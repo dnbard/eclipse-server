@@ -17,14 +17,16 @@ exports.createWSServer = function(server){
 
         stage.addActor({
             kind: 'player',
-            x: Math.random() * 1000,
-            y: Math.random() * 800,
+            x: (Math.random() * 1000).toFixed(1),
+            y: (Math.random() * 800).toFixed(1),
             id: actorId
         })
 
         ws.send(JSON.stringify({
             subject: 'eclipse.subscribe.created',
-            message: subscription
+            message: Object.assign({}, subscription, {
+                actorId: actorId
+            })
         }));
 
         ws.send(JSON.stringify({
