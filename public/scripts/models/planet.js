@@ -5,10 +5,10 @@ define([], function(){
         sprite.anchor.x = 0.5;
         sprite.anchor.y = 0.5;
 
-        sprite.onUpdate = function(){
-            this.vx = 1;
-            this.vy = 1;
+        sprite.vx = 0;
+        sprite.vy = 0;
 
+        sprite.onUpdate = function(){
             this.x += this.vx;
             this.y += this.vy;
         }

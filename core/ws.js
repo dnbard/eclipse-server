@@ -9,7 +9,17 @@ exports.createWSServer = function(server){
             console.log('received: %s', message);
         });
 
-        ws.send('something');
+        ws.send(JSON.stringify({
+            subject: 'eclipse.connection.open',
+            message: {
+                text: 'initialization',
+                stage: [{
+                    kind: 'planet',
+                    x: 96,
+                    y: 96
+                }]
+            }
+        }));
     });
 
     console.log(`WS Server :: created`);
