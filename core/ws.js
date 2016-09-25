@@ -40,7 +40,7 @@ exports.createWSServer = function(server){
 
         ws.on('close', () => {
             stage.removeActorById(actorId);
-            //todo: clean subscriptions
+            Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
         });
     });
 
