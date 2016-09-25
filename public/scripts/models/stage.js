@@ -5,8 +5,8 @@ define([
         const stage = new PIXI.Container();
         options = options || {};
 
-        if (typeof options.init === 'object' && typeof options.init.stage === 'object'){
-            options.init.stage.forEach(function(el){
+        if (typeof options.init === 'object' && typeof options.init.stage === 'object' && typeof options.init.stage.actors === 'object'){
+            options.init.stage.actors.forEach(function(el){
                 var constructor = null;
 
                 if (el.kind === 'planet'){

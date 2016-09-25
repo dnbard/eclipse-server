@@ -1,25 +1,36 @@
 const WebSocketServer = require('ws').Server;
+const uuid = require('node-uuid').v4;
+
+const Stages = require('./stages');
+const Subscriptions = require('./subscriptions');
+
 var wss = null;
 
 exports.createWSServer = function(server){
     wss = new WebSocketServer({ server: server });
 
     wss.on('connection', function connection(ws) {
-        ws.on('message', function incoming(message) {
-            console.log('received: %s', message);
-        });
+        const stage = Stages.getOrCreateGeneric();
+        const subscriberId = uuid();
+
+        const subscription = Subscriptions.createSubscription(subscriberId, stage.id);
+
+        ws.send(JSON.stringify({
+            subject: 'eclipse.subscribe.created',
+            message: subscription
+        }));
 
         ws.send(JSON.stringify({
             subject: 'eclipse.connection.open',
             message: {
                 text: 'initialization',
-                stage: [{
-                    kind: 'planet',
-                    x: 96,
-                    y: 96
-                }]
+                stage: stage
             }
         }));
+
+        ws.on('message', function incoming(message) {
+            console.log('received: %s', message);
+        });
     });
 
     console.log(`WS Server :: created`);
