@@ -1,6 +1,7 @@
 define([
-    'models/planet'
-],(Planet) => {
+    'models/planet',
+    'models/player'
+],(Planet, Player) => {
     function createDefault(options){
         const stage = new PIXI.Container();
         options = options || {};
@@ -11,6 +12,8 @@ define([
 
                 if (el.kind === 'planet'){
                     constructor = Planet;
+                } else if (el.kind === 'player'){
+                    constructor = Player;
                 }
 
                 if (!constructor){

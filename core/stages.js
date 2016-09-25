@@ -1,19 +1,20 @@
 const uuid = require('node-uuid').v4;
+
+const Stage = require('../models/stage');
+
 const collection = [];
 
 exports.createStage = function(options){
-    const stage = {
-        generic: true,
-        actors: [{
-            kind: 'planet',
-            x: 96,
-            y: 96
-        }],
+    const stage = new Stage();
+    stage.addActor({
+        kind: 'planet',
+        x: 96,
+        y: 96,
         id: uuid()
-    }
+    });
+
 
     collection.push(stage);
-
     return stage;
 }
 

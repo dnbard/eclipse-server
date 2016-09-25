@@ -12,8 +12,15 @@ exports.createWSServer = function(server){
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
         const subscriberId = uuid();
-
+        const actorId = uuid();
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id);
+
+        stage.addActor({
+            kind: 'player',
+            x: Math.random() * 1000,
+            y: Math.random() * 800,
+            id: actorId
+        })
 
         ws.send(JSON.stringify({
             subject: 'eclipse.subscribe.created',
@@ -23,13 +30,17 @@ exports.createWSServer = function(server){
         ws.send(JSON.stringify({
             subject: 'eclipse.connection.open',
             message: {
-                text: 'initialization',
                 stage: stage
             }
         }));
 
-        ws.on('message', function incoming(message) {
+        ws.on('message', (message) => {
             console.log('received: %s', message);
+        });
+
+        ws.on('close', () => {
+            stage.removeActorById(actorId);
+            //todo: clean subscriptions
         });
     });
 

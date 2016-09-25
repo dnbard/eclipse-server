@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
+    "lodash": "^4.16.1",
     "mongoose": "^4.6.0",
     "node-uuid": "^1.4.7",
     "ws": "^1.1.1"
