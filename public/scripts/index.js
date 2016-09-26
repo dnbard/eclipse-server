@@ -1,9 +1,19 @@
+requirejs.config({
+    paths:{
+        'templates': '../templates',
+        'pixi': 'https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.2/pixi',
+        'pubsub': 'https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.5.3/pubsub'
+    }
+});
+
 define([
+    'pixi',
+    'pubsub',
     'graph/renderer',
     'core/websocket',
     'core/gameLoop',
     'models/stage'
-], (Renderer, websocket, GameLoop, Stage) => {
+], (PIXI, PubSub, Renderer, websocket, GameLoop, Stage) => {
     console.log('Started');
 
     PIXI.loader

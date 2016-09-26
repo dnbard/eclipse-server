@@ -1,4 +1,6 @@
-define([], function(){
+define([
+    'pixi'
+], function(PIXI){
     return function Player(options){
         var circle = new PIXI.Graphics();
         circle.beginFill(0x9966FF);

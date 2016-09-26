@@ -1,6 +1,9 @@
-define([], function(){
+define([
+    'pixi'
+], function(PIXI){
     return function Planet(options){
-        const sprite = new PIXI.Sprite(PIXI.loader.resources['/public/images/planet-eE6w1yk0880.png'].texture)
+        const texture = PIXI.loader.resources['/public/images/planet-eE6w1yk0880.png'].texture;
+        const sprite = new PIXI.Sprite(texture);
 
         sprite.anchor.x = 0.5;
         sprite.anchor.y = 0.5;

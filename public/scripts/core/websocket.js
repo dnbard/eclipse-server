@@ -1,4 +1,6 @@
-define(() => {
+define([
+    'pubsub'
+], (PubSub) => {
     function genericConnect(){
         const ws = new WebSocket(`ws://${location.host}`);
 

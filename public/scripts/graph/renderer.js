@@ -1,7 +1,8 @@
 define([
+    'pixi',
     'core/gameLoop',
     'models/planet'
-], (gameLoop, Planet) => {
+], (PIXI, gameLoop, Planet) => {
     var initialized = false;
 
     function create() {

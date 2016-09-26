@@ -1,7 +1,8 @@
 define([
+    'pixi',
     'models/planet',
     'models/player'
-],(Planet, Player) => {
+],(PIXI, Planet, Player) => {
     function createDefault(options){
         const stage = new PIXI.Container();
         options = options || {};
