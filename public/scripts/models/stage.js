@@ -2,11 +2,19 @@ define([
     'pixi',
     'models/planet',
     'models/player',
-    'models/camera'
-],(PIXI, Planet, Player, Camera) => {
+    'models/camera',
+    'components/backdrop'
+],(PIXI, Planet, Player, Camera, Backdrop) => {
     function createDefault(options){
         const stage = new PIXI.Container();
         options = options || {};
+
+        stage.addChild(Backdrop({
+            container: stage,
+            click: (e) => {
+                console.log(e.target);
+            }
+        }));
 
         if (typeof options.init === 'object' && typeof options.init.stage === 'object' && typeof options.init.stage.actors === 'object'){
             options.init.stage.actors.forEach(function(el){

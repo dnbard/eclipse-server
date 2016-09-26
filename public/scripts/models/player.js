@@ -17,8 +17,8 @@ define([
 
         player.onUpdate = onUpdate;
 
-        player.vx = 1;
-        player.vy = 1;
+        player.vx = 0;
+        player.vy = 0;
 
         return player;
     }

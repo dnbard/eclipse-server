@@ -3,19 +3,26 @@ define([
 ], function(PIXI){
     return function Planet(options){
         const texture = PIXI.loader.resources['/public/images/planet-eE6w1yk0880.png'].texture;
-        const sprite = new PIXI.Sprite(texture);
+        const planet = new PIXI.Sprite(texture);
 
-        sprite.anchor.x = 0.5;
-        sprite.anchor.y = 0.5;
+        planet.anchor.x = 0.5;
+        planet.anchor.y = 0.5;
 
-        sprite.vx = 0;
-        sprite.vy = 0;
+        planet.vx = 0;
+        planet.vy = 0;
 
-        sprite.onUpdate = function(){
+        planet.kind = 'planet';
+
+        planet.onUpdate = function(){
             this.x += this.vx;
             this.y += this.vy;
         }
 
-        return sprite;
+        planet.interactive = true;
+        planet.click = (e) => {
+            console.log(e.target);
+        }
+
+        return planet;
     }
 });
