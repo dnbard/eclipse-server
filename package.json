@@ -1,6 +1,6 @@
 {
-  "name": "ws-online",
-  "version": "0.0.3",
+  "name": "eclipse-server",
+  "version": "0.0.4",
   "description": "",
   "main": "app.js",
   "scripts": {
