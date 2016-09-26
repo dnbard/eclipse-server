@@ -8,13 +8,14 @@ define([], () => {
         function gameLoop(){
             requestAnimationFrame(gameLoop);
 
+            updateLoopIterator(stage._camera);
             stage.children.forEach(updateLoopIterator)
 
             renderer.render(stage);
         }
 
         function updateLoopIterator(el){
-            if (el.onUpdate && typeof el.onUpdate === 'function'){
+            if (el && el.onUpdate && typeof el.onUpdate === 'function'){
                 el.onUpdate.call(el);
             }
         }

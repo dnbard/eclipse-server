@@ -8,8 +8,8 @@ exports.createStage = function(options){
     const stage = new Stage();
     stage.addActor({
         kind: 'planet',
-        x: 96,
-        y: 96,
+        x: 0,
+        y: 0,
         id: uuid()
     });
 

@@ -17,8 +17,8 @@ exports.createWSServer = function(server){
 
         stage.addActor({
             kind: 'player',
-            x: (Math.random() * 1000).toFixed(1),
-            y: (Math.random() * 800).toFixed(1),
+            x: (Math.random() * 100).toFixed(1),
+            y: (Math.random() * 50).toFixed(1),
             id: actorId
         })
 
@@ -32,7 +32,8 @@ exports.createWSServer = function(server){
         ws.send(JSON.stringify({
             subject: 'eclipse.connection.open',
             message: {
-                stage: stage
+                stage: stage,
+                actorId: actorId
             }
         }));
 
