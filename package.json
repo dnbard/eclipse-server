@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec tests/**/*Spec.js"
   },
   "author": "",
   "license": "MIT",
@@ -14,5 +14,9 @@
     "mongoose": "^4.6.0",
     "node-uuid": "^1.4.7",
     "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   }
 }
