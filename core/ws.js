@@ -4,6 +4,7 @@ const uuid = require('node-uuid').v4;
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
 const Actor = require('../models/actor');
+const Events = require('../public/scripts/enums/events');
 
 var wss = null;
 
@@ -31,14 +32,14 @@ exports.createWSServer = function(server){
         stage.addActor(player);
 
         ws.send(JSON.stringify({
-            subject: 'eclipse.subscribe.created',
+            subject: Events.SUBSCRIBE.CREATED,
             message: Object.assign({}, subscription, {
                 actorId: actorId
             })
         }));
 
         ws.send(JSON.stringify({
-            subject: 'eclipse.connection.open',
+            subject: Events.CONNECTION.OPEN,
             message: {
                 stage: stage,
                 actorId: actorId

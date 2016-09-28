@@ -1,6 +1,7 @@
 define([
-    'pubsub'
-], (PubSub) => {
+    'pubsub',
+    'enums/events'
+], (PubSub, EVENTS) => {
     function startGameLoop(data){
         stage = data.stage;
         renderer = data.renderer;
@@ -22,7 +23,7 @@ define([
             }
         }
 
-        PubSub.subscribe('eclipse.stage.update', function(event, payload){
+        PubSub.subscribe(EVENTS.STAGE.UPDATED, function(event, payload){
             const newStageState = payload.message.stage;
 
             if (!stage /*|| newStageState.id !== stage.id*/){

@@ -14,14 +14,15 @@ define([
     'core/websocket',
     'core/gameLoop',
     'core/resourceLoader',
-    'models/stage'
-], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, Stage) => {
+    'models/stage',
+    'enums/events'
+], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, Stage, EVENTS) => {
     console.log('Started');
 
     ResourceLoader().load(() => {
         websocket.genericConnect();
 
-        const token = PubSub.subscribe('eclipse.connection.open', (e, payload) => {
+        const token = PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
             const renderer = Renderer.create();
             const stage = Stage.createDefault({
                 init: payload.message

@@ -6,11 +6,11 @@ define([
         const ws = new WebSocket(`ws://${location.host}`);
 
         ws.onopen = () => {
-            alertify.log('WebSocket connection established');
+            alertify.log('Connection established');
         }
 
         ws.onclose = () => {
-            alertify.delay(0).closeLogOnClick(true).error('WebSocket connection lost');
+            alertify.delay(0).closeLogOnClick(true).error('Connection lost');
         }
 
         ws.onmessage = (data, flags) => {

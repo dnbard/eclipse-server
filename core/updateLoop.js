@@ -49,7 +49,7 @@ exports.init = function(){
 
     function SubscribeIterator(subscribe){
         subscribe.ws.send(JSON.stringify({
-            subject: 'eclipse.stage.update',
+            subject: 'eclipse.stage.updated',
             message: {
                 stage: stage
             }

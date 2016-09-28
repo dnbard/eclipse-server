@@ -10,7 +10,7 @@ define([
     }
 
     function loadProgressHandler(loader, resource) {
-        console.log(`loading: ${resource.url} (${loader.progress.toFixed(0)} %)`);
+        console.log(`Loading: ${resource.url} (${loader.progress.toFixed(0)} %)`);
     }
 
     return resourceLoader;
