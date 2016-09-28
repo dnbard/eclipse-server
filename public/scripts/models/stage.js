@@ -3,8 +3,9 @@ define([
     'models/planet',
     'models/player',
     'models/camera',
-    'components/backdrop'
-],(PIXI, Planet, Player, Camera, Backdrop) => {
+    'components/backdrop',
+    'components/borders'
+],(PIXI, Planet, Player, Camera, Backdrop, Borders) => {
     function createDefault(options){
         const stage = new PIXI.Container();
         options = options || {};
@@ -15,6 +16,8 @@ define([
                 console.log(e.target);
             }
         }));
+
+        stage.addChild(Borders());
 
         if (typeof options.init === 'object' && typeof options.init.stage === 'object' && typeof options.init.stage.actors === 'object'){
             options.init.stage.actors.forEach(function(el){
