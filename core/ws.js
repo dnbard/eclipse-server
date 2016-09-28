@@ -3,6 +3,7 @@ const uuid = require('node-uuid').v4;
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
+const Actor = require('../models/actor');
 
 var wss = null;
 
@@ -12,15 +13,22 @@ exports.createWSServer = function(server){
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
         const subscriberId = uuid();
-        const actorId = uuid();
-        const subscription = Subscriptions.createSubscription(subscriberId, stage.id);
 
-        stage.addActor({
+        console.log(`Incoming WS connection (subscriber=${subscriberId})`);
+
+        const player = new Actor({
             kind: 'player',
             x: (Math.random() * 100).toFixed(1),
             y: (Math.random() * 50).toFixed(1),
-            id: actorId
-        })
+            onUpdate: function(stage, delta, time){
+                this.x = Math.sin(time / 1000) * 100;
+                this.y = Math.cos(time / 1000) * 100;
+            }
+        });
+        const actorId = player.id;
+        const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
+
+        stage.addActor(player);
 
         ws.send(JSON.stringify({
             subject: 'eclipse.subscribe.created',

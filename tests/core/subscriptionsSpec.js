@@ -26,6 +26,16 @@ describe('Subscriptions', function(){
         });
     });
 
+    describe('#getSubscriptionBySubscribeToId', function(){
+        it('should return subscriptions', function(){
+            const subscriber = uuid();
+            const subscribeTo = uuid();
+            Subscriptions.createSubscription(subscriber, subscribeTo);
+
+            expect(Subscriptions.getSubscriptionBySubscribeToId(subscribeTo)).to.have.length(1);
+        });
+    });
+
     describe('#removeSubscriptionById', function(){
         it('should remove subscription', function(){
             const subscriber = uuid();

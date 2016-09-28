@@ -1,18 +1,17 @@
+"use strict";
+
 const uuid = require('node-uuid').v4;
 
 const Stage = require('../models/stage');
+const Actor = require('../models/actor');
 
-var collection = [];
+let collection = [];
 
 exports.createStage = function(options){
     const stage = new Stage();
-    stage.addActor({
-        kind: 'planet',
-        x: 0,
-        y: 0,
-        id: uuid()
-    });
-
+    stage.addActor(new Actor({
+        kind: 'planet'
+    }));
 
     collection.push(stage);
     return stage;
@@ -30,4 +29,8 @@ exports.removeAll = function(){
 
 exports.length = function(){
     return collection.length;
+}
+
+exports.getCollection = function(){
+    return collection;
 }

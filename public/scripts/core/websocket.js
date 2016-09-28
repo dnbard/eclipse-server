@@ -5,7 +5,7 @@ define([
         const ws = new WebSocket(`ws://${location.host}`);
 
         ws.onopen = function () {
-            ws.send('something111');
+
         }
 
         ws.onmessage = function (data, flags) {
