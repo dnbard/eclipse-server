@@ -5,6 +5,7 @@ const UPDATE_DELTA = 100;
 
 const Stages = require('../core/stages');
 const Subscriptions = require('../core/subscriptions');
+const EVENTS = require('../public/scripts/enums/events');
 
 let TIME = 0;
 
@@ -42,17 +43,15 @@ exports.init = function(){
         }
 
         const stageId = stage.id;
-
-        Subscriptions.getSubscriptionBySubscribeToId(stageId).forEach(SubscribeIterator);
-        setTimeout(UpdateIterator, UPDATE_DELTA);
-    }
-
-    function SubscribeIterator(subscribe){
-        subscribe.ws.send(JSON.stringify({
-            subject: 'eclipse.stage.updated',
+        const message = JSON.stringify({
+            subject: EVENTS.STAGE.UPDATED,
             message: {
                 stage: stage
             }
-        }));
+        });
+
+        Subscriptions.getSubscriptionBySubscribeToId(stageId).forEach(s => s.ws.send(message));
+
+        setTimeout(UpdateIterator, UPDATE_DELTA);
     }
 }
