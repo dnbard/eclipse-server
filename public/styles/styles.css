@@ -1,0 +1,14 @@
+* {
+    padding: 0;
+    margin: 0
+}
+#version {
+    position: fixed;
+    color: #9a9a9a;
+    z-index: 10;
+    font-size: 9pt;
+    font-family: sans-serif;
+    left: 5px;
+    bottom: 1px;
+    pointer-events: none;
+}

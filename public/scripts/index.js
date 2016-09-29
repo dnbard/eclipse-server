@@ -35,6 +35,8 @@ define([
             });
 
             PubSub.unsubscribe(token);
+
+            document.querySelector('#version').textContent = `${payload.message.application.title} v${payload.message.application.version}`;
         });
     });
 });
