@@ -73,8 +73,12 @@ define([
                 return;
             }
 
-            localActor.x = actor.x;
-            localActor.y = actor.y;
+            if (typeof localActor.applyUpdate === 'function'){
+                localActor.applyUpdate.call(localActor, actor);
+            } else {
+                localActor.x = actor.x;
+                localActor.y = actor.y;
+            }
         }
 
         function MapById(el){

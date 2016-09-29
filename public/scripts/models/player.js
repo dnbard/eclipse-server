@@ -6,6 +6,20 @@ define([
         this.y += this.vy;
     }
 
+    function applyUpdate(newState){
+        this.moveTo = {
+            x: newState.x,
+            y: newState.y,
+            diffX: newState.x - this.x,
+            diffY: newState.y - this.y,
+            velX: (newState.x - this.x ) * 0.2,
+            velY: (newState.y - this.y ) * 0.2,
+        };
+
+        this.vx = this.moveTo.velX;
+        this.vy = this.moveTo.velY;
+    }
+
     return function Player(options){
         var player = new PIXI.Graphics();
 
@@ -16,6 +30,7 @@ define([
         player.kind = 'player';
 
         player.onUpdate = onUpdate;
+        player.applyUpdate = applyUpdate;
 
         player.vx = 0;
         player.vy = 0;
