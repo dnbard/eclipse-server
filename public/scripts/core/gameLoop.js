@@ -26,11 +26,17 @@ define([
         PubSub.subscribe(EVENTS.STAGE.UPDATED, function(event, payload){
             const newStageState = payload.message.stage;
 
-            if (!stage /*|| newStageState.id !== stage.id*/){
+            if (!stage || newStageState.id !== stage.id){
                 return;
             }
 
             newStageState.actors.forEach(ActorIterator);
+
+            //TODO: find new entities and add them to the scene
+
+
+
+            //TODO: find missing entities and remove them from the scene
         });
 
         function ActorIterator(actor){

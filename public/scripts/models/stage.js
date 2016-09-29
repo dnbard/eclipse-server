@@ -10,6 +10,8 @@ define([
         const stage = new PIXI.Container();
         options = options || {};
 
+        stage.id = options.init.stage.id;
+
         stage.addChild(Backdrop({
             container: stage,
             click: (e) => {
