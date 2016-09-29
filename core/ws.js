@@ -17,13 +17,17 @@ exports.createWSServer = function(server){
 
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
+        const px = Math.random() * 100;
+        const py = Math.random() * 100;
+        const deltaTime = Math.random() * 1000
         const player = new Actor({
             kind: 'player',
-            x: (Math.random() * 100).toFixed(1),
-            y: (Math.random() * 50).toFixed(1),
+            x: px,
+            y: py,
             onUpdate: function(stage, delta, time){
-                this.x = Math.sin(time / 1000) * 100;
-                this.y = Math.cos(time / 1000) * 100;
+                const _time = time + deltaTime;
+                this.x = px + Math.sin(_time / 1000) * 100;
+                this.y = py + Math.cos(_time / 1000) * 100;
             }
         });
         const actorId = player.id;

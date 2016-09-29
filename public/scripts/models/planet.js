@@ -5,6 +5,8 @@ define([
         const texture = PIXI.loader.resources['/public/images/planet-eE6w1yk0880.png'].texture;
         const planet = new PIXI.Sprite(texture);
 
+        planet.id = options.id;
+
         planet.anchor.x = 0.5;
         planet.anchor.y = 0.5;
 
