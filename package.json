@@ -1,10 +1,12 @@
 {
   "name": "eclipse-server",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "test": "mocha --reporter spec tests/**/*Spec.js"
+    "test": "mocha --reporter spec tests/**/*Spec.js",
+    "start": "node server.js",
+    "dev": "gulp"
   },
   "author": "",
   "license": "MIT",
@@ -17,6 +19,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^3.0.1",
+    "gulp-nodemon": "^2.2.1",
     "mocha": "^3.1.0"
   }
 }
