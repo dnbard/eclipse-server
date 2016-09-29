@@ -4,6 +4,16 @@ define([
     function onUpdate(){
         this.x += this.vx;
         this.y += this.vy;
+
+        if (typeof this.moveTo === 'object' && this.moveTo){
+            this.moveTo.ticks ++;
+
+            if (this.moveTo.ticks >= 5){
+                this.moveTo = null;
+                this.vx = 0;
+                this.vy = 0;
+            }
+        }
     }
 
     function applyUpdate(newState){
@@ -14,6 +24,7 @@ define([
             diffY: newState.y - this.y,
             velX: (newState.x - this.x ) * 0.2,
             velY: (newState.y - this.y ) * 0.2,
+            ticks: 0
         };
 
         this.vx = this.moveTo.velX;
