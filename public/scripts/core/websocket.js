@@ -15,7 +15,7 @@ define([
 
         ws.onmessage = (data, flags) => {
             const payload = JSON.parse(data.data);
-            console.log(`=> "${payload.subject}" :: ${JSON.stringify(payload.message, null, 2)}`);
+            //console.log(`=> "${payload.subject}" :: ${JSON.stringify(payload.message, null, 2)}`);
 
             PubSub.publish(payload.subject, payload);
         }

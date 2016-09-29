@@ -13,8 +13,8 @@ define([
         function gameLoop(){
             requestAnimationFrame(gameLoop);
 
+            stage.children.forEach(updateLoopIterator);
             updateLoopIterator(stage._camera);
-            stage.children.forEach(updateLoopIterator)
 
             renderer.render(stage);
         }
