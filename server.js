@@ -6,12 +6,18 @@ const config = require('./config');
 const ws = require('./core/ws');
 const middlewares = require('./middlewares');
 const UpdateLoop = require('./core/updateLoop');
+const mongo = require('./core/mongo');
 
-server.on('request', app);
-server.listen(config.port, () => {
-    console.log(`HTTP Server :: listening on port ${config.port}`);
-    ws.createWSServer(server);
-    middlewares.init(app);
+mongo.connect().then(db => {
+    server.on('request', app);
+    server.listen(config.port, () => {
+        console.log(`HTTP Server :: listening on port ${config.port}`);
+        ws.createWSServer(server);
+        middlewares.init(app);
 
-    UpdateLoop.init();
+        UpdateLoop.init();
+    });
+}).catch(err => {
+    console.log(err);
+    return process.exit(1);
 });
