@@ -3,6 +3,12 @@ define([
     'vendor/alertify',
     'enums/events'
 ], (PubSub, alertify, EVENTS) => {
+    var token = null;
+
+    PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
+        token = payload.message.token
+    });
+
     function genericConnect(){
         const ws = new WebSocket(`ws://${location.host}`);
 
@@ -22,7 +28,8 @@ define([
         PubSub.subscribe(EVENTS.COMMANDS.ALL, (e, data) => {
             ws.send(JSON.stringify({
                 subject: e,
-                message: data
+                message: data,
+                token: token
             }));
         });
 

@@ -1,5 +1,6 @@
 const WebSocketServer = require('ws').Server;
 const uuid = require('node-uuid').v4;
+const Base64 = require('js-base64').Base64;
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
@@ -15,6 +16,7 @@ exports.createWSServer = function(server){
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
         const subscriberId = uuid();
+        const token = Base64.encode(uuid());
 
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
@@ -49,7 +51,8 @@ exports.createWSServer = function(server){
                 application: {
                     title: 'Eclipse',
                     version: packageData.version
-                }
+                },
+                token: token
             }
         }));
 
@@ -60,9 +63,10 @@ exports.createWSServer = function(server){
                 console.err(e);
             }
 
-            //TODO: apply token based verification
-            if (data.message.playerId !== player.id){
-                return console.log(`Received message with playerId=${data.message.playerId} from ${player.id}, execution stopped`);
+            if (data.token !== token){
+                return console.log(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
+            } else {
+                console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
             }
 
             player.x = data.message.x;
