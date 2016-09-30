@@ -8,6 +8,12 @@
         },
         STAGE: {
             UPDATED: 'eclipse.stage.updated'
+        },
+        COMMANDS: {
+            ALL: 'eclipse.commands',
+            PLAYER: {
+                MOVETO: 'eclipse.commands.player.moveto'
+            }
         }
     };
 

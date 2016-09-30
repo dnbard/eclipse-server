@@ -42,10 +42,7 @@ define([
         stage.id = options.init.stage.id;
 
         stage.addChild(Backdrop({
-            container: stage,
-            click: (e) => {
-                console.log(e.target);
-            }
+            container: stage
         }));
 
         stage.addChild(Borders());

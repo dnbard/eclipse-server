@@ -18,18 +18,16 @@ exports.createWSServer = function(server){
 
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
-        const px = Math.random() * 100;
-        const py = Math.random() * 100;
+        var px = Math.random() * 100;
+        var py = Math.random() * 100;
         const deltaTime = Math.random() * 1000
         const player = new Actor({
             kind: 'player',
             x: px,
-            y: py,
+            y: py/*,
             onUpdate: function(stage, delta, time){
                 const _time = time + deltaTime;
-                this.x = px + Math.sin(_time / 1000) * 100;
-                this.y = py + Math.cos(_time / 1000) * 100;
-            }
+            }*/
         });
         const actorId = player.id;
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
@@ -55,8 +53,20 @@ exports.createWSServer = function(server){
             }
         }));
 
-        ws.on('message', (message) => {
-            console.log('received: %s', message);
+        ws.on('message', (payload, flags) => {
+            try{
+                const data = JSON.parse(payload);
+            } catch(e){
+                console.err(e);
+            }
+
+            //TODO: apply token based verification
+            if (data.message.playerId !== player.id){
+                return console.log(`Received message with playerId=${data.message.playerId} from ${player.id}, execution stopped`);
+            }
+
+            player.x = data.message.x;
+            player.y = data.message.y;
         });
 
         ws.on('close', () => {
