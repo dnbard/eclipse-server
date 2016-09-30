@@ -12,7 +12,7 @@ const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
 const PLAYER_SPEED = 3;
-const PIXEL_THRESHOLD = PLAYER_SPEED / 10;
+const PIXEL_THRESHOLD = PLAYER_SPEED * 2;
 
 var wss = null;
 
@@ -35,11 +35,12 @@ exports.createWSServer = function(server){
                 if (this.moveToX || this.moveToY){
                     const angle = Angle.getAngleBetweenTwoPoints(this.x, this.y, this.moveToX, this.moveToY);
                     this.velocity = Velocity.get2DVelocity(angle, PLAYER_SPEED);
+                    this.rotation = -angle;
                 } else {
                     this.velocity = null;
                 }
 
-                if (!this.velocity || (Math.abs(this.x - this.velocity.x) < PIXEL_THRESHOLD && Math.abs(this.y - this.velocity.y) < PIXEL_THRESHOLD)){
+                if (!this.velocity || (Math.abs(this.x - this.moveToX) < PIXEL_THRESHOLD && Math.abs(this.y - this.moveToY) < PIXEL_THRESHOLD)){
                     this.moveToX = null;
                     this.moveToY = null;
                 }

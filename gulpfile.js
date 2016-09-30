@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const nodemon = require('gulp-nodemon');
 const mocha = require('gulp-mocha');
 
-gulp.task('default', function () {
+gulp.task('default', ['test'], function () {
     nodemon({
         tasks: ['test'],
         delay: 10

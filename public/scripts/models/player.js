@@ -5,11 +5,15 @@ define([
         this.x += this.vx;
         this.y += this.vy;
 
-        if (typeof this.moveTo === 'object' && this.moveTo){
-            this.moveTo.ticks ++;
+//        if (this.rotation > Math.PI * 2){
+//            this.rotation -= Math.PI * 2;
+//        }
 
-            if (this.moveTo.ticks >= 5){
-                this.moveTo = null;
+        if (typeof this.animateMovement === 'object' && this.animateMovement){
+            this.animateMovement.ticks ++;
+
+            if (this.animateMovement.ticks >= 5){
+                this.animateMovement = null;
                 this.vx = 0;
                 this.vy = 0;
             }
@@ -17,34 +21,38 @@ define([
     }
 
     function applyUpdate(newState){
-        this.moveTo = {
+        this.animateMovement = {
             x: newState.x,
             y: newState.y,
-            diffX: newState.x - this.x,
-            diffY: newState.y - this.y,
             velX: (newState.x - this.x ) * 0.2,
             velY: (newState.y - this.y ) * 0.2,
             ticks: 0
         };
 
-        this.vx = this.moveTo.velX;
-        this.vy = this.moveTo.velY;
+        this.vx = this.animateMovement.velX;
+        this.vy = this.animateMovement.velY;
+
+        const projectedRotation = -(newState.rotation || 0) + Math.PI * 0.5;
+        this.rotation = projectedRotation;
     }
 
     return function Player(options){
-        var player = new PIXI.Graphics();
+        const texture = PIXI.loader.resources['/public/images/spaceship-01.png'].texture;
+        const player = new PIXI.Sprite(texture);
 
-        player.beginFill(0x9966FF);
-        player.drawCircle(0, 0, 16);
-        player.endFill();
         player.id = options.id;
         player.kind = 'player';
 
-        player.onUpdate = onUpdate;
-        player.applyUpdate = applyUpdate;
-
         player.vx = 0;
         player.vy = 0;
+
+        player.anchor.x = 0.5;
+        player.anchor.y = 0.5;
+
+        player.rotation = 0;
+
+        player.onUpdate = onUpdate;
+        player.applyUpdate = applyUpdate;
 
         return player;
     }

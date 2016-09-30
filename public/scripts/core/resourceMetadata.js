@@ -1,5 +1,10 @@
 define([
-    'text!images/metadata.json'
-], function(textMetadata){
-    return JSON.parse(textMetadata);
+    'lodash',
+    'text!images/metadata.json',
+    'text!images/spaceships.json'
+], function(_, metadata, spaceships){
+    return _.concat(
+        JSON.parse(metadata),
+        JSON.parse(spaceships)
+    );
 });

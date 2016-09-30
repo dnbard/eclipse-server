@@ -7,7 +7,7 @@ const ws = require('./core/ws');
 const middlewares = require('./middlewares');
 const config = require('./config');
 
-mongo.connect().then(db => {
+//mongo.connect().then(db => {
     const server = require('http').createServer();
     const app = express();
 
@@ -19,7 +19,7 @@ mongo.connect().then(db => {
 
         UpdateLoop.init();
     });
-}).catch(err => {
-    console.log(err);
-    return process.exit(1);
-});
+//}).catch(err => {
+//    console.log(err);
+//    return process.exit(1);
+//});

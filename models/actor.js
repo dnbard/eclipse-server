@@ -11,6 +11,7 @@ class Actor{
 
         this.x = options.x || 0;
         this.y = options.y || 0;
+        this.rotation = 0;
 
         this.kind = options.kind || 'actor';
 
