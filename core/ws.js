@@ -8,6 +8,12 @@ const Actor = require('../models/actor');
 const EVENTS = require('../public/scripts/enums/events');
 const packageData = require('../package.json');
 
+const Angle = require('../physics/angle');
+const Velocity = require('../physics/velocity');
+
+const PLAYER_SPEED = 3;
+const PIXEL_THRESHOLD = PLAYER_SPEED / 10;
+
 var wss = null;
 
 exports.createWSServer = function(server){
@@ -20,16 +26,29 @@ exports.createWSServer = function(server){
 
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
-        var px = Math.random() * 100;
-        var py = Math.random() * 100;
         const deltaTime = Math.random() * 1000
         const player = new Actor({
             kind: 'player',
-            x: px,
-            y: py/*,
+            x: Math.random() * 100,
+            y: Math.random() * 100,
             onUpdate: function(stage, delta, time){
-                const _time = time + deltaTime;
-            }*/
+                if (this.moveToX || this.moveToY){
+                    const angle = Angle.getAngleBetweenTwoPoints(this.x, this.y, this.moveToX, this.moveToY);
+                    this.velocity = Velocity.get2DVelocity(angle, PLAYER_SPEED);
+                } else {
+                    this.velocity = null;
+                }
+
+                if (!this.velocity || (Math.abs(this.x - this.velocity.x) < PIXEL_THRESHOLD && Math.abs(this.y - this.velocity.y) < PIXEL_THRESHOLD)){
+                    this.moveToX = null;
+                    this.moveToY = null;
+                }
+
+                if (this.velocity){
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+                }
+            }
         });
         const actorId = player.id;
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
@@ -69,8 +88,8 @@ exports.createWSServer = function(server){
                 console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
             }
 
-            player.x = data.message.x;
-            player.y = data.message.y;
+            player.moveToX = data.message.x;
+            player.moveToY = data.message.y;
         });
 
         ws.on('close', () => {
