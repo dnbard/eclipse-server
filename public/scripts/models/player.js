@@ -1,6 +1,17 @@
 define([
-    'pixi'
-], function(PIXI){
+    'pixi',
+    'pubsub',
+    'enums/events',
+    'enums/keys',
+    'core/hotkey'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey){
+    var playerId = null;
+
+    PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
+        playerId = data.message.actorId;
+    });
+
+
     function onUpdate(){
         this.x += this.vx;
         this.y += this.vy;
@@ -53,6 +64,18 @@ define([
 
         player.onUpdate = onUpdate;
         player.applyUpdate = applyUpdate;
+
+        if (player.id === playerId){
+            Hotkey.register({
+                keycode: KEYS.UP,
+                onPress: () => {
+                    console.log('UP PRESS');
+                },
+                onRelease: () => {
+                    console.log('UP RELEASE');
+                }
+            });
+        }
 
         return player;
     }
