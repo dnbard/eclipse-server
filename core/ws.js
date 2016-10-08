@@ -77,8 +77,10 @@ exports.createWSServer = function(server){
         }));
 
         ws.on('message', (payload, flags) => {
+            var data;
+
             try{
-                const data = JSON.parse(payload);
+                data = JSON.parse(payload);
             } catch(e){
                 console.err(e);
             }
