@@ -67,7 +67,7 @@ define([
 
         if (player.id === playerId){
             Hotkey.register({
-                keycode: KEYS.UP,
+                keycode: KEYS.W,
                 onPress: () => {
                     PubSub.publish(EVENTS.COMMANDS.PLAYER.ACCELERATE);
                 },
@@ -77,7 +77,7 @@ define([
             });
 
             Hotkey.register({
-                keycode: KEYS.LEFT,
+                keycode: KEYS.A,
                 onPress: () => {
                     PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE, {
                         direction: -1
@@ -89,7 +89,7 @@ define([
             });
 
             Hotkey.register({
-                keycode: KEYS.RIGHT,
+                keycode: KEYS.D,
                 onPress: () => {
                     PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE, {
                         direction: 1

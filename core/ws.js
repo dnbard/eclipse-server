@@ -11,7 +11,7 @@ const packageData = require('../package.json');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
-const PLAYER_SPEED = 3;
+const PLAYER_SPEED = 5;
 const PLAYER_RADIAL_SPEED = 0.1;
 
 var wss = null;
@@ -32,6 +32,27 @@ exports.createWSServer = function(server){
             x: Math.random() * 100,
             y: Math.random() * 100,
             onUpdate: function(stage, delta, time){
+                if (this.isAccelerating){
+                    this.velocity += PLAYER_SPEED * 0.1;
+                    if (this.velocity > PLAYER_SPEED){
+                        this.velocity = PLAYER_SPEED;
+                    }
+                } else {
+                    this.velocity -= PLAYER_SPEED * 0.025;
+                    if (this.velocity < 0){
+                        this.velocity = 0;
+                    }
+                }
+
+                if (this.rotateDirection !== 0){
+                    this.radialVelocity = Velocity.getRadialVelocity(player.velocity, PLAYER_SPEED, PLAYER_RADIAL_SPEED) * this.rotateDirection;
+                } else {
+                    this.radialVelocity -= PLAYER_RADIAL_SPEED * 0.3;
+                    if (this.radialVelocity < 0){
+                        this.radialVelocity = 0;
+                    }
+                }
+
                 if (this.velocity){
                     const velocity = Velocity.get2DVelocity(-this.rotation, this.velocity);
                     this.x += velocity.x;
@@ -84,13 +105,15 @@ exports.createWSServer = function(server){
             }
 
             if (data.subject === EVENTS.COMMANDS.PLAYER.ACCELERATE){
-                player.velocity = PLAYER_SPEED;
+                //player.velocity = PLAYER_SPEED;
+                player.isAccelerating = true;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.DECELERATE){
-                player.velocity = 0;
+                //player.velocity = 0;
+                player.isAccelerating = false;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE){
-                player.radialVelocity = PLAYER_RADIAL_SPEED * -data.message.direction;
+                player.rotateDirection = -data.message.direction;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE){
-                player.radialVelocity = 0;
+                player.rotateDirection = 0;
             }
         });
 
