@@ -69,10 +69,34 @@ define([
             Hotkey.register({
                 keycode: KEYS.UP,
                 onPress: () => {
-                    console.log('UP PRESS');
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.ACCELERATE);
                 },
                 onRelease: () => {
-                    console.log('UP RELEASE');
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.DECELERATE);
+                }
+            });
+
+            Hotkey.register({
+                keycode: KEYS.LEFT,
+                onPress: () => {
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE, {
+                        direction: -1
+                    });
+                },
+                onRelease: () => {
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE);
+                }
+            });
+
+            Hotkey.register({
+                keycode: KEYS.RIGHT,
+                onPress: () => {
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE, {
+                        direction: 1
+                    });
+                },
+                onRelease: () => {
+                    PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE);
                 }
             });
         }

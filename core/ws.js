@@ -12,7 +12,7 @@ const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
 const PLAYER_SPEED = 3;
-const PIXEL_THRESHOLD = PLAYER_SPEED * 2;
+const PLAYER_RADIAL_SPEED = 0.1;
 
 var wss = null;
 
@@ -32,22 +32,14 @@ exports.createWSServer = function(server){
             x: Math.random() * 100,
             y: Math.random() * 100,
             onUpdate: function(stage, delta, time){
-                if (this.moveToX || this.moveToY){
-                    const angle = Angle.getAngleBetweenTwoPoints(this.x, this.y, this.moveToX, this.moveToY);
-                    this.velocity = Velocity.get2DVelocity(angle, PLAYER_SPEED);
-                    this.rotation = -angle;
-                } else {
-                    this.velocity = null;
-                }
-
-                if (!this.velocity || (Math.abs(this.x - this.moveToX) < PIXEL_THRESHOLD && Math.abs(this.y - this.moveToY) < PIXEL_THRESHOLD)){
-                    this.moveToX = null;
-                    this.moveToY = null;
-                }
-
                 if (this.velocity){
-                    this.x += this.velocity.x;
-                    this.y += this.velocity.y;
+                    const velocity = Velocity.get2DVelocity(-this.rotation, this.velocity);
+                    this.x += velocity.x;
+                    this.y += velocity.y;
+                }
+
+                if (this.radialVelocity){
+                    this.rotation += this.radialVelocity;
                 }
             }
         });
@@ -91,8 +83,15 @@ exports.createWSServer = function(server){
                 console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
             }
 
-            player.moveToX = data.message.x;
-            player.moveToY = data.message.y;
+            if (data.subject === EVENTS.COMMANDS.PLAYER.ACCELERATE){
+                player.velocity = PLAYER_SPEED;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.DECELERATE){
+                player.velocity = 0;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE){
+                player.radialVelocity = PLAYER_RADIAL_SPEED * -data.message.direction;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE){
+                player.radialVelocity = 0;
+            }
         });
 
         ws.on('close', () => {
