@@ -3,8 +3,9 @@ define([
     'pubsub',
     'enums/events',
     'enums/keys',
-    'core/hotkey'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey){
+    'core/hotkey',
+    'models/turret'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -31,6 +32,16 @@ define([
                 this.vy = 0;
             }
         }
+
+        if (this.turrets){
+            this.turrets.forEach(turretIterator);
+        }
+    }
+
+    function turretIterator(t){
+        if (typeof t.onUpdate === 'function'){
+            t.onUpdate();
+        }
     }
 
     function applyUpdate(newState){
@@ -52,7 +63,8 @@ define([
     return function Player(options){
         const texture = PIXI.loader.resources['/public/images/spaceship-01.png']
             .texture;
-        const player = new PIXI.Sprite(texture);
+        const player = new PIXI.Container();
+        const playerSprite = new PIXI.Sprite(texture);
 
         player.id = options.id;
         player.kind = 'player';
@@ -60,8 +72,8 @@ define([
         player.vx = 0;
         player.vy = 0;
 
-        player.anchor.x = 0.5;
-        player.anchor.y = 0.5;
+        playerSprite.anchor.x = 0.5;
+        playerSprite.anchor.y = 0.5;
 
         player.rotation = 0;
         player.rotateDirection = 0;
@@ -105,6 +117,16 @@ define([
                 }
             });
         }
+
+        player.addChild(playerSprite);
+
+        player.turrets = [Turret({
+            x: 0,
+            y: 16,
+            isControllable: player.id === playerId,
+            parent: player
+        })];
+        player.turrets.forEach(t => player.addChild(t));
 
         return player;
     }

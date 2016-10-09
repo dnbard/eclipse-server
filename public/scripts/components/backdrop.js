@@ -1,8 +1,9 @@
 define([
     'pixi',
     'pubsub',
+    'core/mouse',
     'enums/events'
-], (PIXI, PubSub, EVENTS) => {
+], (PIXI, PubSub, Mouse, EVENTS) => {
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
@@ -21,6 +22,14 @@ define([
         });
     }
 
+    function defaultBackdropMousemove(e){
+        this.mouseGlobalX = e.data.global.x;
+        this.mouseGlobalY = e.data.global.y;
+
+        //Mouse.set(x, y);
+
+    }
+
     return function Backdrop(options){
         options = options || {};
 
@@ -34,13 +43,22 @@ define([
 
         backdrop.container = options.container;
 
+        this.mouseGlobalX = this.mouseGlobalY = 0;
+
         backdrop.onUpdate = function(){
             this.x = - options.container.x;
             this.y = - options.container.y;
+
+            Mouse.set(
+                Math.trunc(this.mouseGlobalX - this.container.x),
+                Math.trunc(this.mouseGlobalY - this.container.y)
+            );
         }
 
         backdrop.interactive = true;
         backdrop.click = typeof options.click === 'function' ? options.click : defaultBackdropClick;
+
+        backdrop.mousemove = defaultBackdropMousemove;
 
         return backdrop;
     }
