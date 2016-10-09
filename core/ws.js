@@ -62,6 +62,12 @@ exports.createWSServer = function(server){
                 if (this.radialVelocity){
                     this.rotation += this.radialVelocity;
                 }
+
+                if (this.rotation > Math.PI * 2){
+                    this.rotation -= Math.PI * 2;
+                } else if (this.rotation < -Math.PI * 2){
+                    this.rotation += Math.PI * 2;
+                }
             }
         });
         const actorId = player.id;

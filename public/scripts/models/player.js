@@ -16,9 +16,11 @@ define([
         this.x += this.vx;
         this.y += this.vy;
 
-//        if (this.rotation > Math.PI * 2){
-//            this.rotation -= Math.PI * 2;
-//        }
+       if (this.rotation > Math.PI * 2){
+           this.rotation -= Math.PI * 2;
+       } else if (this.rotation < -Math.PI * 2){
+           this.rotation += Math.PI * 2;
+       }
 
         if (typeof this.animateMovement === 'object' && this.animateMovement){
             this.animateMovement.ticks ++;
@@ -48,7 +50,8 @@ define([
     }
 
     return function Player(options){
-        const texture = PIXI.loader.resources['/public/images/spaceship-01.png'].texture;
+        const texture = PIXI.loader.resources['/public/images/spaceship-01.png']
+            .texture;
         const player = new PIXI.Sprite(texture);
 
         player.id = options.id;
@@ -61,6 +64,8 @@ define([
         player.anchor.y = 0.5;
 
         player.rotation = 0;
+        player.rotateDirection = 0;
+        player.projectedRotation = Math.PI * 0.5;
 
         player.onUpdate = onUpdate;
         player.applyUpdate = applyUpdate;
