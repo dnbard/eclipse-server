@@ -14,7 +14,7 @@ define([
         const x = Math.trunc(e.data.global.x - this.container.x);
         const y = Math.trunc(e.data.global.y - this.container.y);
 
-        PubSub.publish(EVENTS.COMMANDS.PLAYER.MOVETO, {
+        PubSub.publish(EVENTS.COMMANDS.PLAYER.FIRE, {
             x: x,
             y: y,
             stageId: this.container.id,
@@ -25,9 +25,6 @@ define([
     function defaultBackdropMousemove(e){
         this.mouseGlobalX = e.data.global.x;
         this.mouseGlobalY = e.data.global.y;
-
-        //Mouse.set(x, y);
-
     }
 
     return function Backdrop(options){

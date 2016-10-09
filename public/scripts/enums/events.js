@@ -16,7 +16,8 @@
                 DECELERATE: 'eclipse.commands.player.decelerate',
                 ACCELERATE: 'eclipse.commands.player.accelerate',
                 RADIAL_ACCELERATE: 'eclipse.commands.player.radial_accelerate',
-                RADIAL_DECELERATE: 'eclipse.commands.player.radial_decelerate'
+                RADIAL_DECELERATE: 'eclipse.commands.player.radial_decelerate',
+                FIRE: 'eclipse.commands.player.fire'
             }
         }
     };

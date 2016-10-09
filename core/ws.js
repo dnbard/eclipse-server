@@ -11,8 +11,8 @@ const packageData = require('../package.json');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
-const PLAYER_SPEED = 5;
-const PLAYER_RADIAL_SPEED = 0.1;
+const PROJECTILE_SPEED = 10;
+const PROJECTILE_LIFETIME = 1200;
 
 var wss = null;
 
@@ -29,46 +29,10 @@ exports.createWSServer = function(server){
         const deltaTime = Math.random() * 1000
         const player = new Actor({
             kind: 'player',
+            type: 'player-base',
             x: Math.random() * 100,
             y: Math.random() * 100,
-            onUpdate: function(stage, delta, time){
-                if (this.isAccelerating){
-                    this.velocity += PLAYER_SPEED * 0.1;
-                    if (this.velocity > PLAYER_SPEED){
-                        this.velocity = PLAYER_SPEED;
-                    }
-                } else {
-                    this.velocity -= PLAYER_SPEED * 0.025;
-                    if (this.velocity < 0){
-                        this.velocity = 0;
-                    }
-                }
-
-                if (this.rotateDirection !== 0){
-                    this.radialVelocity = Velocity.getRadialVelocity(player.velocity, PLAYER_SPEED, PLAYER_RADIAL_SPEED) * this.rotateDirection;
-                } else {
-                    this.radialVelocity -= PLAYER_RADIAL_SPEED * 0.3;
-                    if (this.radialVelocity < 0){
-                        this.radialVelocity = 0;
-                    }
-                }
-
-                if (this.velocity){
-                    const velocity = Velocity.get2DVelocity(-this.rotation, this.velocity);
-                    this.x += velocity.x;
-                    this.y += velocity.y;
-                }
-
-                if (this.radialVelocity){
-                    this.rotation += this.radialVelocity;
-                }
-
-                if (this.rotation > Math.PI * 2){
-                    this.rotation -= Math.PI * 2;
-                } else if (this.rotation < -Math.PI * 2){
-                    this.rotation += Math.PI * 2;
-                }
-            }
+            onUpdate: 'defaultPlayer'
         });
         const actorId = player.id;
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
@@ -111,15 +75,29 @@ exports.createWSServer = function(server){
             }
 
             if (data.subject === EVENTS.COMMANDS.PLAYER.ACCELERATE){
-                //player.velocity = PLAYER_SPEED;
                 player.isAccelerating = true;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.DECELERATE){
-                //player.velocity = 0;
                 player.isAccelerating = false;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE){
                 player.rotateDirection = -data.message.direction;
             } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE){
                 player.rotateDirection = 0;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.FIRE){
+                const angle = Angle.getAngleBetweenTwoPoints(player.x, player.y, data.message.x, data.message.y);
+                const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
+                const projectile = new Actor({
+                    kind: 'projectile',
+                    x: player.x,
+                    y: player.y,
+                    rotation: -angle,
+                    vx: velocity.x,
+                    vy: velocity.y,
+                    ttl: PROJECTILE_LIFETIME,
+                    onUpdate: 'defaultProjectile'
+                });
+
+                //todo: check last shot timestamp
+                stage.addActor(projectile);
             }
         });
 

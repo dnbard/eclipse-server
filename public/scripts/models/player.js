@@ -4,8 +4,9 @@ define([
     'enums/events',
     'enums/keys',
     'core/hotkey',
-    'models/turret'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret){
+    'models/turret',
+    'blueprints/ships'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -33,12 +34,12 @@ define([
             }
         }
 
-        if (this.turrets){
-            this.turrets.forEach(turretIterator);
+        if (this.systems){
+            this.systems.forEach(systemsIterator);
         }
     }
 
-    function turretIterator(t){
+    function systemsIterator(t){
         if (typeof t.onUpdate === 'function'){
             t.onUpdate();
         }
@@ -65,6 +66,7 @@ define([
             .texture;
         const player = new PIXI.Container();
         const playerSprite = new PIXI.Sprite(texture);
+        const blueprint = ShipBlueprints.find(b => b.id === options.type);
 
         player.id = options.id;
         player.kind = 'player';
@@ -119,14 +121,26 @@ define([
         }
 
         player.addChild(playerSprite);
+        player.systems = [];
 
-        player.turrets = [Turret({
-            x: 0,
-            y: 16,
-            isControllable: player.id === playerId,
-            parent: player
-        })];
-        player.turrets.forEach(t => player.addChild(t));
+        blueprint.systems.forEach(s => {
+            var system = null;
+
+            if (s.kind === 'turret'){
+                system = Turret({
+                   x: s.offset.x,
+                   y: s.offset.y,
+                   isControllable: player.id === playerId,
+                   parent: player
+                });
+            }
+
+            if (system){
+                player.systems.push(system);
+            }
+        });
+
+        player.systems.forEach(s => player.addChild(s));
 
         return player;
     }

@@ -4,7 +4,10 @@ define([
 ], function(PIXI, Mouse){
     function onUpdate(){
         const mousePosition = Mouse.get();
-        const angle = Math.atan2(mousePosition.y - this.y - this._parent.y, mousePosition.x - this.x - this._parent.x);
+        const angle = Math.atan2(
+            mousePosition.y - this.y - this._parent.y,
+            mousePosition.x - this.x - this._parent.x
+        );
         this.rotation = angle + Math.PI * 0.5 - this._parent.rotation;
     }
 

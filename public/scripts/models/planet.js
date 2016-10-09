@@ -21,9 +21,6 @@ define([
         }
 
         planet.interactive = true;
-        planet.click = (e) => {
-            console.log(e.target);
-        }
 
         return planet;
     }
