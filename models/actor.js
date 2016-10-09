@@ -13,6 +13,8 @@ class Actor{
         this.y = options.y || 0;
         this.rotation = 0;
 
+        this.velocity = 0;
+
         this.kind = options.kind || 'actor';
 
         if (typeof options.onUpdate === 'function'){

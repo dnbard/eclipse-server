@@ -12,7 +12,11 @@
         COMMANDS: {
             ALL: 'eclipse.commands',
             PLAYER: {
-                MOVETO: 'eclipse.commands.player.moveto'
+                MOVETO: 'eclipse.commands.player.moveto',
+                DECELERATE: 'eclipse.commands.player.decelerate',
+                ACCELERATE: 'eclipse.commands.player.accelerate',
+                RADIAL_ACCELERATE: 'eclipse.commands.player.radial_accelerate',
+                RADIAL_DECELERATE: 'eclipse.commands.player.radial_decelerate'
             }
         }
     };

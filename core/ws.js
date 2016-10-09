@@ -11,8 +11,8 @@ const packageData = require('../package.json');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
-const PLAYER_SPEED = 3;
-const PIXEL_THRESHOLD = PLAYER_SPEED * 2;
+const PLAYER_SPEED = 5;
+const PLAYER_RADIAL_SPEED = 0.1;
 
 var wss = null;
 
@@ -32,22 +32,41 @@ exports.createWSServer = function(server){
             x: Math.random() * 100,
             y: Math.random() * 100,
             onUpdate: function(stage, delta, time){
-                if (this.moveToX || this.moveToY){
-                    const angle = Angle.getAngleBetweenTwoPoints(this.x, this.y, this.moveToX, this.moveToY);
-                    this.velocity = Velocity.get2DVelocity(angle, PLAYER_SPEED);
-                    this.rotation = -angle;
+                if (this.isAccelerating){
+                    this.velocity += PLAYER_SPEED * 0.1;
+                    if (this.velocity > PLAYER_SPEED){
+                        this.velocity = PLAYER_SPEED;
+                    }
                 } else {
-                    this.velocity = null;
+                    this.velocity -= PLAYER_SPEED * 0.025;
+                    if (this.velocity < 0){
+                        this.velocity = 0;
+                    }
                 }
 
-                if (!this.velocity || (Math.abs(this.x - this.moveToX) < PIXEL_THRESHOLD && Math.abs(this.y - this.moveToY) < PIXEL_THRESHOLD)){
-                    this.moveToX = null;
-                    this.moveToY = null;
+                if (this.rotateDirection !== 0){
+                    this.radialVelocity = Velocity.getRadialVelocity(player.velocity, PLAYER_SPEED, PLAYER_RADIAL_SPEED) * this.rotateDirection;
+                } else {
+                    this.radialVelocity -= PLAYER_RADIAL_SPEED * 0.3;
+                    if (this.radialVelocity < 0){
+                        this.radialVelocity = 0;
+                    }
                 }
 
                 if (this.velocity){
-                    this.x += this.velocity.x;
-                    this.y += this.velocity.y;
+                    const velocity = Velocity.get2DVelocity(-this.rotation, this.velocity);
+                    this.x += velocity.x;
+                    this.y += velocity.y;
+                }
+
+                if (this.radialVelocity){
+                    this.rotation += this.radialVelocity;
+                }
+
+                if (this.rotation > Math.PI * 2){
+                    this.rotation -= Math.PI * 2;
+                } else if (this.rotation < -Math.PI * 2){
+                    this.rotation += Math.PI * 2;
                 }
             }
         });
@@ -77,8 +96,10 @@ exports.createWSServer = function(server){
         }));
 
         ws.on('message', (payload, flags) => {
+            var data;
+
             try{
-                const data = JSON.parse(payload);
+                data = JSON.parse(payload);
             } catch(e){
                 console.err(e);
             }
@@ -89,8 +110,17 @@ exports.createWSServer = function(server){
                 console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
             }
 
-            player.moveToX = data.message.x;
-            player.moveToY = data.message.y;
+            if (data.subject === EVENTS.COMMANDS.PLAYER.ACCELERATE){
+                //player.velocity = PLAYER_SPEED;
+                player.isAccelerating = true;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.DECELERATE){
+                //player.velocity = 0;
+                player.isAccelerating = false;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE){
+                player.rotateDirection = -data.message.direction;
+            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE){
+                player.rotateDirection = 0;
+            }
         });
 
         ws.on('close', () => {
