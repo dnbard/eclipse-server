@@ -5,12 +5,12 @@ define([
     'enums/events'
 ], (_, PubSub, Stage, EVENTS) => {
     function startGameLoop(data){
-        stage = data.stage;
-        renderer = data.renderer;
+        const stage = data.stage;
+        const renderer = data.renderer
 
         gameLoop();
 
-        function gameLoop(){
+        function gameLoop(delta){
             requestAnimationFrame(gameLoop);
 
             stage.children.forEach(updateLoopIterator);
@@ -50,7 +50,7 @@ define([
                     return;
                 }
 
-                const actorComponent = Stage.createGenericActor(actor);
+                const actorComponent = Stage.createGenericActor(actor, stage);
                 stage.addChild(actorComponent);
             });
 
@@ -62,6 +62,9 @@ define([
                 }
 
                 const actor = _.find(stage.children, a => a.id === id);
+                if (typeof actor.onDestroy === 'function'){
+                    actor.onDestroy.call(actor, stage);
+                }
                 stage.removeChild(actor);
             });
         });

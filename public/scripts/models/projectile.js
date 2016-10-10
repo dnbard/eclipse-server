@@ -1,6 +1,11 @@
 define([
-    'pixi'
-], function(PIXI){
+    'pixi',
+    'particles/projectile-ion',
+    'particles/explosion-small-ion',
+    'components/staticParticle',
+
+    'pixi-particles'
+], function(PIXI, particle, particleExplosion, StaticParticle){
     function applyUpdate(newState){
         this.animateMovement = {
             x: newState.x,
@@ -14,7 +19,21 @@ define([
         this.vy = this.animateMovement.velY;
     }
 
-    function onUpdate(){
+    function onDestroy(stage){
+        this.particle.destroy();
+
+        const explosion = StaticParticle({
+            x: this.x,
+            y: this.y,
+            textures: [PIXI.loader.resources['/public/particles/particle.png'].texture],
+            particle: particleExplosion.get(),
+            stage: stage
+        });
+
+        stage.addChild(explosion);
+    }
+
+    function onUpdate(stage, delta){
         this.x += this.vx;
         this.y += this.vy;
 
@@ -27,17 +46,17 @@ define([
                 this.vy = 0;
             }
         }
+
+        this.particle.update(20*0.001);
     }
 
 
-    return function Projectile(options){
-        const texture = PIXI.loader.resources['/public/images/projectile-01.png'].texture;
-        const projectile = new PIXI.Sprite(texture);
+    return function Projectile(options, stage){
+        const projectile = new PIXI.Container();
+
+        projectile.particle = new PIXI.particles.Emitter(projectile,     [PIXI.loader.resources['/public/particles/particle.png'].texture], particle);
 
         projectile.id = options.id;
-
-        projectile.anchor.x = 0.5;
-        projectile.anchor.y = 0.5;
 
         projectile.vx = options.vx * 0.2;
         projectile.vy = options.vy * 0.2;
@@ -47,6 +66,7 @@ define([
 
         projectile.onUpdate = onUpdate;
         projectile.applyUpdate = applyUpdate;
+        projectile.onDestroy = onDestroy;
 
         return projectile;
     }

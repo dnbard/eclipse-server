@@ -3,6 +3,8 @@ requirejs.config({
         'templates': '../templates',
         'images': '../images',
         'pixi': 'https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.2/pixi',
+        'pixi-particles': './vendor/pixiParticles',
+        'particles': '../particles',
         'pubsub': 'https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.5.3/pubsub',
         'lodash': 'https://cdn.jsdelivr.net/lodash/4.16.2/lodash.min'
     }

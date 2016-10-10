@@ -5,8 +5,10 @@ define([
     'models/camera',
     'models/projectile',
     'components/backdrop',
-    'components/borders'
-],(PIXI, Planet, Player, Camera, Projectile, Backdrop, Borders) => {
+    'components/borders',
+    'pubsub',
+    'enums/events'
+],(PIXI, Planet, Player, Camera, Projectile, Backdrop, Borders, PubSub, EVENTS) => {
     function getActorConstructor(kind){
         var constructor = null;
 
@@ -21,14 +23,14 @@ define([
         return constructor;
     }
 
-    function createGenericActor(el){
+    function createGenericActor(el, stage){
         var constructor = getActorConstructor(el.kind);
 
         if (!constructor){
             return console.info(`Unknown element with kind=${el.kind}`);
         }
 
-        const actor = constructor(el);
+        const actor = constructor(el, stage);
 
         actor.x = parseFloat(el.x) || 0;
         actor.y = parseFloat(el.y) || 0;
@@ -51,7 +53,9 @@ define([
         stage.addChild(Borders());
 
         if (typeof options.init === 'object' && typeof options.init.stage === 'object' && typeof options.init.stage.actors === 'object'){
-            options.init.stage.actors.forEach(el => stage.addChild(createGenericActor(el)));
+            options.init.stage.actors.forEach(el =>
+                stage.addChild(createGenericActor(el, stage))
+            );
 
             const camera = Camera({
                 container: stage,
@@ -60,6 +64,17 @@ define([
 
             stage._camera = camera;
         }
+
+        PubSub.subscribe(EVENTS.STAGE.REMOVE_CHILD, (e, data) => {
+            if (stage.id !== data.stageId){
+                return;
+            }
+
+            if (typeof data.child.onDestroy === 'function'){
+                data.child.onDestroy.call(data.child, stage);
+            }
+            stage.removeChild(data.child);
+        });
 
         return stage;
     }

@@ -7,7 +7,8 @@
             OPEN: 'eclipse.connection.open'
         },
         STAGE: {
-            UPDATED: 'eclipse.stage.updated'
+            UPDATED: 'eclipse.stage.updated',
+            REMOVE_CHILD: 'eclipse.stage.remove-child'
         },
         COMMANDS: {
             ALL: 'eclipse.commands',
