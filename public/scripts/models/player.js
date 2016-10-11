@@ -136,24 +136,21 @@ define([
                    parent: player
                 });
             } else if (s.kind === 'trail'){
-                const radius = Math.sqrt(s.offset.x*s.offset.x + s.offset.y *s.offset.y);
-                const xAngle = Math.acos(s.offset.x / radius);
-                const yAngle = Math.asin(s.offset.y / radius);
-
-                console.log(JSON.stringify(s, null, 21));
-                console.log(`x:${xAngle / Math.PI * 180}, y:${yAngle / Math.PI * 180}`);
+                const offsetX = s.offset.x;
+                const offsetY = s.offset.y;
 
                 system = StaticParticle({
-                    textures: [PIXI.loader.resources['/public/particles/particle.png'].texture],
+                    textures: [
+                        PIXI.loader.resources['/public/particles/particle.png'].texture
+                    ],
                     particle: trail,
                     x: 0,
                     y: 0,
                     onUpdate: function (){
-                        const _y = yAngle + player.rotation;
-                        const _x = xAngle + player.rotation;
+                        const angle = player.rotation;
 
-                        this.particle.spawnPos.x = player.x + Math.cos(_x) * radius;
-                        this.particle.spawnPos.y = player.y + Math.sin(_y) * radius;
+                        this.particle.spawnPos.x = offsetX * Math.cos(angle) - offsetY * Math.sin(angle) + player.x;
+                        this.particle.spawnPos.y = offsetX * Math.sin(angle) + offsetY * Math.cos(angle) + player.y;
 
                         this.particle.emit = !!player.animateMovement;
                         this.particle.update(20 * 0.001);

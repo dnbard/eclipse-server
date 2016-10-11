@@ -5,12 +5,12 @@
         systems: [{
             kind: 'turret',
             offset: {x: 0, y: 0},
-        }/*, {
+        }, {
             kind: 'trail',
-            offset: {x: -10, y: 20}
-        }*/, {
+            offset: {x: -12, y: 18}
+        }, {
             kind: 'trail',
-            offset: {x: 0, y: 22}
+            offset: {x: 12, y: 18}
         }]
     }];
 
