@@ -5,8 +5,10 @@ define([
     'enums/keys',
     'core/hotkey',
     'models/turret',
-    'blueprints/ships'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints){
+    'blueprints/ships',
+    'components/staticParticle',
+    'particles/trail'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -61,7 +63,7 @@ define([
         this.rotation = projectedRotation;
     }
 
-    return function Player(options){
+    return function Player(options, stage){
         const texture = PIXI.loader.resources['/public/images/spaceship-01.png']
             .texture;
         const player = new PIXI.Container();
@@ -133,6 +135,33 @@ define([
                    isControllable: player.id === playerId,
                    parent: player
                 });
+            } else if (s.kind === 'trail'){
+                const radius = Math.sqrt(s.offset.x*s.offset.x + s.offset.y *s.offset.y);
+                const xAngle = Math.acos(s.offset.x / radius);
+                const yAngle = Math.asin(s.offset.y / radius);
+
+                console.log(JSON.stringify(s, null, 21));
+                console.log(`x:${xAngle / Math.PI * 180}, y:${yAngle / Math.PI * 180}`);
+
+                system = StaticParticle({
+                    textures: [PIXI.loader.resources['/public/particles/particle.png'].texture],
+                    particle: trail,
+                    x: 0,
+                    y: 0,
+                    onUpdate: function (){
+                        const _y = yAngle + player.rotation;
+                        const _x = xAngle + player.rotation;
+
+                        this.particle.spawnPos.x = player.x + Math.cos(_x) * radius;
+                        this.particle.spawnPos.y = player.y + Math.sin(_y) * radius;
+
+                        this.particle.emit = !!player.animateMovement;
+                        this.particle.update(20 * 0.001);
+                    }
+                    /*TODO: destroy particle on player removal*/
+                });
+
+                return stage.addChild(system);
             }
 
             if (system){

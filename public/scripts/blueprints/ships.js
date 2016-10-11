@@ -4,7 +4,13 @@
         texture: '/public/images/spaceship-01.png',
         systems: [{
             kind: 'turret',
-            offset: {x: 0, y: 0}
+            offset: {x: 0, y: 0},
+        }/*, {
+            kind: 'trail',
+            offset: {x: -10, y: 20}
+        }*/, {
+            kind: 'trail',
+            offset: {x: 0, y: 22}
         }]
     }];
 

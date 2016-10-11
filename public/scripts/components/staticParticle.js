@@ -26,7 +26,7 @@ define([
         container.kind = 'static-particle';
 
         container.onDestroy = onDestroy;
-        container.onUpdate = onUpdate;
+        container.onUpdate = options.onUpdate || onUpdate;
 
         if (options.particle.emitterLifetime > 0){
             setTimeout(function(){
