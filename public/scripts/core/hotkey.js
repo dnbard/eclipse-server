@@ -28,7 +28,11 @@ define([
             keys[e.keyCode].forEach(keydownIterator);
         }
 
-        e.preventDefault();
+        if (e.key !== 'F12' && e.key !== 'F5'){
+            //allowing to open Chrome DevTools and Refresh page
+            //hotkey to function without restrictions
+            e.preventDefault();
+        }
     }, false);
 
     function keydownIterator(key){
