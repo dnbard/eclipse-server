@@ -15,6 +15,12 @@ define([
         playerId = data.message.actorId;
     });
 
+    function onDestroy(){
+        var args = arguments;
+        this.children.filter(c => typeof c.onDestroy === 'function')
+            .forEach(c => c.onDestroy.apply(c, args));
+    }
+
 
     function onUpdate(){
         this.x += this.vx;

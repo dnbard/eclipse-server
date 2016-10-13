@@ -28,6 +28,8 @@ define([
         container.onDestroy = onDestroy;
         container.onUpdate = options.onUpdate || onUpdate;
 
+        container.isPartricle = true;
+
         if (options.particle.emitterLifetime > 0){
             setTimeout(function(){
                 PubSub.publish(EVENTS.STAGE.REMOVE_CHILD, {
