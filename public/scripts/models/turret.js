@@ -8,7 +8,7 @@ define([
             mousePosition.y - this.y - this._parent.y,
             mousePosition.x - this.x - this._parent.x
         );
-        this.rotation = angle + Math.PI * 0.5 - this._parent.rotation;
+        this.rotation = (angle || 0) + Math.PI * 0.5 - this._parent.rotation;
     }
 
     return function(options){
