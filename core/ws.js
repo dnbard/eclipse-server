@@ -111,3 +111,11 @@ exports.createWSServer = function(server){
 
     return wss;
 }
+
+exports.sendMessage = function(ws, message){
+    if (ws.readyState !== ws.OPEN){
+        return console.log('Unable to send WS message. Reason - WS already closed.')
+    }
+
+    ws.send(message);
+}

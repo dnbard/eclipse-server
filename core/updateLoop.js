@@ -6,6 +6,7 @@ const UPDATE_DELTA = 100;
 const Stages = require('../core/stages');
 const Subscriptions = require('../core/subscriptions');
 const EVENTS = require('../public/scripts/enums/events');
+const WebSokets = require('../core/ws');
 
 let TIME = 0;
 
@@ -45,13 +46,11 @@ exports.init = function(){
         const stageId = stage.id;
         const message = JSON.stringify({
             subject: EVENTS.STAGE.UPDATED,
-            message: {
-                stage: stage
-            }
+            message: { stage: stage }
         });
 
-        Subscriptions.getSubscriptionBySubscribeToId(stageId).forEach(s => s.ws.send(message));
-
+        Subscriptions.getSubscriptionBySubscribeToId(stageId)
+            .forEach(s => WebSokets.sendMessage(s.ws, message));
         setTimeout(UpdateIterator, UPDATE_DELTA);
     }
 }
