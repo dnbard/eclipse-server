@@ -9,8 +9,12 @@ define([
         token = payload.message.token
     });
 
+    function getProtocol(){
+        return location.protocol === 'https:' ? 'wss' : 'ws';
+    }
+
     function genericConnect(){
-        const ws = new WebSocket(`ws://${location.host}`);
+        const ws = new WebSocket(`${getProtocol()}://${location.host}`);
 
         ws.onopen = () => {
             alertify.log('Connection established');
