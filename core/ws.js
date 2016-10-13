@@ -7,12 +7,7 @@ const Subscriptions = require('./subscriptions');
 const Actor = require('../models/actor');
 const EVENTS = require('../public/scripts/enums/events');
 const packageData = require('../package.json');
-
-const Angle = require('../physics/angle');
-const Velocity = require('../physics/velocity');
-
-const PROJECTILE_SPEED = 10;
-const PROJECTILE_LIFETIME = 1200;
+const Commands = require('./commands');
 
 var wss = null;
 
@@ -70,34 +65,19 @@ exports.createWSServer = function(server){
 
             if (data.token !== token){
                 return console.log(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
-            } else {
-                console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
             }
 
-            if (data.subject === EVENTS.COMMANDS.PLAYER.ACCELERATE){
-                player.isAccelerating = true;
-            } else if (data.subject === EVENTS.COMMANDS.PLAYER.DECELERATE){
-                player.isAccelerating = false;
-            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_ACCELERATE){
-                player.rotateDirection = -data.message.direction;
-            } else if (data.subject === EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE){
-                player.rotateDirection = 0;
-            } else if (data.subject === EVENTS.COMMANDS.PLAYER.FIRE){
-                const angle = Angle.getAngleBetweenTwoPoints(player.x, player.y, data.message.x, data.message.y);
-                const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
-                const projectile = new Actor({
-                    kind: 'projectile',
-                    x: player.x,
-                    y: player.y,
-                    rotation: -angle,
-                    vx: velocity.x,
-                    vy: velocity.y,
-                    ttl: PROJECTILE_LIFETIME,
-                    onUpdate: 'defaultProjectile'
-                });
+            if (EVENTS._hash[data.subject]){
+                console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
 
-                //todo: check last shot timestamp
-                stage.addActor(projectile);
+                Commands.execute(data.subject, {
+                    message: data.message,
+                    subject: data.subject,
+                    player: player,
+                    stage: stage
+                });
+            } else {
+                console.log(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
             }
         });
 

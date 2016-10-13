@@ -23,6 +23,20 @@
         }
     };
 
+    function createHash(hash, events){
+        for(var el in events){
+            if (typeof events[el] === 'string'){
+                hash[events[el]] = events[el].length;
+            } else if (typeof events[el] === 'object'){
+                createHash(hash, events[el]);
+            }
+        }
+
+        return hash;
+    }
+
+    events._hash = createHash({}, events);
+
     converter(events);
 })(function(data){
     typeof define === 'function' ? define(() =>  data) : module.exports = data;
