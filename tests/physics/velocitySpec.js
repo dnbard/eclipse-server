@@ -18,4 +18,22 @@ describe('Physics - Velocity', () => {
             expect(Velocity.get2DVelocity(Math.PI * 0.5, 50).y.toFixed(2)).to.be.equal('50.00');
         });
     });
+
+    describe('#getRadialVelocity', () => {
+        it('should return radial velocity for 0%', () => {
+            expect(Velocity.getRadialVelocity(0, 100, 100)).to.be.equal(100);
+        });
+
+        it('should return radial velocity for 50%', () => {
+            expect(Velocity.getRadialVelocity(50, 100, 100)).to.be.equal(62.5);
+        });
+
+        it('should return radial velocity for 75%', () => {
+            expect(Velocity.getRadialVelocity(75, 100, 100)).to.be.equal(43.75);
+        });
+
+        it('should return radial velocity for 100%', () => {
+            expect(Velocity.getRadialVelocity(100, 100, 100)).to.be.equal(25);
+        });
+    });
 });
