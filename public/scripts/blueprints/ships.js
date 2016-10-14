@@ -7,10 +7,20 @@
             offset: {x: 0, y: 0},
         }, {
             kind: 'trail',
+            particle: 'trail',
             offset: {x: -12, y: 18}
         }, {
             kind: 'trail',
+            particle: 'trail',
             offset: {x: 12, y: 18}
+        }]
+    },{
+        id: 'npc-base',
+        texture: '/public/images/spaceship-02.png',
+        systems: [{
+            kind: 'trail',
+            particle: 'trail',
+            offset: {x: 0, y: 12}
         }]
     }];
 

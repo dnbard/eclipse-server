@@ -4,4 +4,10 @@
     "filename": "spaceship-01.png",
     "widht": 64,
     "height": 64
+},{
+    "kind": "spaceship",
+    "id": "02",
+    "filename": "spaceship-02.png",
+    "widht": 32,
+    "height": 32
 }]

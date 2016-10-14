@@ -72,6 +72,9 @@ class Actor{
         this.y = options.y || 0;
         this.rotation = options.rotation || 0;
 
+        this.isAccelerating = options.isAccelerating || false;
+        this.rotateDirection = options.rotateDirection || 0;
+
         this.velocity = 0;
         this.vx = options.vx;
         this.vy = options.vy;

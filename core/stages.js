@@ -18,9 +18,21 @@ exports.createStage = function(options){
 }
 
 exports.getOrCreateGeneric = function(){
-    var stage = collection.filter(s => s.generic)[0];
+    var stage = collection.filter(s => s.generic)[0] || exports.createStage();
 
-    return stage || exports.createStage();
+    const npc = new Actor({
+        kind: 'player',
+        type: 'npc-base',
+        x: Math.random() * 1000,
+        y: Math.random() * 1000,
+        onUpdate: 'defaultPlayer',
+        isAccelerating: true,
+        rotateDirection: 1
+    });
+
+    stage.addActor(npc);
+
+    return stage ;
 }
 
 exports.removeAll = function(){

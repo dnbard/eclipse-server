@@ -70,11 +70,12 @@ define([
     }
 
     return function Player(options, stage){
-        const texture = PIXI.loader.resources['/public/images/spaceship-01.png']
+        const blueprint = ShipBlueprints.find(b => b.id === options.type);
+        const texture = PIXI.loader.resources[blueprint.texture]
             .texture;
         const player = new PIXI.Container();
         const playerSprite = new PIXI.Sprite(texture);
-        const blueprint = ShipBlueprints.find(b => b.id === options.type);
+
 
         player.id = options.id;
         player.kind = 'player';
@@ -161,7 +162,6 @@ define([
                         this.particle.emit = !!player.animateMovement;
                         this.particle.update(20 * 0.001);
                     }
-                    /*TODO: destroy particle on player removal*/
                 });
 
                 return stage.addChild(system);
