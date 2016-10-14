@@ -6,7 +6,11 @@ define([
 ], (_, PubSub, Stage, EVENTS) => {
     function startGameLoop(data){
         const stage = data.stage;
-        const renderer = data.renderer
+        const renderer = data.renderer;
+        const filterStrength = 5;
+        var frameTime = 0, lastLoop = new Date, thisLoop;
+        var uframeTime = 100, ulastLoop = new Date, uthisLoop;
+        var received = 0;
 
         gameLoop();
 
@@ -17,7 +21,22 @@ define([
             updateLoopIterator(stage._camera);
 
             renderer.render(stage);
+
+            const thisFrameTime = (thisLoop=new Date) - lastLoop;
+            frameTime+= (thisFrameTime - frameTime) / filterStrength;
+            lastLoop = thisLoop;
         }
+
+        const fpsOut = document.getElementById('fps');
+        const latencyOut = document.getElementById('latency');
+        const receivedOut = document.getElementById('received');
+        setInterval(function(){
+            fpsOut.textContent = `| ${(1000 / frameTime).toFixed(1)} fps`;
+            latencyOut.textContent = `| ${Math.round(uframeTime)}ms`;
+            receivedOut.textContent = received < 100000 ?
+                `| ⬇${(received / 1000).toFixed(0)}KB` :
+                `| ⬇${(received / 1000000).toFixed(1)}MB`;
+        },1000);
 
         function updateLoopIterator(el){
             if (el && el.onUpdate && typeof el.onUpdate === 'function'){
@@ -67,6 +86,12 @@ define([
                 }
                 stage.removeChild(actor);
             });
+
+            const thisFrameTime = (uthisLoop=new Date) - ulastLoop;
+            uframeTime+= (thisFrameTime - uframeTime) / filterStrength;
+            ulastLoop = uthisLoop;
+
+            received += payload._length;
         });
 
         function ActorIterator(actor){

@@ -3,7 +3,8 @@ define([
     'vendor/alertify',
     'enums/events'
 ], (PubSub, alertify, EVENTS) => {
-    var token = null;
+    var token = null
+        bytesSent = 0;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
         token = payload.message.token
@@ -24,21 +25,34 @@ define([
             alertify.delay(0).closeLogOnClick(true).error('Connection lost');
         }
 
-        ws.onmessage = (data, flags) => {
-            const payload = JSON.parse(data.data);
-            PubSub.publish(payload.subject, payload);
+        ws.onmessage = (payload, flags) => {
+            const message = JSON.parse(payload.data);
+            PubSub.publish(message.subject, Object.assign(message, {
+                _length: payload.data.length
+            }));
         }
 
         PubSub.subscribe(EVENTS.COMMANDS.ALL, (e, data) => {
-            ws.send(JSON.stringify({
+            const payload = JSON.stringify({
                 subject: e,
                 message: data,
                 token: token
-            }));
+            });
+            const payloadSize = payload.length;
+            bytesSent += payloadSize;
+
+            ws.send(payload);
         });
 
         return ws;
     }
+
+    const sentOut = document.getElementById('sent');
+    setInterval(() => {
+        sentOut.textContent = bytesSent < 100000 ?
+            `| ⬆${(bytesSent / 1000).toFixed(0)}KB` :
+            `| ⬆${(bytesSent / 1000000).toFixed(1)}MB`;
+    }, 1000);
 
     return {
         genericConnect: genericConnect

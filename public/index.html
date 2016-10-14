@@ -1,11 +1,22 @@
 <!doctype html>
 <html>
     <head>
+        <title>Eclipse</title>
+
         <link href="/public/styles/styles.css" rel="stylesheet" type="text/css"/>
         <link href="/public/styles/alertify.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div id="version"></div>
+        <div id="footer">
+            <span id="version"></span>
+            <span id="stats">
+                <span id="fps"></span>
+                <span id="latency"></span>
+                <span id="received"></span>
+                <span id="sent"></span>
+            </span>
+        </div>
+
         <script data-main="/public/scripts/index.js" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js"></script>
     </body>
 </html>

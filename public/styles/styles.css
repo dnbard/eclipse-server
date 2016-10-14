@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0
 }
-#version {
+#footer {
     position: fixed;
     color: #9a9a9a;
     z-index: 10;
