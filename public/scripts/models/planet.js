@@ -20,8 +20,6 @@ define([
             this.y += this.vy;
         }
 
-        planet.interactive = true;
-
         return planet;
     }
 });

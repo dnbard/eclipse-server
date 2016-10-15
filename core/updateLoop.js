@@ -7,6 +7,7 @@ const Stages = require('../core/stages');
 const Subscriptions = require('../core/subscriptions');
 const EVENTS = require('../public/scripts/enums/events');
 const WebSokets = require('../core/ws');
+const Collision = require('../core/collision');
 
 let TIME = 0;
 
@@ -16,6 +17,8 @@ exports.init = function(){
     setTimeout(UpdateIterator, UPDATE_DELTA);
 
     function LoopIterator(){
+        setTimeout(LoopIterator, LOOP_DELTA);
+
         TIME += LOOP_DELTA;
 
         if (!stage){
@@ -25,7 +28,7 @@ exports.init = function(){
         const actors = stage.actors;
         actors.forEach(ActorIterator);
 
-        setTimeout(LoopIterator, LOOP_DELTA);
+        Collision.checkStage(stage);
     }
 
     function ActorIterator(actor){
@@ -39,6 +42,8 @@ exports.init = function(){
     }
 
     function UpdateIterator(){
+        setTimeout(UpdateIterator, UPDATE_DELTA);
+
         if (!stage){
             return;
         }
@@ -51,6 +56,5 @@ exports.init = function(){
 
         Subscriptions.getSubscriptionBySubscribeToId(stageId)
             .forEach(s => WebSokets.sendMessage(s.ws, message));
-        setTimeout(UpdateIterator, UPDATE_DELTA);
     }
 }

@@ -1,7 +1,9 @@
-const EVENTS = require('../public/scripts/enums/events');
 const Actor = require('../models/actor');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
+
+const EVENTS = require('../public/scripts/enums/events');
+const GEOMETRY = require('../enums/geometry');
 
 var commands = {};
 
@@ -29,8 +31,8 @@ exports.register = register;
 exports.unregisterAll = unregisterAll;
 
 
-const PROJECTILE_SPEED = 10;
-const PROJECTILE_LIFETIME = 1200;
+const PROJECTILE_SPEED = 13;
+const PROJECTILE_LIFETIME = 1900;
 
 register(EVENTS.COMMANDS.PLAYER.ACCELERATE,
     p => p.player.isAccelerating = true);
@@ -53,7 +55,10 @@ register(EVENTS.COMMANDS.PLAYER.FIRE, p => {
         vx: velocity.x,
         vy: velocity.y,
         ttl: PROJECTILE_LIFETIME,
-        onUpdate: 'defaultProjectile'
+        onUpdate: 'defaultProjectile',
+        geometry: GEOMETRY.POINT,
+        onCollide: 'defaultProjectileCollision',
+        createdBy: p.player.id
     });
 
     //todo: check last shot timestamp

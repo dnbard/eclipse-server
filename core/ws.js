@@ -5,9 +5,11 @@ const Base64 = require('js-base64').Base64;
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
 const Actor = require('../models/actor');
-const EVENTS = require('../public/scripts/enums/events');
 const packageData = require('../package.json');
 const Commands = require('./commands');
+
+const GEOMETRY = require('../enums/geometry');
+const EVENTS = require('../public/scripts/enums/events');
 
 var wss = null;
 
@@ -27,7 +29,9 @@ exports.createWSServer = function(server){
             type: 'player-base',
             x: Math.random() * 100,
             y: Math.random() * 100,
-            onUpdate: 'defaultPlayer'
+            onUpdate: 'defaultPlayer',
+            geometry: GEOMETRY.CIRCLE,
+            size: 22
         });
         const actorId = player.id;
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);

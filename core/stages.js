@@ -5,12 +5,16 @@ const uuid = require('node-uuid').v4;
 const Stage = require('../models/stage');
 const Actor = require('../models/actor');
 
+const GEOMETRY = require('../enums/geometry');
+
 let collection = [];
 
 exports.createStage = function(options){
     const stage = new Stage();
     stage.addActor(new Actor({
-        kind: 'planet'
+        kind: 'planet',
+        geometry: GEOMETRY.CIRCLE,
+        size: 32
     }));
 
     collection.push(stage);
@@ -27,7 +31,9 @@ exports.getOrCreateGeneric = function(){
         y: Math.random() * 1000,
         onUpdate: 'defaultPlayer',
         isAccelerating: true,
-        rotateDirection: 1
+        rotateDirection: 1,
+        geometry: GEOMETRY.CIRCLE,
+        size: 16
     });
 
     stage.addActor(npc);

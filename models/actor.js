@@ -59,6 +59,13 @@ const actions = {
         } else if (this.rotation < -Math.PI * 2){
             this.rotation += Math.PI * 2;
         }
+    },
+    defaultProjectileCollision: function(actor, stage){
+        if(actor.id === this.createdBy){
+            return;
+        }
+
+        stage.removeActorById(this.id);
     }
 }
 
@@ -85,10 +92,20 @@ class Actor{
 
         this.kind = options.kind || 'actor';
 
+        this.geometry = options.geometry || null;
+        this.size = options.size || 0;
+        this.createdBy = options.createdBy || null;
+
         if (typeof options.onUpdate === 'function'){
             this.onUpdate = options.onUpdate;
         } else if (typeof options.onUpdate === 'string'){
             this.onUpdate = actions[options.onUpdate];
+        }
+
+        if (typeof options.onCollide === 'function'){
+            this.onCollision = options.onCollide;
+        } else if (typeof options.onCollide === 'string'){
+            this.onCollide = actions[options.onCollide];
         }
     }
 }
