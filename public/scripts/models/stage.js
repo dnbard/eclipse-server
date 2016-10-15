@@ -46,9 +46,8 @@ define([
 
         stage.id = options.init.stage.id;
 
-        stage.addChild(Backdrop({
-            container: stage
-        }));
+        stage._backdrop = Backdrop({ container: stage });
+        stage.addChild(stage._backdrop);
 
         stage.addChild(Borders());
 

@@ -19,6 +19,7 @@ define([
 
             stage.children.forEach(updateLoopIterator);
             updateLoopIterator(stage._camera);
+            updateLoopIterator(stage._backdrop);
 
             renderer.render(stage);
 

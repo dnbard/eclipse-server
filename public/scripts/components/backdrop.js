@@ -30,11 +30,8 @@ define([
     return function Backdrop(options){
         options = options || {};
 
-        const backdrop = new PIXI.Graphics();
-
-        backdrop.beginFill(options.color || 0x000000);
-        backdrop.drawRect(0, 0, window.innerWidth, window.innerHeight);
-        backdrop.endFill();
+        const texture = PIXI.loader.resources['/public/images/backgrounds/background_black.jpg'].texture;
+        const backdrop = new PIXI.Sprite(texture);
 
         backdrop.kind = 'backdrop';
 
