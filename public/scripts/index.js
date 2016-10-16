@@ -6,7 +6,8 @@ requirejs.config({
         'pixi-particles': './vendor/pixiParticles',
         'particles': '../particles',
         'pubsub': 'https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.5.3/pubsub',
-        'lodash': 'https://cdn.jsdelivr.net/lodash/4.16.2/lodash.min'
+        'lodash': 'https://cdn.jsdelivr.net/lodash/4.16.2/lodash.min',
+        pako: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min'
     }
 });
 

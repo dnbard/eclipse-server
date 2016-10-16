@@ -2,6 +2,7 @@ const WebSocketServer = require('ws').Server;
 const uuid = require('./uuid');
 const Base64 = require('js-base64').Base64;
 const url = require('url');
+const pako = require('pako');
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
@@ -44,14 +45,14 @@ exports.createWSServer = function(server){
 
         stage.addActor(player);
 
-        ws.send(JSON.stringify({
+        sendMessage(ws, JSON.stringify({
             subject: EVENTS.SUBSCRIBE.CREATED,
             message: Object.assign({}, subscription, {
                 actorId: actorId
             })
         }));
 
-        ws.send(JSON.stringify({
+        sendMessage(ws, JSON.stringify({
             subject: EVENTS.CONNECTION.OPEN,
             message: {
                 stage: stage,
@@ -102,10 +103,14 @@ exports.createWSServer = function(server){
     return wss;
 }
 
-exports.sendMessage = function(ws, message){
+function sendMessage(ws, message, options){
     if (ws.readyState !== ws.OPEN){
         return console.log('Unable to send WS message. Reason - WS already closed.')
     }
 
-    ws.send(message);
+    const binaryString = pako.deflate(message, { to: 'string' });
+
+    ws.send(binaryString);
 }
+
+exports.sendMessage = sendMessage;

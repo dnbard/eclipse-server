@@ -41,13 +41,13 @@ exports.getOrCreateGeneric = function(){
     });
 
     //size of transitional message is TOO LARGE with that amount of asteroids
-    for(var i = 0; i < 100; i ++){
-        var asteroid = new Asteroid({
-            x: Math.random() * 3000 - 1500,
-            y: Math.random() * 3000 - 4500,
-        });
-        stage.addActor(asteroid);
-    }
+//    for(var i = 0; i < 100; i ++){
+//        var asteroid = new Asteroid({
+//            x: Math.random() * 3000 - 1500,
+//            y: Math.random() * 3000 - 4500,
+//        });
+//        stage.addActor(asteroid);
+//    }
 
     stage.addActor(npc);
 

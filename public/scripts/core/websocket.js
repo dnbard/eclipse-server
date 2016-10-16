@@ -1,8 +1,9 @@
 define([
     'pubsub',
+    'pako',
     'vendor/alertify',
     'enums/events'
-], (PubSub, alertify, EVENTS) => {
+], (PubSub, pako, alertify, EVENTS) => {
     var token = null
         bytesSent = 0;
 
@@ -29,7 +30,7 @@ define([
         }
 
         ws.onmessage = (payload, flags) => {
-            const message = JSON.parse(payload.data);
+            const message = JSON.parse(pako.inflate(payload.data, { to: 'string' }));
             PubSub.publish(message.subject, Object.assign(message, {
                 _length: payload.data.length
             }));
