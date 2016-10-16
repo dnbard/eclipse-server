@@ -1,5 +1,5 @@
 const WebSocketServer = require('ws').Server;
-const uuid = require('node-uuid').v4;
+const uuid = require('./uuid');
 const Base64 = require('js-base64').Base64;
 const url = require('url');
 

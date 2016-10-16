@@ -1,6 +1,6 @@
 "use strict";
 
-const uuid = require('node-uuid').v4;
+const uuid = require('../core/uuid');
 
 
 const actions = {};

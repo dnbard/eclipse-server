@@ -1,4 +1,4 @@
-const uuid = require('node-uuid').v4;
+const uuid = require('./uuid');
 const _ = require('lodash');
 
 var subscriptions = [];
