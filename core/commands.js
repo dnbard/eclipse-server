@@ -1,4 +1,4 @@
-const Actor = require('../models/actor');
+const Projectile = require('../models/projectile');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
@@ -47,8 +47,7 @@ register(EVENTS.COMMANDS.PLAYER.FIRE, p => {
         p.player.x, p.player.y, p.message.x, p.message.y
     );
     const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
-    const projectile = new Actor({
-        kind: 'projectile',
+    const projectile = new Projectile({
         x: p.player.x,
         y: p.player.y,
         rotation: -angle,

@@ -2,7 +2,7 @@ define([
     'pixi'
 ], function(PIXI){
     return function Planet(options){
-        const texture = PIXI.loader.resources['/public/images/planet-eE6w1yk0880.png'].texture;
+        const texture = PIXI.loader.resources['/public/images/planet-cj0ixcXfmRa.png'].texture;
         const planet = new PIXI.Sprite(texture);
 
         planet.id = options.id;

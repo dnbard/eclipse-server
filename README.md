@@ -21,7 +21,6 @@ Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 New version of server are going to be deployed once commit make its way to `master` branch and pass all tests during the CI process(not created atm - [task](https://github.com/dnbard/eclipse-server/issues/5) for it).
 
 Test server - EU [Curio](https://curio.herokuapp.com/)
-Production - ---
 
 ## Additional Tools
 

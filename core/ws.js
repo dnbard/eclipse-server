@@ -30,6 +30,7 @@ exports.createWSServer = function(server){
             x: Math.random() * 100,
             y: Math.random() * 100,
             onUpdate: 'defaultPlayer',
+            onDamage: 'defaultPlayerDamage',
             geometry: GEOMETRY.CIRCLE,
             size: 22
         });

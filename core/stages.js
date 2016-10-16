@@ -14,7 +14,7 @@ exports.createStage = function(options){
     stage.addActor(new Actor({
         kind: 'planet',
         geometry: GEOMETRY.CIRCLE,
-        size: 32
+        size: 118
     }));
 
     collection.push(stage);
@@ -30,6 +30,8 @@ exports.getOrCreateGeneric = function(){
         x: Math.random() * 1000,
         y: Math.random() * 1000,
         onUpdate: 'defaultPlayer',
+        onDamage: 'defaultPlayerDamage',
+        armor: 10,
         isAccelerating: true,
         rotateDirection: 1,
         geometry: GEOMETRY.CIRCLE,

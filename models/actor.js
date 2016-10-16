@@ -7,21 +7,10 @@ const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 
 const PLAYER_SPEED = 5;
+const PLAYER_ARMOR = 100;
 const PLAYER_RADIAL_SPEED = 0.1;
 
 const actions = {
-    defaultProjectile: function(stage, delta){
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.ttl){
-            this.ttl -= delta;
-
-            if (this.ttl <= 0){
-                stage.removeActorById(this.id);
-            }
-        }
-    },
     defaultPlayer: function(stage, delta, time){
         if (this.isAccelerating){
             this.velocity += PLAYER_SPEED * 0.1;
@@ -60,12 +49,18 @@ const actions = {
             this.rotation += Math.PI * 2;
         }
     },
-    defaultProjectileCollision: function(actor, stage){
-        if(actor.id === this.createdBy){
-            return;
-        }
+    defaultPlayerDamage: function(projectile, stage){
+        this.armor -= projectile.damage;
 
-        stage.removeActorById(this.id);
+        if (this.armor <= 0){
+            if (this.type === "player-base"){
+                this.x = 0;
+                this.y = 0;
+                this.armor = PLAYER_ARMOR;
+            } else {
+                stage.removeActorById(this.id);
+            }
+        }
     }
 }
 
@@ -96,16 +91,19 @@ class Actor{
         this.size = options.size || 0;
         this.createdBy = options.createdBy || null;
 
-        if (typeof options.onUpdate === 'function'){
-            this.onUpdate = options.onUpdate;
-        } else if (typeof options.onUpdate === 'string'){
-            this.onUpdate = actions[options.onUpdate];
-        }
+        this.armor = options.armor || PLAYER_ARMOR;
+        this.maxArmor = options.armor || PLAYER_ARMOR;
 
-        if (typeof options.onCollide === 'function'){
-            this.onCollision = options.onCollide;
-        } else if (typeof options.onCollide === 'string'){
-            this.onCollide = actions[options.onCollide];
+        this.setMethod(actions, options, 'onUpdate');
+        this.setMethod(actions, options, 'onCollide');
+        this.setMethod(actions, options, 'onDamage');
+    }
+
+    setMethod(methods, options, name){
+        if (typeof options[name] === 'function'){
+            this[name] = options[name];
+        } else if (typeof options[name] === 'string'){
+            this[name] = methods[options[name]];
         }
     }
 }
