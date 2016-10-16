@@ -1,5 +1,6 @@
 const WebSocketServer = require('ws').Server;
 const uuid = require('./uuid');
+const NativeUUID = require('node-uuid').v4;
 const Base64 = require('js-base64').Base64;
 const url = require('url');
 const pako = require('pako');
@@ -21,7 +22,7 @@ exports.createWSServer = function(server){
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
         const subscriberId = uuid();
-        const token = Base64.encode(uuid());
+        const token = Base64.encode(NativeUUID());
 
         const location = url.parse(ws.upgradeReq.url, true);
         const playerName = location.query.name;
