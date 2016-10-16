@@ -4,13 +4,14 @@ define([
     'core/mouse',
     'enums/events'
 ], (PIXI, PubSub, Mouse, EVENTS) => {
-    var playerId = null;
+    var playerId = null,
+        rotationInterval = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
         playerId = payload.message.actorId;
     });
 
-    function defaultBackdropClick(e){
+    function defaultBackdropMouseDown(e){
         const x = Math.trunc(e.data.global.x - this.container.x);
         const y = Math.trunc(e.data.global.y - this.container.y);
 
@@ -20,6 +21,35 @@ define([
             stageId: this.container.id,
             playerId: playerId
         });
+
+        rotationInterval = setInterval(function(){
+            const x = Math.trunc(this.mouseGlobalX - this.container.x);
+            const y = Math.trunc(this.mouseGlobalY - this.container.y);
+
+            PubSub.publish(EVENTS.COMMANDS.PLAYER.FIRE, {
+                x: x,
+                y: y,
+                stageId: this.container.id,
+                playerId: playerId
+            });
+        }.bind(this), 50);
+    }
+
+    function defaultBackdropMouseUp(e){
+        const x = Math.trunc(e.data.global.x - this.container.x);
+        const y = Math.trunc(e.data.global.y - this.container.y);
+
+        PubSub.publish(EVENTS.COMMANDS.PLAYER.STOP_FIRE, {
+            x: x,
+            y: y,
+            stageId: this.container.id,
+            playerId: playerId
+        });
+
+        if (rotationInterval){
+            clearInterval(rotationInterval);
+            rotationInterval = null;
+        }
     }
 
     function defaultBackdropMousemove(e){
@@ -50,7 +80,9 @@ define([
         }
 
         backdrop.interactive = true;
-        backdrop.click = typeof options.click === 'function' ? options.click : defaultBackdropClick;
+        //backdrop.click = typeof options.click === 'function' ? options.click : defaultBackdropClick;
+        backdrop.mousedown  = typeof options.mousedown  === 'function' ? options.mousedown  : defaultBackdropMouseDown;
+        backdrop.mouseup   = typeof options.mouseup   === 'function' ? options.mouseup   : defaultBackdropMouseUp ;
 
         backdrop.mousemove = defaultBackdropMousemove;
 

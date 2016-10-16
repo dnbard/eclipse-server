@@ -5,7 +5,7 @@ const url = require('url');
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
-const Actor = require('../models/actor');
+const Player = require('../models/player');
 const packageData = require('../package.json');
 const Commands = require('./commands');
 
@@ -28,7 +28,7 @@ exports.createWSServer = function(server){
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
         const deltaTime = Math.random() * 1000
-        const player = new Actor({
+        const player = new Player({
             kind: 'player',
             type: 'player-base',
             x: Math.random() * 100,

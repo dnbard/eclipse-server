@@ -4,6 +4,7 @@ const uuid = require('node-uuid').v4;
 
 const Stage = require('../models/stage');
 const Actor = require('../models/actor');
+const Player = require('../models/player');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -24,7 +25,7 @@ exports.createStage = function(options){
 exports.getOrCreateGeneric = function(){
     var stage = collection.filter(s => s.generic)[0] || exports.createStage();
 
-    const npc = new Actor({
+    const npc = new Player({
         kind: 'player',
         type: 'npc-base',
         x: Math.random() * 1000,
