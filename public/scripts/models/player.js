@@ -26,11 +26,11 @@ define([
         this.x += this.vx;
         this.y += this.vy;
 
-       if (this.rotation > Math.PI * 2){
+        if (this.rotation > Math.PI * 2){
            this.rotation -= Math.PI * 2;
        } else if (this.rotation < -Math.PI * 2){
-           this.rotation += Math.PI * 2;
-       }
+            this.rotation += Math.PI * 2;
+        }
 
         if (typeof this.animateMovement === 'object' && this.animateMovement){
             this.animateMovement.ticks ++;
@@ -44,6 +44,10 @@ define([
 
         if (this.systems){
             this.systems.forEach(systemsIterator);
+        }
+
+        if (this._healthbar){
+            this._healthbar.rotation = - this.rotation;
         }
     }
 
@@ -67,6 +71,25 @@ define([
 
         const projectedRotation = -(newState.rotation || 0) + Math.PI * 0.5;
         this.rotation = projectedRotation;
+
+        if (this._healthbar && newState.armor !== this.armor){
+            this._healthbar.clear();
+
+            this._healthbar.beginFill(0x00CC00);
+            this._healthbar.drawRect(- this.size, 10, this.size * 2 * newState.armor / newState.maxArmor, 4);
+
+            if (newState.armor < newState.maxArmor){
+                this._healthbar.beginFill(0xDD0000);
+                this._healthbar.drawRect(this.size * 2 * newState.armor / newState.maxArmor - this.size, 10,
+                    this.size * 2 - this.size * 2 * newState.armor / newState.maxArmor, 4);
+            }
+
+            this._healthbar.endFill();
+
+            this.armor = newState.armor;
+        }
+
+
     }
 
     return function Player(options, stage){
@@ -79,6 +102,11 @@ define([
 
         player.id = options.id;
         player.kind = 'player';
+
+        player.armor = options.armor;
+        player.maxArmor = options.maxArmor;
+
+        player.size = options.size;
 
         player.vx = 0;
         player.vy = 0;
@@ -173,6 +201,11 @@ define([
         });
 
         player.systems.forEach(s => player.addChild(s));
+
+        const healthBar = new PIXI.Graphics();
+        player.addChild(healthBar);
+
+        player._healthbar = healthBar;
 
         return player;
     }
