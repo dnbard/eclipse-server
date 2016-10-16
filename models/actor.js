@@ -87,6 +87,8 @@ class Actor{
 
         this.kind = options.kind || 'actor';
 
+        this.name = options.name;
+
         this.geometry = options.geometry || null;
         this.size = options.size || 0;
         this.createdBy = options.createdBy || null;

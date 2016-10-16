@@ -15,10 +15,12 @@ define([
         playerId = data.message.actorId;
     });
 
-    function onDestroy(){
+    function onDestroy(stage){
         var args = arguments;
         this.children.filter(c => typeof c.onDestroy === 'function')
             .forEach(c => c.onDestroy.apply(c, args));
+
+        stage.removeChild(this._name);
     }
 
 
@@ -48,6 +50,11 @@ define([
 
         if (this._healthbar){
             this._healthbar.rotation = - this.rotation;
+        }
+
+        if (this._name){
+            this._name.y = this.y - 40;
+            this._name.x = this.x - this._name.width * 0.5;
         }
     }
 
@@ -88,8 +95,6 @@ define([
 
             this.armor = newState.armor;
         }
-
-
     }
 
     return function Player(options, stage){
@@ -120,6 +125,7 @@ define([
 
         player.onUpdate = onUpdate;
         player.applyUpdate = applyUpdate;
+        player.onDestroy = onDestroy;
 
         if (player.id === playerId){
             Hotkey.register({
@@ -204,8 +210,14 @@ define([
 
         const healthBar = new PIXI.Graphics();
         player.addChild(healthBar);
-
         player._healthbar = healthBar;
+
+        const _name = (options.name || player.id).replace('-', '').substring(0, 12);
+        const name = new PIXI.Text(_name, {
+            fontFamily : 'Arial', fontSize: 14, fill : 0xffffff
+        });
+        stage.addChild(name);
+        player._name = name;
 
         return player;
     }

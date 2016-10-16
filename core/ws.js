@@ -1,6 +1,7 @@
 const WebSocketServer = require('ws').Server;
 const uuid = require('node-uuid').v4;
 const Base64 = require('js-base64').Base64;
+const url = require('url');
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
@@ -21,6 +22,9 @@ exports.createWSServer = function(server){
         const subscriberId = uuid();
         const token = Base64.encode(uuid());
 
+        const location = url.parse(ws.upgradeReq.url, true);
+        const playerName = location.query.name;
+
         console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
         const deltaTime = Math.random() * 1000
@@ -32,7 +36,8 @@ exports.createWSServer = function(server){
             onUpdate: 'defaultPlayer',
             onDamage: 'defaultPlayerDamage',
             geometry: GEOMETRY.CIRCLE,
-            size: 22
+            size: 22,
+            name: playerName
         });
         const actorId = player.id;
         const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);

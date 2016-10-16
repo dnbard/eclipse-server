@@ -15,7 +15,10 @@ define([
     }
 
     function genericConnect(){
-        const ws = new WebSocket(`${getProtocol()}://${location.host}`);
+        const _name = location.hash.replace('#', '');
+
+
+        const ws = new WebSocket(`${getProtocol()}://${location.host}?name=${_name}`);
 
         ws.onopen = () => {
             alertify.log('Connection established');
