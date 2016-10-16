@@ -1,0 +1,19 @@
+[{
+    "kind": "asteroid",
+    "id": "01",
+    "filename": "asteroids/gray01.png",
+    "widht": 83,
+    "height": 83
+},{
+    "kind": "asteroid",
+    "id": "02",
+    "filename": "asteroids/gray02.png",
+    "widht": 42,
+    "height": 42
+},{
+    "kind": "asteroid",
+    "id": "03",
+    "filename": "asteroids/gray03.png",
+    "widht": 64,
+    "height": 64
+}]

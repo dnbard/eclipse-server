@@ -5,6 +5,7 @@ const uuid = require('node-uuid').v4;
 const Stage = require('../models/stage');
 const Actor = require('../models/actor');
 const Player = require('../models/player');
+const Asteroid = require('../models/asteroid');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -38,6 +39,15 @@ exports.getOrCreateGeneric = function(){
         geometry: GEOMETRY.CIRCLE,
         size: 16
     });
+
+//    size of transitional message is TOO LARGE with that amount of asteroids
+//    for(var i = 0; i < 100; i ++){
+//        var asteroid = new Asteroid({
+//            x: Math.random() * 3000 - 1500,
+//            y: Math.random() * 3000 - 4500,
+//        });
+//        stage.addActor(asteroid);
+//    }
 
     stage.addActor(npc);
 

@@ -4,11 +4,12 @@ define([
     'models/player',
     'models/camera',
     'models/projectile',
+    'models/asteroid',
     'components/backdrop',
     'components/borders',
     'pubsub',
     'enums/events'
-],(PIXI, Planet, Player, Camera, Projectile, Backdrop, Borders, PubSub, EVENTS) => {
+],(PIXI, Planet, Player, Camera, Projectile, Asteroid, Backdrop, Borders, PubSub, EVENTS) => {
     function getActorConstructor(kind){
         var constructor = null;
 
@@ -18,6 +19,8 @@ define([
             constructor = Player;
         } else if (kind === 'projectile'){
             constructor = Projectile;
+        } else if (kind = 'asteroid'){
+            constructor = Asteroid;
         }
 
         return constructor;
