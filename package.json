@@ -24,6 +24,8 @@
     "gulp": "^3.9.1",
     "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
-    "mocha": "^3.1.0"
+    "mocha": "^3.1.0",
+    "mongo-mock": "^2.1.0",
+    "sinon": "^1.17.6"
   }
 }
