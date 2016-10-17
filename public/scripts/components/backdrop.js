@@ -65,6 +65,9 @@ define([
 
         backdrop.kind = 'backdrop';
 
+        backdrop.anchor.x = 0.125;
+        backdrop.anchor.y = 0.25;
+
         backdrop.container = options.container;
 
         this.mouseGlobalX = this.mouseGlobalY = 0;
