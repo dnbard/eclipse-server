@@ -105,11 +105,14 @@ exports.createWSServer = function(server){
 }
 
 function sendMessage(ws, message, options){
+    options = options || {};
+
     if (ws.readyState !== ws.OPEN){
         return console.log('Unable to send WS message. Reason - WS already closed.')
     }
 
-    const binaryString = pako.deflate(message, { to: 'string' });
+    const binaryString = options.packed ? message :
+        pako.deflate(message, { to: 'string' });
 
     ws.send(binaryString);
 }

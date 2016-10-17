@@ -1,5 +1,7 @@
 "use strict";
 
+const pako = require('pako');
+
 const LOOP_DELTA = 25;
 const UPDATE_DELTA = 100;
 
@@ -54,7 +56,11 @@ exports.init = function(){
             message: { stage: stage }
         });
 
+        const binaryString = pako.deflate(message, { to: 'string' });
+
         Subscriptions.getSubscriptionBySubscribeToId(stageId)
-            .forEach(s => WebSokets.sendMessage(s.ws, message));
+            .forEach(s => WebSokets.sendMessage(s.ws, binaryString, {
+                packed: true
+            }));
     }
 }

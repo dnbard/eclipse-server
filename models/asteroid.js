@@ -22,6 +22,8 @@ class Asteroid extends Actor{
         this.size = asteroidData.width * 0.35;
         this.geometry = GEOMETRY.CIRCLE;
 
+        this.rotationSpeed = Math.random() * 0.01 - 0.005;
+
         this.maxArmor = Math.round(Math.random() * 10);
         this.armor = this.maxArmor;
     }
@@ -36,7 +38,7 @@ class Asteroid extends Actor{
     }
 
     onUpdate(){
-        this.rotation += 0.01;
+        this.rotation += this.rotationSpeed;
     }
 }
 
