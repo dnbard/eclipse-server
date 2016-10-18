@@ -2,15 +2,10 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 
 const users = require('../../db/users');
-// const db = require('../../core/mongo').getDatabase();
 
 describe('Users Model', () => {
-    // beforeEach(() => {
-    //     sinon.stub(db.collection('users'), 'insertOne');
-    // });
-    // afterEach(() => {
-    //     db.collection('users').insertOne.restore();
-    // });
+    const login = 'test-user';
+    const password = 'qwerty';
 
     describe('#createOne', () => {
         it('should validate empty argument', (done) => {
@@ -43,6 +38,17 @@ describe('Users Model', () => {
                 expect(spy.called).to.be.true;
                 done();
             });
+        });
+
+        it('should resolve', function(done){
+            users.createOne({
+                login: login,
+                password: password
+            }).then((result) => {
+                expect(result.login).to.be.equal(login);
+                expect(result.password).to.be.equal(password);
+                done();
+            }).catch(err => done);
         });
     });
 });

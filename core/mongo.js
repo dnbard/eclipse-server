@@ -22,3 +22,7 @@ exports.connect = function(){
 exports.getDatabase = function(){
     return _db;
 }
+
+exports.setDatabase = function(db){
+    _db = db;
+}

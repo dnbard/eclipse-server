@@ -13,6 +13,7 @@ gulp.task('test', function(){
     return gulp.src('./tests/**/*Spec.js', {
         read: false
     }).pipe(mocha({
-        reporter: 'min'
+        reporter: 'min',
+        require: ['./tests/mocha.init']
     }));
 });
