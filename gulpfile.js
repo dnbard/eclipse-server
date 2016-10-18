@@ -9,11 +9,11 @@ gulp.task('default', ['test'], function () {
     });
 });
 
-gulp.task('test', function(){
-    return gulp.src('./tests/**/*Spec.js', {
-        read: false
-    }).pipe(mocha({
-        reporter: 'min',
-        require: ['./tests/mocha.init']
-    }));
+gulp.task('test', function(cb){
+    require('./tests/mocha.init')(db => {
+        return gulp.src('./tests/**/*Spec.js', {
+            read: false
+        }).pipe(mocha({ }))
+            .on('end', () => db.close(cb));
+    });
 });

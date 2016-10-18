@@ -26,3 +26,8 @@ exports.getDatabase = function(){
 exports.setDatabase = function(db){
     _db = db;
 }
+
+exports.closeConnection = function(){
+    // _db.close();
+    _db = null;
+}
