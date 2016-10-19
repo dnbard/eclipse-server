@@ -12,10 +12,6 @@ exports.createOne = function(key, value){
             return rej('TypeError: "Key" should be a non-empty string');
         }
 
-        if(typeof value !== 'string' || !value){
-            return rej('TypeError: "Value" should be a non-empty string');
-        }
-
         Collection.insertOne({
             _id: key,
             value: value

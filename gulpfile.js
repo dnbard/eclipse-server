@@ -13,6 +13,8 @@ gulp.task('test', function(cb){
         return gulp.src('./tests/**/*Spec.js', {
             read: false
         }).pipe(mocha({ }))
-            .on('end', () => db.close(cb));
+            .on('error', () => {
+                //handle the error (empty handler is enough)
+            }).on('end', () => db.close(cb));
     });
 });
