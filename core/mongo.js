@@ -28,6 +28,6 @@ exports.setDatabase = function(db){
 }
 
 exports.closeConnection = function(){
-    // _db.close();
+    _db.close();
     _db = null;
 }

@@ -3,10 +3,9 @@ const nodemon = require('gulp-nodemon');
 const mocha = require('gulp-mocha');
 
 gulp.task('default', ['test'], function () {
-    nodemon({
-        tasks: ['test'],
-        delay: 10
-    });
+    nodemon();
+
+    return gulp.watch('./tests/**/*Spec.js', ['test']);
 });
 
 gulp.task('test', function(cb){
