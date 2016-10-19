@@ -3,11 +3,14 @@ const express = require('express');
 const UpdateLoop = require('./core/updateLoop');
 const mongo = require('./core/mongo');
 const ws = require('./core/ws');
+const migrations = require('./core/migrations');
 
 const middlewares = require('./middlewares');
 const config = require('./config');
 
-mongo.connect().then(db => {
+mongo.connect().then(() => {
+    return migrations.init();
+}).then(() => {
     const server = require('http').createServer();
     const app = express();
 

@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const nodemon = require('gulp-nodemon');
 const mocha = require('gulp-mocha');
 
-gulp.task('default', ['test'], function () {
+gulp.task('default', function () {
     nodemon();
 
     return gulp.watch('./tests/**/*Spec.js', ['test']);

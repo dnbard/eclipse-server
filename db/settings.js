@@ -1,5 +1,3 @@
-const uuid = require('node-uuid');
-
 const mongo = require('../core/mongo');
 const COLLECTIONS = require('../enums/collections');
 
