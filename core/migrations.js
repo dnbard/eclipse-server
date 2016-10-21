@@ -7,7 +7,7 @@ exports.init = function(options, cb){
     const _Settings = db.collection(COLLECTIONS.SETTINGS);
     const Settings = require('../db/settings');
 
-    // function applyMigrations(err, DBVersionAttribute){
+    function applyMigrations(err, DBVersionAttribute){
     //     function migrationHandler(){
     //         console.log(`Migration(index=${index})`);
     //
@@ -29,14 +29,14 @@ exports.init = function(options, cb){
     //         }
     //     }
     //
-    //     if (err){
-    //         console.error(err);
-    //         process.exit(1);
-    //     }
-    //
-    //     var index = parseInt(DBVersionAttribute.value);
-    //     migrationHandler();
-    // }
+        if (err){
+            console.error(err);
+            process.exit(1);
+        }
+
+        var index = parseInt(DBVersionAttribute.value);
+        migrationHandler();
+    }
 
     options = options || {};
     var promise = null;
@@ -53,6 +53,8 @@ exports.init = function(options, cb){
             promise = Promise.resolve(attr);
         }
 
-        return promise;
+        return promise.then((setting) => {
+
+        });
     });
 }

@@ -1,25 +1,23 @@
-const mongo = require('../core/mongo');
-const COLLECTIONS = require('../enums/collections');
+const mongoose = require('mongoose');
 
-exports.createOne = function(key, value){
-    return new Promise((res, rej) => {
-        const db = mongo.getDatabase();
-        const Collection = db.collection(COLLECTIONS.SETTINGS);
+const schema = mongoose.Schema({
+    _id: { type: String, unique: true },
+    value: mongoose.Schema.Types.Mixed
+});
 
-        if(typeof key !== 'string' || !key){
-            return rej('TypeError: "Key" should be a non-empty string');
-        }
+schema.statics.createOne = function(key, value){
+    if(typeof key !== 'string' || !key){
+        return Promise.reject('TypeError: "Key" should be a non-empty string');
+    }
 
-        Collection.insertOne({
-            _id: key,
-            value: value
-        }, (err, result) => {
-            if (err){
-                return rej(err);
-            }
-
-            Collection.findOne({ _id: result.insertedId },
-                (err, doc)=> err ? rej(err) : res(doc));
-        });
+    const setting = new Setting({
+        _id: key,
+        value: value
     });
+
+    return setting.save();
 }
+
+const Setting = mongoose.model('settings', schema);
+
+module.exports = Setting;
