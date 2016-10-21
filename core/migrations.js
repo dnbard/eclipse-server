@@ -1,56 +1,50 @@
 const SETTINGS = require('../enums/settings');
 
-exports.init = function(options, cb){
+const migrations = [];
+
+exports.init = function(options){
     const Settings = require('../db/settings');
 
     function applyMigrations(err, DBVersionAttribute){
-    //     function migrationHandler(){
-    //         console.log(`Migration(index=${index})`);
-    //
-    //         if (index < migrations.length){
-    //             console.log(`Execute migration(index=${index})`);
-    //             migrations[index].call(this, null, (err) => {
-    //                 if (err){
-    //                     console.error(err);
-    //                     process.exit(1);
-    //                 }
-    //
-    //                 index ++;
-    //                 DBVersionAttribute.value = index.toString();
-    //                 DBVersionAttribute.save(migrationHandler);
-    //             });
-    //         } else {
-    //             console.log('Stop migration execution');
-    //             cb(null);
-    //         }
-    //     }
-    //
-        if (err){
-            console.error(err);
-            process.exit(1);
-        }
+        return new Promise((res, rej) => {
+            function migrationHandler(){
+                console.log(`Looking at migration(index=${index})`);
 
-        var index = parseInt(DBVersionAttribute.value);
-        migrationHandler();
+                if (index < migrations.length){
+                    console.log(`Execute migration(index=${index})`);
+                    migrations[index].call(this, null, (err) => {
+                        if (err){
+                            console.error(err);
+                            process.exit(1);
+                        }
+
+                        index ++;
+                        DBVersionAttribute.value = index.toString();
+                        DBVersionAttribute.save(migrationHandler);
+                    });
+                } else {
+                    console.log('Stop migrations execution');
+                    res();
+                }
+            }
+
+            if (err){
+                console.error(err);
+                process.exit(1);
+            }
+
+            var index = parseInt(DBVersionAttribute.value);
+            migrationHandler();
+        });
     }
 
-    options = options || {};
-    var promise = null;
 
-    Settings.findOne({ _id: SETTINGS.DB_VERSION }, (err, attr) => {
-        if (err){
-            return cb(err);
-        }
-
-        if (!attr){
+    return Settings.findOne({ _id: SETTINGS.DB_VERSION }).exec().then((setting) => {
+        const createOrUseExistingSetting = !setting ?
             //no db-version attribute found and we must create one
-            promise = Settings.createOne(SETTINGS.DB_VERSION, 0)
-        } else {
-            promise = Promise.resolve(attr);
-        }
+            Settings.createOne(SETTINGS.DB_VERSION, 0) :
+            Promise.resolve(setting);
 
-        return promise.then((setting) => {
-
-        });
+        return createOrUseExistingSetting.then(setting => applyMigrations(null, setting));
     });
 }
