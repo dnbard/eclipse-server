@@ -1,36 +1,37 @@
-const uuid = require('node-uuid');
+const uuid = require('node-uuid').v4;
+const mongoose = require('mongoose');
+const Base64 = require('js-base64').Base64;
 
-const validator = require('node-validator');
 const stringRegex = /[0-9a-zA-Z]+/;
-const mongo = require('../core/mongo');
-const COLLECTIONS = require('../enums/collections');
 
-exports.createOne = (data) => {
-    return new Promise((res, rej) => {
-        const check = validator.isObject(data)
-            .withRequired('login', validator.isString({regex: stringRegex}))
-            .withRequired('password', validator.isString({regex: stringRegex}));
+const schema = mongoose.Schema({
+    _id: { type: String, unique: true, default: uuid },
+    login: { type: String, unique: true, match: stringRegex, index: true },
+    salt: { type: String, required: true },
+    password: { type: String, required: true }
+});
 
-        validator.run(check, data, (errorCount, errors) => {
-            const db = mongo.getDatabase();
-            const UsersCollection = db.collection(COLLECTIONS.USERS);
+schema.statics.createOne = function(data){
+    data = data || {};
 
-            if (errorCount){
-                return rej(errors);
-            }
+    if (typeof data.password !== 'string' || data.password.length < 7){
+        return Promise.reject('Password empty or too small');
+    }
 
-            UsersCollection.insertOne({
-                _id: uuid(),
-                login: data.login,
-                password: data.password
-            }, (err, result) => {
-                if (err){
-                    return rej(err);
-                }
+    if (!stringRegex.test(data.password)){
+        return Promise.reject('Password contain invalid characters');
+    }
 
-                UsersCollection.findOne({ _id: result.insertedId },
-                    (err, doc)=> err ? rej(err) : res(doc));
-            });
-        });
+    const salt = (Math.random() * 1000000000).toString(36);
+    const user = new User({
+        login: data.login,
+        salt: salt,
+        password: Base64.encode(data.password + salt)
     });
+
+    return user.save();
 }
+
+const User = mongoose.models.users || mongoose.model('users', schema);
+
+module.exports = User;

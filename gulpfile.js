@@ -5,7 +5,17 @@ const mocha = require('gulp-mocha');
 gulp.task('default', function () {
     nodemon();
 
-    return gulp.watch('./tests/**/*Spec.js', ['test']);
+    return gulp.watch([
+        './tests/**/*Spec.js',
+        './**/*.js'
+    ], ['test']);
+});
+
+gulp.task('watch', ['test'], function () {
+    return gulp.watch([
+        './tests/**/*Spec.js',
+        './**/*.js'
+    ], ['test']);
 });
 
 gulp.task('test', function(cb){
@@ -13,8 +23,11 @@ gulp.task('test', function(cb){
         return gulp.src('./tests/**/*Spec.js', {
             read: false
         }).pipe(mocha({ }))
-            .on('error', () => {
+            .on('error', (e) => {
+                console.log(e);
                 //handle the error (empty handler is enough)
-            }).on('end', () => db.close(cb));
+            }).on('end', () => {
+                cb();
+            });
     });
 });

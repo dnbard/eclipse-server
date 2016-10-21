@@ -18,6 +18,6 @@ schema.statics.createOne = function(key, value){
     return setting.save();
 }
 
-const Setting = mongoose.model('settings', schema);
+const Setting = mongoose.models.settings || mongoose.model('settings', schema);
 
-module.exports = Setting;
+module.exports = Setting

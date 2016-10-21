@@ -2,22 +2,32 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 
 mongoose.Promise = Promise;
-
-const COLLECTIONS = require('../enums/collections');
 const config = require('../config');
+
+var _connection = null;
 
 module.exports = function(cb){
     const url = config.mongoTest;
 
-    mongoose.connect(url, function(err) {
-        if (err){
-            return console.error(err);
-        }
-        console.log('Connected to "eclipse-test"');
+    var action = Promise.resolve();
 
-        mongoose.connection.db.dropDatabase();
-        console.log('"eclipse-test" database droped');
+    if (_connection){
+        action = mongoose.disconnect();
+    }
 
-        cb(mongoose.connection);
+    action.then(() => {
+            mongoose.connect(url, function(err) {
+            if (err){
+                return console.error(err);
+            }
+            console.log('Connected to "eclipse-test"');
+
+            _connection = mongoose.connection;
+
+            mongoose.connection.db.dropDatabase();
+            console.log('"eclipse-test" database droped');
+
+            cb(_connection);
+        });
     });
 }

@@ -1,10 +1,6 @@
-const mongo = require('./mongo');
-const COLLECTIONS = require('../enums/collections');
 const SETTINGS = require('../enums/settings');
 
 exports.init = function(options, cb){
-    const db = mongo.getDatabase();
-    const _Settings = db.collection(COLLECTIONS.SETTINGS);
     const Settings = require('../db/settings');
 
     function applyMigrations(err, DBVersionAttribute){
@@ -41,7 +37,7 @@ exports.init = function(options, cb){
     options = options || {};
     var promise = null;
 
-    _Settings.findOne({ _id: SETTINGS.DB_VERSION }, (err, attr) => {
+    Settings.findOne({ _id: SETTINGS.DB_VERSION }, (err, attr) => {
         if (err){
             return cb(err);
         }

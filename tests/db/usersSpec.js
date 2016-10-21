@@ -5,7 +5,7 @@ const users = require('../../db/users');
 
 describe('Users Model', () => {
     const login = 'test-user';
-    const password = 'qwerty';
+    const password = 'qwerty444';
 
     describe('#createOne', () => {
         it('should validate empty argument', (done) => {
@@ -46,7 +46,8 @@ describe('Users Model', () => {
                 password: password
             }).then((result) => {
                 expect(result.login).to.be.equal(login);
-                expect(result.password).to.be.equal(password);
+                expect(result.password).to.not.be.undefined;
+                expect(result.salt).to.not.be.undefined;
                 done();
             }).catch(err => done);
         });
