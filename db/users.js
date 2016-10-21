@@ -1,7 +1,9 @@
 const uuid = require('node-uuid').v4;
 const mongoose = require('mongoose');
 const Base64 = require('js-base64').Base64;
+const CryptoJS = require("crypto-js");
 
+const secret = require('../config').secret;
 const stringRegex = /[0-9a-zA-Z]+/;
 
 const schema = mongoose.Schema({
@@ -22,11 +24,11 @@ schema.statics.createOne = function(data){
         return Promise.reject('Password contain invalid characters');
     }
 
-    const salt = (Math.random() * 1000000000).toString(36);
+    const salt = Base64.encode(Math.random());
     const user = new User({
         login: data.login,
         salt: salt,
-        password: Base64.encode(data.password + salt)
+        password: CryptoJS.AES.encrypt(data.password + salt, secret)
     });
 
     return user.save();
