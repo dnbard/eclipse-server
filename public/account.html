@@ -4,6 +4,20 @@
         <link href="/public/styles/account.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <main>Hello, world!</main>
+        <main>
+            <h1>Login or Register account</h1>
+            <div>Login:
+                <input name="eclipse-login" placeholder="Type your login..." data-element="login" data-bind="textInput: login"/>
+            </div>
+            <div>Password:
+                <input name="eclipse-password" type="password" placeholder="Type your password..." data-bind="textInput: password"/>
+            </div>
+            <div class="buttons">
+                <button data-bind="attr:{ disabled: isDisabled }">Login</button>
+                <button data-bind="attr:{ disabled: isDisabled }">Register</button>
+            </div>
+        </main>
+
+        <script data-main="/public/scripts-account/index.js" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js"></script>
     </body>
 </html>

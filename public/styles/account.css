@@ -1,0 +1,77 @@
+html{
+    height: 100%;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    align-items: center;
+    background: black;
+    color: #5959d6;
+}
+
+main{
+    margin: 10px 15px;
+    padding: 10px 25px;
+    border: 1px solid;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+
+    background: #07071d;
+    box-shadow: 0 0 10px;
+}
+
+h1{
+    font-size: 14pt;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+input{
+    margin-bottom: 10px;
+    border-color: #5959d6;
+    border-style: solid;
+    border-radius: 2px;
+    border: 1px solid;
+    background: black;
+    color: #5959d6;
+    padding: 2px 10px;
+}
+
+input[data-element="login"]{
+    margin-left: 23px;
+}
+
+.center{
+    text-align: center;
+}
+
+button{
+    background: #07071d;
+    border: 1px solid #5959d6;
+    color: #5959d6;
+    border-radius: 2px;
+    padding: 2px 15px;
+    cursor: pointer;
+}
+
+button:hover{
+    color: #aaaad6;
+    border-color: #aaaad6;
+}
+
+button[disabled="true"]{
+    border: 1px solid #07071d;
+    cursor: not-allowed;
+    color: gray;
+    background: #1a1a25;
+}
+
+.buttons{
+    margin-top: 10px;
+    text-align: center;
+}
