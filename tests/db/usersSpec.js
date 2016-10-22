@@ -51,5 +51,15 @@ describe('Users Model', () => {
                 done();
             }).catch(err => done);
         });
+
+        it('should resolve with token', done => {
+            users.createOne({
+                login: login+1,
+                password: password
+            }).then((result) => {
+                expect(result.token).to.not.be.undefined;
+                done();
+            }).catch(err => done);
+        });
     });
 });

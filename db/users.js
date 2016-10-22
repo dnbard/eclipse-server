@@ -4,6 +4,7 @@ const Base64 = require('js-base64').Base64;
 const CryptoJS = require("crypto-js");
 
 const secret = require('../config').secret;
+const Token = require('../db/tokens');
 const stringRegex = /[0-9a-zA-Z]+/;
 
 const schema = mongoose.Schema({
@@ -31,7 +32,17 @@ schema.statics.createOne = function(data){
         password: CryptoJS.AES.encrypt(data.password + salt, secret)
     });
 
-    return user.save();
+    return user.save().then(user => {
+        const token = new Token({
+            userId: user._id
+        });
+
+        return token.save().then(t => {
+            return Object.assign(user, {
+                token: t.token
+            });
+        });
+    });
 }
 
 const User = mongoose.models.users || mongoose.model('users', schema);
