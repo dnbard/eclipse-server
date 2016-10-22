@@ -1,7 +1,8 @@
 const config = require('../config');
 
 const pagesCollection = {
-    '/': 'index.html'
+    '/': 'index.html',
+    '/account': 'account.html'
 };
 
 module.exports = function(req, res, next){
