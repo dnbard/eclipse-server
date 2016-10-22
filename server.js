@@ -7,6 +7,7 @@ const migrations = require('./core/migrations');
 
 const middlewares = require('./middlewares');
 const config = require('./config');
+const routing = require('./routing');
 
 mongo.connect().then(() => {
     return migrations.init();
@@ -19,6 +20,7 @@ mongo.connect().then(() => {
         console.log(`HTTP Server :: listening on port ${config.port}`);
         ws.createWSServer(server);
         middlewares.init(app);
+        routing.init(app);
 
         UpdateLoop.init();
     });

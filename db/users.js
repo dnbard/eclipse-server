@@ -33,14 +33,19 @@ schema.statics.createOne = function(data){
     });
 
     return user.save().then(user => {
+        console.log(`User(id="${user.id}") created`);
+
         const token = new Token({
             userId: user._id
         });
 
         return token.save().then(t => {
-            return Object.assign(user, {
-                token: t.token
-            });
+            console.log(`Token(id="${t.id}") for user(id="${user.id}") created`);
+            return {
+                login: user.login,
+                token: t.token,
+                _id: user._id
+            };
         });
     });
 }

@@ -46,8 +46,6 @@ describe('Users Model', () => {
                 password: password
             }).then((result) => {
                 expect(result.login).to.be.equal(login);
-                expect(result.password).to.not.be.undefined;
-                expect(result.salt).to.not.be.undefined;
                 done();
             }).catch(err => done);
         });
