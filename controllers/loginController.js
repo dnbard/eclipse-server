@@ -23,6 +23,7 @@ exports.login = function(req, res, next){
         }
 
         const checkString = CryptoJS.SHA256(password + user.salt + secret).toString();
+        console.log(`User(id="${user._id}", login="${user.login}") are logging in`);
 
         if (checkString === user.password){
             return new Tokens({ userId: user._id }).save()
@@ -30,6 +31,7 @@ exports.login = function(req, res, next){
             throw res.status(404).send('Invalid password');
         }
     }).then(token => {
-        res.send(token);
+        console.log(`Token(id="${token._id}") for User(id="${token.userId}") was created`);
+        return res.send(token);
     });
 }
