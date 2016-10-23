@@ -2,24 +2,18 @@ define([
     'pubsub',
     'pako',
     'vendor/alertify',
-    'enums/events'
-], (PubSub, pako, alertify, EVENTS) => {
-    var token = null
+    'enums/events',
+    'core/token'
+], (PubSub, pako, alertify, EVENTS, TokenProvider) => {
+    var token = TokenProvider.get(),
         bytesSent = 0;
-
-    PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
-        token = payload.message.token
-    });
 
     function getProtocol(){
         return location.protocol === 'https:' ? 'wss' : 'ws';
     }
 
     function genericConnect(){
-        const _name = location.hash.replace('#', '');
-
-
-        const ws = new WebSocket(`${getProtocol()}://${location.host}?name=${_name}`);
+        const ws = new WebSocket(`${getProtocol()}://${location.host}?token=${token}`);
 
         ws.onopen = () => {
             alertify.log('Connection established');

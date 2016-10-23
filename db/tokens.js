@@ -21,5 +21,10 @@ function getToken(){
     return Base64.encode(uuid());
 }
 
+schema.methods.extend = function(){
+    this.expiresAt = getExpiredDate();
+    return this.save();
+}
+
 const Token = mongoose.models.tokens || mongoose.model('tokens', schema);
 module.exports = Token;

@@ -10,6 +10,7 @@ const Subscriptions = require('./subscriptions');
 const Player = require('../models/player');
 const packageData = require('../package.json');
 const Commands = require('./commands');
+const UsersController = require('../controllers/usersController');
 
 const GEOMETRY = require('../enums/geometry');
 const EVENTS = require('../public/scripts/enums/events');
@@ -22,80 +23,97 @@ exports.createWSServer = function(server){
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
         const subscriberId = uuid();
-        const token = Base64.encode(NativeUUID());
-
         const location = url.parse(ws.upgradeReq.url, true);
-        const playerName = location.query.name;
+        const token = location.query.token;
 
-        console.log(`Incoming WS connection (subscriber=${subscriberId})`);
+        if (!token){
+            return ws.close();
+        }
 
-        const deltaTime = Math.random() * 1000
-        const player = new Player({
-            kind: 'player',
-            type: 'player-base',
-            x: Math.random() * 100,
-            y: Math.random() * 100,
-            onUpdate: 'defaultPlayer',
-            onDamage: 'defaultPlayerDamage',
-            geometry: GEOMETRY.CIRCLE,
-            size: 22,
-            name: playerName
-        });
-        const actorId = player.id;
-        const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
+        UsersController.getUserByTokenInternal(token).then(data => {
+            const _user = data.user;
+            const _token = data.token;
+            const playerName = _user.login;
 
-        stage.addActor(player);
+            _token.extend().then(() => {
+                console.log(`Token(id="${_token._id}") was prolongated`);
+            }).catch(() => {
+                console.log(`Token(id="${_token._id}") was NOT prolongated`);
+            });
 
-        sendMessage(ws, JSON.stringify({
-            subject: EVENTS.SUBSCRIBE.CREATED,
-            message: Object.assign({}, subscription, {
-                actorId: actorId
-            })
-        }));
+            console.log(`Incoming WS connection (subscriber=${subscriberId})`);
 
-        sendMessage(ws, JSON.stringify({
-            subject: EVENTS.CONNECTION.OPEN,
-            message: {
-                stage: stage,
-                actorId: actorId,
-                application: {
-                    title: 'Eclipse',
-                    version: packageData.version
-                },
-                token: token
-            }
-        }));
+            const deltaTime = Math.random() * 1000
+            const player = new Player({
+                kind: 'player',
+                type: 'player-base',
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                onUpdate: 'defaultPlayer',
+                onDamage: 'defaultPlayerDamage',
+                geometry: GEOMETRY.CIRCLE,
+                size: 22,
+                name: playerName
+            });
+            const actorId = player.id;
+            const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
 
-        ws.on('message', (payload, flags) => {
-            var data;
+            stage.addActor(player);
 
-            try{
-                data = JSON.parse(payload);
-            } catch(e){
-                console.err(e);
-            }
+            sendMessage(ws, JSON.stringify({
+                subject: EVENTS.SUBSCRIBE.CREATED,
+                message: Object.assign({}, subscription, {
+                    actorId: actorId
+                })
+            }));
 
-            if (data.token !== token){
-                return console.log(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
-            }
+            sendMessage(ws, JSON.stringify({
+                subject: EVENTS.CONNECTION.OPEN,
+                message: {
+                    stage: stage,
+                    actorId: actorId,
+                    application: {
+                        title: 'Eclipse',
+                        version: packageData.version
+                    },
+                    token: token
+                }
+            }));
 
-            if (EVENTS._hash[data.subject]){
-                console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
+            ws.on('message', (payload, flags) => {
+                var data;
 
-                Commands.execute(data.subject, {
-                    message: data.message,
-                    subject: data.subject,
-                    player: player,
-                    stage: stage
-                });
-            } else {
-                console.log(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
-            }
-        });
+                try{
+                    data = JSON.parse(payload);
+                } catch(e){
+                    console.err(e);
+                }
 
-        ws.on('close', () => {
-            stage.removeActorById(actorId);
-            Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
+                if (data.token !== token){
+                    return console.log(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
+                }
+
+                if (EVENTS._hash[data.subject]){
+                    console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
+
+                    Commands.execute(data.subject, {
+                        message: data.message,
+                        subject: data.subject,
+                        player: player,
+                        stage: stage
+                    });
+                } else {
+                    console.log(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
+                }
+            });
+
+            ws.on('close', () => {
+                stage.removeActorById(actorId);
+                Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
+            });
+        }).catch(err => {
+            console.log(err);
+            return ws.close();
         });
     });
 

@@ -9,6 +9,31 @@ exports.postUser = function(req, res, next){
     });
 }
 
+exports.getUserByTokenInternal = function(token){
+    const dateNow = Date.now();
+
+    return Tokens.findOne({ token: token }).exec().then(token => {
+        if (!token){
+            return Promise.reject('Token not found');
+        }
+
+        if (new Date(token.expiresAt) < dateNow){
+            return Promise.reject(`Token ${token_id} has been expired`);
+        }
+
+        return Users.findOne({ _id: token.userId }).exec().then(user => {
+            if (!user){
+                return Promise.reject('Token not found');
+            }
+
+            return {
+                user: user,
+                token: token
+            };
+        });
+    })
+}
+
 exports.getUserByToken = function(req, res, next){
     const token = (req.headers['authorization'] || '').replace('Bearer ', '');
     const dateNow = Date.now();
