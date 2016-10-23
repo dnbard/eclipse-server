@@ -19,6 +19,14 @@ exports.createStage = function(options){
         size: 118
     }));
 
+    for(var i = 0; i < 15; i ++){
+        var asteroid = new Asteroid({
+            x: Math.random() * 800 - 400,
+            y: Math.random() * 900 - 1000,
+        });
+        stage.addActor(asteroid);
+    }
+
     collection.push(stage);
     return stage;
 }
@@ -39,14 +47,6 @@ exports.getOrCreateGeneric = function(){
         geometry: GEOMETRY.CIRCLE,
         size: 16
     });
-
-   for(var i = 0; i < 15; i ++){
-       var asteroid = new Asteroid({
-           x: Math.random() * 800 - 400,
-           y: Math.random() * 900 - 1000,
-       });
-       stage.addActor(asteroid);
-   }
 
     stage.addActor(npc);
 

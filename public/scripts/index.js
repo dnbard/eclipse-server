@@ -18,28 +18,33 @@ define([
     'core/websocket',
     'core/gameLoop',
     'core/resourceLoader',
+    'core/tokenCheck',
     'models/stage',
     'enums/events'
-], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, Stage, EVENTS) => {
+], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS) => {
     console.log('Started');
 
-    ResourceLoader().load(() => {
-        websocket.genericConnect();
+    tokenCheck().then((user) => {
+        ResourceLoader().load(() => {
+            websocket.genericConnect();
 
-        const token = PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
-            const renderer = Renderer.create();
-            const stage = Stage.createDefault({
-                init: payload.message
+            const token = PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
+                const renderer = Renderer.create();
+                const stage = Stage.createDefault({
+                    init: payload.message
+                });
+
+                GameLoop.startGameLoop({
+                    stage: stage,
+                    renderer: renderer
+                });
+
+                PubSub.unsubscribe(token);
+
+                document.querySelector('#version').textContent = `${payload.message.application.title} v${payload.message.application.version}`;
             });
-
-            GameLoop.startGameLoop({
-                stage: stage,
-                renderer: renderer
-            });
-
-            PubSub.unsubscribe(token);
-
-            document.querySelector('#version').textContent = `${payload.message.application.title} v${payload.message.application.version}`;
         });
+    }).catch(() => {
+        location.href = '/account';
     });
 });
