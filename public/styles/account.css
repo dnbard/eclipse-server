@@ -46,6 +46,13 @@ input[data-element="login"]{
     margin-left: 23px;
 }
 
+input[disabled]{
+    border-color: #1a1a25;
+    background: #1a1a25;
+    color: gray;
+    cursor: not-allowed;
+}
+
 .center{
     text-align: center;
 }
@@ -74,4 +81,9 @@ button[disabled="true"]{
 .buttons{
     margin-top: 10px;
     text-align: center;
+}
+
+.logo{
+    width: 50px;
+    vertical-align: sub;
 }
