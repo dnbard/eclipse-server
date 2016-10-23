@@ -15,11 +15,11 @@ exports.getUserByToken = function(req, res, next){
 
     Tokens.findOne({ token: token }).exec().then(token => {
         if (!token){
-            return res.status(401).send('Token not found');
+            throw res.status(401).send('Token not found');
         }
 
         if (new Date(token.expiresAt) < dateNow){
-            return res.status(401).send(`Token ${token_id} has been expired`);
+            throw res.status(401).send(`Token ${token_id} has been expired`);
         }
 
         req._token = token;
@@ -27,7 +27,7 @@ exports.getUserByToken = function(req, res, next){
         return Users.findOne({ _id: token.userId }).exec();
     }).then(user => {
         if (!user){
-            return res.status(401).send('Token not found');
+            throw res.status(401).send('Token not found');
         }
 
         req._user = user;

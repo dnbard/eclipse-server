@@ -29,7 +29,7 @@ schema.statics.createOne = function(data){
     const user = new User({
         login: data.login,
         salt: salt,
-        password: CryptoJS.AES.encrypt(data.password + salt, secret)
+        password: CryptoJS.SHA256(data.password + salt + secret)
     });
 
     return user.save().then(user => {

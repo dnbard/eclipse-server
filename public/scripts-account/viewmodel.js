@@ -20,6 +20,9 @@ define([
         tokenCheck().then(user => {
             this.user(user);
             this.isTokenValid(true);
+        }).catch(() => {
+            this.isTokenValid(false);
+            this.user(null);
         });
     }
 
@@ -49,6 +52,25 @@ define([
 
     Viewmodel.prototype.play = function(){
         location.href = '/';
+    }
+
+    Viewmodel.prototype.doLogin = function(){
+        if (this.isDisabled()){
+            return;
+        }
+
+        fetch('/login', {
+            method: 'post',
+            body: JSON.stringify({
+                login: this.login(),
+                password: this.password()
+            })
+        }).then(user => {
+            token.set(user.token);
+            location.reload()
+        }).catch(err => {
+            this.error(`Unable to login: ${err.statusText}`);
+        });
     }
 
     return Viewmodel;

@@ -15,7 +15,10 @@
             </div>
             <div data-bind="text: error"></div>
             <div class="buttons">
-                <button data-bind="attr:{ disabled: isDisabled }">Login</button>
+                <button data-bind="attr:{ disabled: isDisabled },
+                                   click: doLogin">
+                    Login
+                </button>
                 <button data-bind="attr:{ disabled: isDisabled },
                                    click: registerUser">
                     Register
