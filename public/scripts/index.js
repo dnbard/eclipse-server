@@ -45,6 +45,6 @@ define([
             });
         });
     }).catch(() => {
-        location.href = '/account';
+        location.href = '/';
     });
 });

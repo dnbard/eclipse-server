@@ -51,7 +51,7 @@ define([
     }
 
     Viewmodel.prototype.play = function(){
-        location.href = '/';
+        location.href = '/eclipse';
     }
 
     Viewmodel.prototype.doLogin = function(){

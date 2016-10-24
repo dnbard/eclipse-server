@@ -2,7 +2,7 @@ const config = require('../config');
 
 const pagesCollection = {
     '/': 'index.html',
-    '/account': 'account.html'
+    '/eclipse': 'eclipse.html'
 };
 
 module.exports = function(req, res, next){
