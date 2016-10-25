@@ -6,6 +6,8 @@ define([
     'core/token'
 ], (PubSub, pako, alertify, EVENTS, TokenProvider) => {
     var token = TokenProvider.get(),
+        messageIdStore = null,
+        lostPackages = 0,
         bytesSent = 0;
 
     function getProtocol(){
@@ -25,6 +27,17 @@ define([
 
         ws.onmessage = (payload, flags) => {
             const message = JSON.parse(pako.inflate(payload.data, { to: 'string' }));
+            const messageId = message.id;
+
+            if (messageId){
+                if (messageIdStore && messageId - messageIdStore > 1){
+                    lostPackages ++;
+                    document.querySelector('#lost').textContent = `| ${lostPackages} Lost`;
+                }
+
+                messageIdStore = messageId;
+            }
+
             PubSub.publish(message.subject, Object.assign(message, {
                 _length: payload.data.length
             }));

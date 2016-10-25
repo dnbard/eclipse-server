@@ -12,6 +12,7 @@ const WebSokets = require('../core/ws');
 const Collision = require('../core/collision');
 
 let TIME = 0;
+let SYNC_COUNTER = 0;
 
 exports.init = function(){
     let stage = Stages.getOrCreateGeneric();
@@ -52,6 +53,7 @@ exports.init = function(){
 
         const stageId = stage.id;
         const message = JSON.stringify({
+            id: SYNC_COUNTER++,
             subject: EVENTS.STAGE.UPDATED,
             message: { stage: stage }
         });
@@ -62,5 +64,9 @@ exports.init = function(){
             .forEach(s => WebSokets.sendMessage(s.ws, binaryString, {
                 packed: true
             }));
+
+        if (SYNC_COUNTER > 100000000){
+            SYNC_COUNTER = 0;
+        }
     }
 }
