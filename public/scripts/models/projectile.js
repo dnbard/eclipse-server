@@ -54,7 +54,8 @@ define([
     return function Projectile(options, stage){
         const projectile = new PIXI.Container();
 
-        projectile.particle = new PIXI.particles.Emitter(projectile,     [PIXI.loader.resources['/public/particles/particle.png'].texture], particle);
+        projectile.particle = new PIXI.particles.Emitter(projectile,
+            [PIXI.loader.resources['/public/particles/particle.png'].texture], particle);
 
         projectile.id = options.id;
 

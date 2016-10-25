@@ -46,6 +46,21 @@ class Actor{
             this[name] = methods[options[name]];
         }
     }
+
+    toJSON(){
+        return {
+            id: this.id,
+            x: this.x,
+            y: this.y,
+            rotation: this.rotation,
+            armot: this.armor,
+            maxArmor: this.maxArmor,
+            type: this.type,
+            size: this.size,
+            name: this.name,
+            kind: this.kind
+        }
+    }
 }
 
 module.exports = Actor;

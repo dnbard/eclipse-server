@@ -41,6 +41,18 @@ class Projectile extends Actor{
         this.setMethod(actions, options, 'onUpdate');
         this.setMethod(actions, options, 'onCollide');
     }
+
+    toJSON(){
+        return {
+            id: this.id,
+            x: this.x,
+            y: this.y,
+            vx: this.vx,
+            vy: this.vy,
+            rotation: this.rotation,
+            kind: this.kind
+        }
+    }
 }
 
 module.exports = Projectile;

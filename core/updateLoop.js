@@ -16,7 +16,7 @@ let TIME = 0;
 exports.init = function(){
     let stage = Stages.getOrCreateGeneric();
     setTimeout(LoopIterator, LOOP_DELTA);
-    setTimeout(UpdateIterator, UPDATE_DELTA);
+    setTimeout(WSUpdateIterator, UPDATE_DELTA);
 
     function LoopIterator(){
         setTimeout(LoopIterator, LOOP_DELTA);
@@ -43,8 +43,8 @@ exports.init = function(){
         }
     }
 
-    function UpdateIterator(){
-        setTimeout(UpdateIterator, UPDATE_DELTA);
+    function WSUpdateIterator(){
+        setTimeout(WSUpdateIterator, UPDATE_DELTA);
 
         if (!stage){
             return;

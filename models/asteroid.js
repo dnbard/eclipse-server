@@ -40,6 +40,17 @@ class Asteroid extends Actor{
     onUpdate(){
         this.rotation += this.rotationSpeed;
     }
+
+    toJSON(){
+        return {
+            id: this.id,
+            x: this.x,
+            y: this.y,
+            rotation: this.rotation,
+            type: this.type,
+            kind: this.kind
+        }
+    }
 }
 
 module.exports = Asteroid;
