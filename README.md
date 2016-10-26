@@ -2,6 +2,8 @@
 
 Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 
+![screenshot](https://raw.githubusercontent.com/dnbard/eclipse-server/master/presentation/01.png)
+
 ## How to setup
 
 * clone this repository `git clone https://github.com/dnbard/eclipse-server.git`
