@@ -1,12 +1,12 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --reporter spec tests/**/*Spec.js",
+    "test": "gulp test",
     "start": "node server.js",
-    "dev": "gulp"
+    "dev": "nodemon"
   },
   "author": "",
   "license": "MIT",

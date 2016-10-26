@@ -2,7 +2,8 @@
 
 const pako = require('pako');
 
-const LOOP_DELTA = 25;
+const LOOP_DELTA = 27;
+const AGRO_LOOP_DELTA = 2999;
 const UPDATE_DELTA = 100;
 
 const Stages = require('../core/stages');
@@ -16,8 +17,10 @@ let SYNC_COUNTER = 0;
 
 exports.init = function(){
     let stage = Stages.getOrCreateGeneric();
+
     setTimeout(LoopIterator, LOOP_DELTA);
     setTimeout(WSUpdateIterator, UPDATE_DELTA);
+    setTimeout(AggroLoopIterator, AGRO_LOOP_DELTA);
 
     function LoopIterator(){
         setTimeout(LoopIterator, LOOP_DELTA);
@@ -32,6 +35,17 @@ exports.init = function(){
         actors.forEach(ActorIterator);
 
         Collision.checkStage(stage);
+    }
+
+    function AggroLoopIterator(){
+        setTimeout(AggroLoopIterator, AGRO_LOOP_DELTA);
+
+        if (!stage){
+            return;
+        }
+
+        const groups = stage.groups;
+        groups.forEach(ActorIterator);
     }
 
     function ActorIterator(actor){

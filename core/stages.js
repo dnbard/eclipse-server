@@ -31,26 +31,33 @@ exports.createStage = function(options){
     return stage;
 }
 
-exports.getOrCreateGeneric = function(){
-    var stage = collection.filter(s => s.generic)[0] || exports.createStage();
+function createNPCs(quantity){
+    const x = Math.random() * 400 - 200;
+    const y = Math.random() * 400 - 200;
 
-    const npc = new Player({
-        kind: 'player',
-        type: 'npc-base',
-        x: Math.random() * 1000,
-        y: Math.random() * 1000,
-        onUpdate: 'defaultPlayer',
-        onDamage: 'defaultPlayerDamage',
-        armor: 10,
-        isAccelerating: true,
-        rotateDirection: 1,
-        geometry: GEOMETRY.CIRCLE,
-        size: 16
+    return Array.apply(null, Array(quantity)).map(() => {
+        return new Player({
+            kind: 'player',
+            type: 'npc-base',
+            x: x + Math.random() * 100,
+            y: y + Math.random() * 100,
+            onUpdate: 'defaultPlayer',
+            onDamage: 'defaultPlayerDamage',
+            armor: Math.round(Math.random() * 25),
+            isAccelerating: true,
+            rotateDirection: Math.random() > 0.5 ? 1 : -1,
+            geometry: GEOMETRY.CIRCLE,
+            size: 16
+        });
     });
+}
 
-    stage.addActor(npc);
+exports.getOrCreateGeneric = function(){
+    const stage = collection.filter(s => s.generic)[0] || exports.createStage();
 
-    return stage ;
+    stage.createGroup(createNPCs(4));
+
+    return stage;
 }
 
 exports.removeAll = function(){

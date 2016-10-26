@@ -77,7 +77,7 @@ const actions = {
     defaultPlayerDamage: function(projectile, stage){
         this.armor -= projectile.damage;
 
-        if (this.armor <= 0){
+        if (this.isDestroyed()){
             if (this.type === "player-base"){
                 this.x = 0;
                 this.y = 0;
@@ -114,6 +114,10 @@ class Player extends Actor{
             name: this.name,
             kind: this.kind
         }
+    }
+
+    isDestroyed(){
+        return this.armor <= 0;
     }
 }
 

@@ -25,9 +25,9 @@ gulp.task('test', function(cb){
         }).pipe(mocha({ }))
             .on('error', (e) => {
                 console.log(e);
-                //handle the error (empty handler is enough)
             }).on('end', () => {
                 cb();
+                process.exit(0);
             });
     });
 });

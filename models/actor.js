@@ -61,6 +61,10 @@ class Actor{
             kind: this.kind
         }
     }
+
+    isDestroyed(){
+        return false;
+    }
 }
 
 module.exports = Actor;
