@@ -54,7 +54,9 @@ const actions = {
             this.rotation += Math.PI * 2;
         }
 
-        if (this.firing && time - (this.lastShot || 0) > PLAYER_ROF){
+        if (this.firing && typeof this.firing === 'object'
+            && typeof this.firing.x === 'number' && typeof this.firing.y === 'number'
+            && time - (this.lastShot || 0) > PLAYER_ROF){
             const angle = Angle.getAngleBetweenTwoPoints( this.x, this.y, this.firing.x, this.firing.y );
             const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
             const projectile = new Projectile({
