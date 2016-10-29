@@ -32,8 +32,8 @@ exports.createStage = function(options){
 }
 
 function createNPCs(quantity){
-    const x = Math.random() * 400 - 200;
-    const y = Math.random() * 400 - 200;
+    const x = Math.random() * 2000 - 1000;
+    const y = Math.random() * 2000 - 1000;
 
     return Array.apply(null, Array(quantity)).map(() => {
         return new Player({

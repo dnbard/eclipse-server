@@ -98,6 +98,8 @@ class Player extends Actor{
         this.armor = options.armor || PLAYER_ARMOR;
         this.maxArmor = options.armor || PLAYER_ARMOR;
 
+        this.target = null;
+
         this.setMethod(actions, options, 'onUpdate');
         this.setMethod(actions, options, 'onCollide');
         this.setMethod(actions, options, 'onDamage');
@@ -114,12 +116,17 @@ class Player extends Actor{
             type: this.type,
             size: this.size,
             name: this.name,
-            kind: this.kind
+            kind: this.kind,
+            target: this.target ? this.target.id : null
         }
     }
 
     isDestroyed(){
         return this.armor <= 0;
+    }
+
+    setTarget(target){
+        this.target = target;
     }
 }
 
