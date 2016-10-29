@@ -44,6 +44,24 @@ describe('Collision', () => {
         });
     });
 
+    describe('#colliderCircleCircle', () => {
+        it('should return true', () => {
+            expect(Collision.colliderCircleCircle({
+                x: 0, y: 0, size: 16, geometry: GEOMETRY.CIRCLE
+            },{
+                x: 10, y: 10, size: 25, geometry: GEOMETRY.CIRCLE
+            })).to.be.true;
+        });
+
+        it('should return false', () => {
+            expect(Collision.colliderCircleCircle({
+                x: 0, y: 0, size: 16, geometry: GEOMETRY.CIRCLE
+            },{
+                x: 10, y: 100, size: 25, geometry: GEOMETRY.CIRCLE
+            })).to.be.false;
+        });
+    });
+
     describe('#getCollisionFunction', () => {
         it('should return #getGeometryFunction', () => {
             expect(Collision.getGeometryFunction(GEOMETRY.POINT, GEOMETRY.POINT))
@@ -58,13 +76,15 @@ describe('Collision', () => {
                 .to.be.equal(Collision.colliderCirclePoint);
         });
 
+        it('should return #colliderCircleCircle', () => {
+            expect(Collision.getGeometryFunction(GEOMETRY.CIRCLE, GEOMETRY.CIRCLE))
+                .to.be.equal(Collision.colliderCircleCircle);
+        });
+
         it('should return null', () => {
             expect(Collision.getGeometryFunction()).to.be.null;
 
             expect(Collision.getGeometryFunction(GEOMETRY.POINT)).to.be.null;
-
-            // temporary, until circle-circle function won't be implemented
-            expect(Collision.getGeometryFunction(GEOMETRY.CIRCLE, GEOMETRY.CIRCLE)).to.be.null;
         });
     });
 });

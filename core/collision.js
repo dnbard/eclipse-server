@@ -43,9 +43,9 @@ function getGeometryFunction(firstActorGeometry, secondActorGeometry){
     } else if ((firstActorGeometry === GEOMETRY.POINT && secondActorGeometry === GEOMETRY.CIRCLE) ||
               (firstActorGeometry === GEOMETRY.CIRCLE && secondActorGeometry === GEOMETRY.POINT)){
         return colliderCirclePoint;
-    }/* else if (firstActorGeometry === GEOMETRY.CIRCLE && secondActorGeometry === GEOMETRY.CIRCLE){
+    } else if (firstActorGeometry === GEOMETRY.CIRCLE && secondActorGeometry === GEOMETRY.CIRCLE){
         return colliderCircleCircle;
-    }*/
+    }
 
     return null;
 }
@@ -70,9 +70,19 @@ function colliderCirclePoint(firstActor, secondActor){
     return distance < circle.size;
 }
 
+function colliderCircleCircle(firstActor, secondActor){
+    const distance = Math.sqrt(
+        Math.pow(secondActor.x - firstActor.x, 2) +
+        Math.pow(secondActor.y - firstActor.y, 2)
+    );
+
+    return distance < (secondActor.size + firstActor.size);
+}
+
 module.exports = {
     checkStage: checkStage,
     getGeometryFunction: getGeometryFunction,
     colliderPointPoint: colliderPointPoint,
-    colliderCirclePoint: colliderCirclePoint
+    colliderCirclePoint: colliderCirclePoint,
+    colliderCircleCircle: colliderCircleCircle
 };

@@ -36,9 +36,13 @@ AggroGroup.prototype.onUpdate = function(){
         return this.stage.removeGroupById(this.id);
     }
 
-    if (_.remove(this.actors, AggroGroup._actorsRemover)){
+    const isGroupChanged = !!_.remove(this.actors, AggroGroup._actorsRemover);
+
+    if (isGroupChanged){
         this.createJSONView();
     }
+
+    
 }
 
 AggroGroup.addToStage = function(actor, stage){
