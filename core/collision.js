@@ -79,10 +79,20 @@ function colliderCircleCircle(firstActor, secondActor){
     return distance < (secondActor.size + firstActor.size);
 }
 
+function nonActorCircleCircleCollider(x1, y1, s1, x2, y2, s2){
+    const distance = Math.sqrt(
+        Math.pow(x2 - x1, 2) +
+        Math.pow(y2 - y1, 2)
+    );
+
+    return distance < (s2 + s1);
+}
+
 module.exports = {
     checkStage: checkStage,
     getGeometryFunction: getGeometryFunction,
     colliderPointPoint: colliderPointPoint,
     colliderCirclePoint: colliderCirclePoint,
-    colliderCircleCircle: colliderCircleCircle
+    colliderCircleCircle: colliderCircleCircle,
+    nonActorCircleCircleCollider: nonActorCircleCircleCollider
 };

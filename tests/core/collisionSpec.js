@@ -62,6 +62,16 @@ describe('Collision', () => {
         });
     });
 
+    describe('#nonActorCircleCircleCollider', () => {
+        it('should return true', () => {
+            expect(Collision.nonActorCircleCircleCollider(0, 0, 16, 10, 10, 25)).to.be.true;
+        });
+
+        it('should return false', () => {
+            expect(Collision.nonActorCircleCircleCollider(0, 0, 16, 100, 10, 25)).to.be.false;
+        });
+    });
+
     describe('#getCollisionFunction', () => {
         it('should return #getGeometryFunction', () => {
             expect(Collision.getGeometryFunction(GEOMETRY.POINT, GEOMETRY.POINT))
