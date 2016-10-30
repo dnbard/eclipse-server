@@ -41,13 +41,14 @@ function createNPCs(quantity){
             type: 'npc-base',
             x: x + Math.random() * 100,
             y: y + Math.random() * 100,
-            onUpdate: 'defaultPlayer',
+            onUpdate: 'morderDroneUpdate',
             onDamage: 'defaultPlayerDamage',
             armor: Math.round(Math.random() * 25),
             isAccelerating: true,
             rotateDirection: Math.random() > 0.5 ? 1 : -1,
             geometry: GEOMETRY.CIRCLE,
-            size: 16
+            size: 16,
+            name: 'Morder Drone'
         });
     });
 }

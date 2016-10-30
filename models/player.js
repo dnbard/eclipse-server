@@ -15,7 +15,38 @@ const PLAYER_ROF = 200;
 const PROJECTILE_SPEED = 13;
 const PROJECTILE_LIFETIME = 1900;
 
+const NPC_ROTATION_STEP = 0.07;
+const HALF_PI = Math.PI * 0.5;
+const TRESHOLD_PI = Math.PI * 0.98;
+
 const actions = {
+    morderDroneUpdate: function(){
+        const target = this.target;
+
+        if (target){
+            this.rotateDirection = 0;
+
+            const newRotation = -Angle.getAngleBetweenTwoPoints(
+                this.x, this.y, target.x, target.y
+            );
+            const rotationDirection = this.rotation > newRotation ? -1 : 1;
+            const difference = Math.abs(this.rotation - newRotation);
+
+            if (difference < NPC_ROTATION_STEP ||
+                (Math.abs(this.rotation) > TRESHOLD_PI &&
+                 Math.abs(newRotation) > TRESHOLD_PI)
+            ){
+                this.rotation = newRotation;
+            } else {
+                this.rotation += NPC_ROTATION_STEP * rotationDirection;
+            }
+        }
+
+        actions.defaultNPC.apply(this, arguments);
+    },
+    defaultNPC: function(){
+        actions.defaultPlayer.apply(this, arguments);
+    },
     defaultPlayer: function(stage, delta, time){
         if (this.isAccelerating){
             this.velocity += PLAYER_SPEED * 0.1;
@@ -48,9 +79,9 @@ const actions = {
             this.rotation += this.radialVelocity;
         }
 
-        if (this.rotation > Math.PI * 2){
+        if (this.rotation > Math.PI){
             this.rotation -= Math.PI * 2;
-        } else if (this.rotation < -Math.PI * 2){
+        } else if (this.rotation < -Math.PI){
             this.rotation += Math.PI * 2;
         }
 

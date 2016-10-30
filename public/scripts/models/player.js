@@ -28,12 +28,6 @@ define([
         this.x += this.vx;
         this.y += this.vy;
 
-        if (this.rotation > Math.PI * 2){
-           this.rotation -= Math.PI * 2;
-       } else if (this.rotation < -Math.PI * 2){
-            this.rotation += Math.PI * 2;
-        }
-
         if (typeof this.animateMovement === 'object' && this.animateMovement){
             this.animateMovement.ticks ++;
 
