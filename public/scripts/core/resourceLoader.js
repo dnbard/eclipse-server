@@ -8,6 +8,7 @@ define([
 
         return PIXI.loader
             .add('/public/particles/particle.png')
+            .add('/public/particles/fire.png')
             .add(files)
             .on('progress', loadProgressHandler);
     }

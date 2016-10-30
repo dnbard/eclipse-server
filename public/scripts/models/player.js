@@ -7,8 +7,9 @@ define([
     'models/turret',
     'blueprints/ships',
     'components/staticParticle',
-    'particles/trail'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail){
+    'particles/trail',
+    'particles/explosion-small-ship'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail, explosionParticle){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -19,6 +20,18 @@ define([
         var args = arguments;
         this.children.filter(c => typeof c.onDestroy === 'function')
             .forEach(c => c.onDestroy.apply(c, args));
+
+        const explosion = StaticParticle({
+            x: this.x,
+            y: this.y,
+            textures: [
+                PIXI.loader.resources['/public/particles/particle.png'].texture
+            ],
+            particle: explosionParticle,
+            stage: stage
+        });
+
+        stage.addChild(explosion);
 
         stage.removeChild(this._name);
     }
