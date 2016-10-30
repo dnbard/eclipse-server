@@ -17,7 +17,7 @@ const PROJECTILE_LIFETIME = 1900;
 
 const NPC_ROTATION_STEP = 0.07;
 const HALF_PI = Math.PI * 0.5;
-const TRESHOLD_PI = Math.PI * 0.98;
+const TRESHOLD_PI = Math.PI * 0.99;
 
 const actions = {
     morderDroneUpdate: function(){
@@ -107,8 +107,8 @@ const actions = {
             stage.addActor(projectile);
         }
     },
-    defaultPlayerDamage: function(projectile, stage){
-        this.armor -= projectile.damage;
+    defaultPlayerDamage: function(projectile, stage, damage){
+        this.armor -= projectile.damage || damage;
 
         if (this.isDestroyed()){
             if (this.type === "player-base"){
@@ -118,6 +118,17 @@ const actions = {
             } else {
                 stage.removeActorById(this.id);
             }
+        }
+    },
+    morderDroneCollision: function(actor, stage){
+        if (actor.type !== "player-base"){
+            return;
+        }
+
+        stage.removeActorById(this.id);
+
+        if (typeof actor.onDamage === 'function'){
+            actor.onDamage(this, stage, Math.round(Math.random() * 30 + 10));
         }
     }
 }

@@ -43,6 +43,7 @@ function createNPCs(quantity){
             y: y + Math.random() * 100,
             onUpdate: 'morderDroneUpdate',
             onDamage: 'defaultPlayerDamage',
+            onCollide: 'morderDroneCollision',
             armor: Math.round(Math.random() * 25),
             isAccelerating: true,
             rotateDirection: Math.random() > 0.5 ? 1 : -1,
