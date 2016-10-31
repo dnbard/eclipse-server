@@ -115,6 +115,9 @@ const actions = {
                 this.x = 0;
                 this.y = 0;
                 this.armor = PLAYER_ARMOR;
+
+                //remove aggro for given player from all groups
+                stage.removeAggro(this);
             } else {
                 stage.removeActorById(this.id);
             }

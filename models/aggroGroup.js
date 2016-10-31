@@ -47,6 +47,10 @@ AggroGroup.prototype.createAggroElement = function(target){
     }
 }
 
+AggroGroup.prototype.removeAggro = function(entity){
+    _.remove(this.aggroList, e => e.id === entity.id);
+}
+
 AggroGroup.prototype.onUpdate = function(){
     if (this.actors.length === 0){
         return this.stage.removeGroupById(this.id);

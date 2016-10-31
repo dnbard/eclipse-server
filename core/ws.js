@@ -108,6 +108,8 @@ exports.createWSServer = function(server){
             });
 
             ws.on('close', () => {
+                stage.removeAggro(player);
+
                 stage.removeActorById(actorId);
                 Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
             });

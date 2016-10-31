@@ -38,4 +38,12 @@ Stage.prototype.removeGroupById = function(groupId){
     _.remove(this.groups, g => g.id === groupId);
 }
 
+Stage.prototype.removeAggro = function(entity){
+    if (!entity || typeof entity !== 'object' || typeof entity.id !== 'string'){
+        throw new TypeError('"entity" should be valid object');
+    }
+
+    this.groups.forEach(g => g.removeAggro(entity));
+}
+
 module.exports = Stage;
