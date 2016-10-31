@@ -39,6 +39,12 @@ class Asteroid extends Actor{
 
     onUpdate(){
         this.rotation += this.rotationSpeed;
+
+        if (this.rotation > Math.PI){
+            this.rotation -= Math.PI * 2;
+        } else if (this.rotation < -Math.PI){
+            this.rotation += Math.PI * 2;
+        }
     }
 
     toJSON(){
