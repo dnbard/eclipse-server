@@ -4,8 +4,8 @@ const uuid = require('../core/uuid');
 const AggroGroup = require('../models/aggroGroup')
 
 function Stage(options){
-    this.id = uuid();
-    this.name = this.generateName();
+    this.id = options.id || uuid();
+    this.name = options.name || this.generateName();
 
     this.actors = [];
 

@@ -3,6 +3,7 @@
 const uuid = require('./uuid');
 
 const Stage = require('../models/stage');
+const StagesData = require('../data/stages');
 const Actor = require('../models/actor');
 const Player = require('../models/player');
 const Asteroid = require('../models/asteroid');
@@ -11,6 +12,7 @@ const GEOMETRY = require('../enums/geometry');
 
 let collection = [];
 
+//obsolete
 exports.createStage = function(options){
     const stage = new Stage();
     stage.addActor(new Actor({
@@ -54,10 +56,26 @@ function createNPCs(quantity){
     });
 }
 
-exports.getOrCreateGeneric = function(){
-    const stage = collection.filter(s => s.generic)[0] || exports.createStage();
+exports.createAllStages = function(){
+    StagesData.forEach(data => {
+        const stage = new Stage(data);
 
-    stage.createGroup(createNPCs(4));
+        if (typeof data.onCreate === 'function'){
+            data.onCreate.call(stage, stage);
+        }
+
+        collection.push(stage);
+    });
+}
+
+exports.getOrCreateGeneric = function(){
+    if(collection.length === 0){
+        exports.createAllStages();
+    }
+
+    const stage = collection.filter(s => s.generic)[0];
+
+    //stage.createGroup(createNPCs(4));
 
     return stage;
 }
