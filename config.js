@@ -6,7 +6,7 @@ exports.mongoTest = process.env.MONGO_TEST || `mongodb://localhost:${exports._mo
 exports.secret = process.env.SECRET || 'U2FsdGVkX19LTE8mlF/Ta7ahEWkqgwsjD8Fc9c2UnMU=';
 /* DON'T FORGET TO SET DIFFERENT SECRET ON REAL SERVERS =) */
 
-exports.debug = process.env.DEBUG ? JSON.parse(process.env.DEBUG) : true;
+exports.debug = false//process.env.DEBUG ? JSON.parse(process.env.DEBUG) : true;
 
 exports.defaultStageId = 'ce44bd18-b408-492f-b561-0d8f1a8c5421';
 

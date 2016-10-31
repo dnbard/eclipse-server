@@ -18,10 +18,10 @@ module.exports = [{
         }));
 
         for(var i = 0; i < 32; i ++){
-            const seed = Math.random() * Math.PI * 2 - Math.PI;
-            const radius = Math.random() * 800 + 450;
+            var seed = Math.random() * Math.PI * 2 - Math.PI;
+            var radius = Math.random() * 800 + 450;
 
-            const asteroid = new Asteroid({
+            var asteroid = new Asteroid({
                 x: Math.sin(seed) * radius,
                 y: Math.cos(seed) * radius,
             });
