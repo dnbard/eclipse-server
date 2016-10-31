@@ -5,12 +5,25 @@ const AggroGroup = require('../models/aggroGroup')
 
 function Stage(options){
     this.id = uuid();
+    this.name = this.generateName();
 
     this.actors = [];
 
     this.generic = true;
 
     this.groups = [];
+}
+
+Stage.prototype.generateName = function(){
+    const name = Math.round((Math.random() * Math.pow(10, Math.round(Math.random() * 3) + 5)))
+        .toString(36)
+        .toUpperCase()
+        .split('');
+
+    if (Math.random() > 0.42)
+        name.splice(Math.ceil(Math.random() * (name.length - 2) + 1), 0, '-');
+
+    return name.join('');
 }
 
 Stage.prototype.addActor = function(actor){
