@@ -11,6 +11,7 @@ const Player = require('../models/player');
 const packageData = require('../package.json');
 const Commands = require('./commands');
 const UsersController = require('../controllers/usersController');
+const config = require('../config');
 
 const GEOMETRY = require('../enums/geometry');
 const EVENTS = require('../public/scripts/enums/events');
@@ -63,7 +64,8 @@ exports.createWSServer = function(server){
             sendMessage(ws, JSON.stringify({
                 subject: EVENTS.SUBSCRIBE.CREATED,
                 message: Object.assign({}, subscription, {
-                    actorId: actorId
+                    actorId: actorId,
+                    isDebug: config.debug
                 })
             }));
 
