@@ -11,7 +11,7 @@ Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 * run server `gulp`
 * open URL `http://localhost:3000` in browser
 
-## Debug models
+## Debug mode
 
 `Debug mode` are going to enabled by default locally. It will be disabled on `Curio` and similar environments. Open development tools (F12) and write `window.DEBUG` to access `debug mode` at the client-side.
 
