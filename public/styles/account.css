@@ -22,7 +22,7 @@ main{
     border-bottom-right-radius: 8px;
 
     background: #07071d;
-    box-shadow: 0 0 10px;
+    box-shadow: 0 0 2px;
 }
 
 h1{
@@ -40,10 +40,6 @@ input{
     background: black;
     color: #5959d6;
     padding: 2px 10px;
-}
-
-input[data-element="login"]{
-    margin-left: 23px;
 }
 
 input[disabled]{
@@ -86,4 +82,10 @@ button[disabled="true"]{
 .logo{
     width: 50px;
     vertical-align: sub;
+}
+
+.flex-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }

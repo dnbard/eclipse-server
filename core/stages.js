@@ -1,7 +1,8 @@
 "use strict";
 
-const uuid = require('./uuid');
+const _ = require('lodash');
 
+const uuid = require('./uuid');
 const Stage = require('../models/stage');
 const StagesData = require('../data/stages');
 const Actor = require('../models/actor');
@@ -10,6 +11,7 @@ const Asteroid = require('../models/asteroid');
 
 const GEOMETRY = require('../enums/geometry');
 
+//TODO: to change it to binary tree
 let collection = [];
 
 //obsolete
@@ -90,4 +92,8 @@ exports.length = function(){
 
 exports.getCollection = function(){
     return collection;
+}
+
+exports.getOneById = function(id){
+    return _.find(collection, s => s.id === id);
 }

@@ -77,6 +77,7 @@ exports.getUser = function(req, res){
         login: user.login,
         token: token.token,
         tokenId: token._id,
-        expiresAt: token.expiresAt
+        expiresAt: token.expiresAt,
+        stageId: user.stageId
     });
 }

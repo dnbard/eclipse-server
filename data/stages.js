@@ -1,11 +1,12 @@
 const Actor = require('../models/actor');
 const Asteroid = require('../models/asteroid');
+const config = require('../config');
 
 const GEOMETRY = require('../enums/geometry');
 
 
 module.exports = [{
-    id: 'ce44bd18-b408-492f-b561-0d8f1a8c5421',
+    id: config.defaultStageId,
     name: 'Hale',
     onCreate: function(stage){
         stage.addActor(new Actor({

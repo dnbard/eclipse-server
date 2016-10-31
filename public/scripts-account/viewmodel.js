@@ -16,10 +16,15 @@ define([
 
         this.error = ko.observable('');
         this.user = ko.observable(null);
+        this.stage = ko.observable(null);
 
         tokenCheck().then(user => {
             this.user(user);
             this.isTokenValid(true);
+
+            return fetch(`/stages/${user.stageId}`);
+        }).then(stage => {
+            this.stage(stage);
         }).catch(() => {
             this.isTokenValid(false);
             this.user(null);

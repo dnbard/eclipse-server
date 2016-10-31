@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Base64 = require('js-base64').Base64;
 const CryptoJS = require("crypto-js");
 
-const secret = require('../config').secret;
+const config = require('../config');
+const secret = config.secret;
 const Token = require('../db/tokens');
 const stringRegex = /[0-9a-zA-Z]+/;
 
@@ -11,7 +12,8 @@ const schema = mongoose.Schema({
     _id: { type: String, unique: true, default: uuid },
     login: { type: String, unique: true, match: stringRegex, index: true },
     salt: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    stageId: { type: String, default: config.defaultStageId }
 });
 
 schema.statics.createOne = function(data){

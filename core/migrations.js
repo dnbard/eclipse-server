@@ -1,6 +1,6 @@
 const SETTINGS = require('../enums/settings');
 
-const migrations = [];
+const migrations = require('../data/migrations');
 
 exports.init = function(options){
     const Settings = require('../db/settings');
