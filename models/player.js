@@ -111,6 +111,8 @@ const actions = {
         this.armor -= projectile.damage || damage;
 
         if (this.isDestroyed()){
+            console.log(`Actor(id=${this.id}, name=${this.name}) was destroyed`);
+
             if (this.type === "player-base"){
                 this.x = 0;
                 this.y = 0;
@@ -128,7 +130,7 @@ const actions = {
             return;
         }
 
-        stage.removeActorById(this.id);
+        this.onDamage(this, stage, 1000);
 
         if (typeof actor.onDamage === 'function'){
             actor.onDamage(this, stage, Math.round(Math.random() * 30 + 10));
@@ -153,9 +155,9 @@ class Player extends Actor{
     toJSON(){
         return {
             id: this.id,
-            x: this.x,
-            y: this.y,
-            rotation: this.rotation,
+            x: this.toFixed(this.x),
+            y: this.toFixed(this.y),
+            rotation: this.toFixed(this.rotation, 2),
             armor: this.armor,
             maxArmor: this.maxArmor,
             type: this.type,

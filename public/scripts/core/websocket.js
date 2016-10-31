@@ -3,16 +3,23 @@ define([
     'pako',
     'vendor/alertify',
     'enums/events',
-    'core/token'
-], (PubSub, pako, alertify, EVENTS, TokenProvider) => {
+    'enums/debugCommands',
+    'core/token',
+    'core/debug'
+], (PubSub, pako, alertify, EVENTS, DEBUG_COMMANDS, TokenProvider, debug) => {
     var token = TokenProvider.get(),
         messageIdStore = null,
         lostPackages = 0,
-        bytesSent = 0;
+        bytesSent = 0,
+        logNextMessage = false;
 
     function getProtocol(){
         return location.protocol === 'https:' ? 'wss' : 'ws';
     }
+
+    debug.registerCommand(DEBUG_COMMANDS.SHOW_MESSAGE, () => {
+        logNextMessage = true;
+    });
 
     function genericConnect(){
         const ws = new WebSocket(`${getProtocol()}://${location.host}?token=${token}`);
@@ -41,6 +48,13 @@ define([
             PubSub.publish(message.subject, Object.assign(message, {
                 _length: payload.data.length
             }));
+
+            if (logNextMessage){
+                console.log(`Received: "${message.subject}"`);
+                console.log(JSON.stringify(message, null, 2));
+
+                logNextMessage = false;
+            }
         }
 
         PubSub.subscribe(EVENTS.COMMANDS.ALL, (e, data) => {

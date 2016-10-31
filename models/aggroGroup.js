@@ -56,7 +56,7 @@ AggroGroup.prototype.onUpdate = function(){
         return this.stage.removeGroupById(this.id);
     }
 
-    const isGroupChanged = !!_.remove(this.actors, AggroGroup._actorsRemover);
+    const isGroupChanged = _.remove(this.actors, AggroGroup._actorsRemover).length;
 
     const players = this.stage.actors.filter(this._playerByType);
     players.forEach(p => {
@@ -83,6 +83,7 @@ AggroGroup.prototype.onUpdate = function(){
     }
 
     if (isGroupChanged){
+        console.log(`Aggro Group(id=${this.id}) was changed: ${isGroupChanged} actors were removed`);
         this.createJSONView();
     }
 }

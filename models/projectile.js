@@ -45,11 +45,11 @@ class Projectile extends Actor{
     toJSON(){
         return {
             id: this.id,
-            x: this.x,
-            y: this.y,
-            vx: this.vx,
-            vy: this.vy,
-            rotation: this.rotation,
+            x: this.toFixed(this.x),
+            y: this.toFixed(this.y),
+            vx: this.toFixed(this.vx, 1),
+            vy: this.toFixed(this.vy, 1),
+            rotation: this.toFixed(this.rotation, 2),
             kind: this.kind
         }
     }

@@ -44,9 +44,9 @@ class Asteroid extends Actor{
     toJSON(){
         return {
             id: this.id,
-            x: this.x,
-            y: this.y,
-            rotation: this.rotation,
+            x: this.toFixed(this.x),
+            y: this.toFixed(this.y),
+            rotation: this.toFixed(this.rotation, 2),
             type: this.type,
             kind: this.kind
         }
