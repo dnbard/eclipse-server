@@ -4,6 +4,7 @@ const Actor = require('./actor');
 const AsteroidsMetadata = require('../public/images/asteroids/asteroids.json');
 
 const GEOMETRY = require('../enums/geometry');
+const COLLISION_VELOCITY = 5;
 
 const types = [
     'gray01',
@@ -15,12 +16,17 @@ class Asteroid extends Actor{
     constructor(options){
         super(options);
 
-        const asteroidData = AsteroidsMetadata[Math.trunc(Math.random() * AsteroidsMetadata.length)];
+        const asteroidData = AsteroidsMetadata[
+            Math.trunc(Math.random() * AsteroidsMetadata.length)
+        ];
 
         this.kind = 'asteroid';
         this.type = asteroidData.filename;
         this.size = asteroidData.width * 0.35;
         this.geometry = GEOMETRY.CIRCLE;
+
+        this.vx = 0;
+        this.vy = 0;
 
         this.rotationSpeed = Math.random() * 0.01 - 0.005;
 
@@ -38,12 +44,35 @@ class Asteroid extends Actor{
     }
 
     onUpdate(){
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.vx -= 0.05 * this.vx;
+        this.vy -= 0.05 * this.vy;
+
         this.rotation += this.rotationSpeed;
 
         if (this.rotation > Math.PI){
             this.rotation -= Math.PI * 2;
         } else if (this.rotation < -Math.PI){
             this.rotation += Math.PI * 2;
+        }
+    }
+
+    onCollide(actor, stage){
+        if (actor.kind === 'player'){
+            const angle = -actor.rotation;
+
+            this.vx = Math.cos(angle) * COLLISION_VELOCITY;
+            this.vy = Math.sin(angle) * COLLISION_VELOCITY;
+
+            actor.velocity = 0;
+            actor.rotation += Math.random() * 0.6 - 0.3;
+
+            actor.onDamage(null, stage , 1);
+        } else if (actor.kind === 'asteroid'){
+            this.vx = actor.vx;
+            this.vy = actor.vy;
         }
     }
 

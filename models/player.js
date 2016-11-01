@@ -108,6 +108,7 @@ const actions = {
         }
     },
     defaultPlayerDamage: function(projectile, stage, damage){
+        projectile = projectile || {};
         this.armor -= projectile.damage || damage;
 
         if (this.isDestroyed()){
