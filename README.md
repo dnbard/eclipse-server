@@ -1,6 +1,4 @@
-![build-status](https://travis-ci.org/dnbard/eclipse-server.svg?branch=master)
-
-# Eclipse
+# Eclipse [![Build Status](https://travis-ci.org/dnbard/eclipse-server.svg?branch=master)](https://travis-ci.org/dnbard/eclipse-server)
 
 Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 
