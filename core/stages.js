@@ -76,8 +76,7 @@ exports.getOrCreateGeneric = function(){
     }
 
     const stage = collection.filter(s => s.generic)[0];
-
-    //stage.createGroup(createNPCs(4));
+    stage.createGroup(createNPCs(4));
 
     return stage;
 }

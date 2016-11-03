@@ -24,7 +24,7 @@ gulp.task('test', function(cb){
             read: false
         }).pipe(mocha({ }))
             .on('error', (e) => {
-                console.log(e);
+
             }).on('end', () => {
                 cb();
                 process.exit(0);

@@ -3,6 +3,8 @@ const _ = require('lodash');
 const idGenerator = require('../core/uuid');
 const Collision = require('../core/collision');
 
+const AGGRO_RADIUS = 1000;
+
 function AggroGroup(options){
     options = options || {};
 
@@ -64,7 +66,7 @@ AggroGroup.prototype.onUpdate = function(){
             var aggroElement = this.getAggroElement(p.id);
 
             if (Collision.nonActorCircleCircleCollider(
-                p.x, p.y, p.size, a.x, a.y, 1000
+                p.x, p.y, p.size, a.x, a.y, AGGRO_RADIUS
             )){
                 if (!aggroElement){
                     aggroElement = this.createAggroElement(p);
