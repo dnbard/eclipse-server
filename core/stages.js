@@ -8,6 +8,7 @@ const StagesData = require('../data/stages');
 const Actor = require('../models/actor');
 const Player = require('../models/player');
 const Asteroid = require('../models/asteroid');
+const MorderDroneGenerator = require('../generators/npcMorder');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -35,29 +36,6 @@ exports.createStage = function(options){
     return stage;
 }
 
-function createNPCs(quantity){
-    const x = Math.random() * 2000 - 1000;
-    const y = Math.random() * 2000 - 1000;
-
-    return Array.apply(null, Array(quantity)).map(() => {
-        return new Player({
-            kind: 'player',
-            type: 'npc-base',
-            x: x + Math.random() * 100,
-            y: y + Math.random() * 100,
-            onUpdate: 'morderDroneUpdate',
-            onDamage: 'defaultPlayerDamage',
-            onCollide: 'morderDroneCollision',
-            armor: Math.round(Math.random() * 25),
-            isAccelerating: true,
-            rotateDirection: Math.random() > 0.5 ? 1 : -1,
-            geometry: GEOMETRY.CIRCLE,
-            size: 16,
-            name: 'Morder Drone'
-        });
-    });
-}
-
 exports.createAllStages = function(){
     StagesData.forEach(data => {
         const stage = new Stage(data);
@@ -76,7 +54,9 @@ exports.getOrCreateGeneric = function(){
     }
 
     const stage = collection.filter(s => s.generic)[0];
-    stage.createGroup(createNPCs(4));
+    stage.createGroup(MorderDroneGenerator.createFew({
+        quantity: 4
+    }));
 
     return stage;
 }
