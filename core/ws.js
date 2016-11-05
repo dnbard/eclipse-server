@@ -23,7 +23,6 @@ exports.createWSServer = function(server){
 
     wss.on('connection', function connection(ws) {
         const stage = Stages.getOrCreateGeneric();
-        const subscriberId = uuid();
         const location = url.parse(ws.upgradeReq.url, true);
         const token = location.query.token;
 
@@ -34,6 +33,7 @@ exports.createWSServer = function(server){
         UsersController.getUserByTokenInternal(token).then(data => {
             const _user = data.user;
             const _token = data.token;
+            const subscriberId = _user._id;
             const playerName = _user.login;
 
             _token.extend().then(() => {
@@ -81,6 +81,12 @@ exports.createWSServer = function(server){
                     token: token
                 }
             }));
+
+            if (Subscriptions.getSubscriptionBySubscriberId(subscriberId).length > 1){
+                //check for active subscriptions for that user and close WS connection if it was found
+                console.log(`Found 2+ subscriptions for Subscriber(id=${subscriberId}, name=${playerName}), closing Subscription(id=${subscription.id})`);
+                ws.close();
+            }
 
             ws.on('message', (payload, flags) => {
                 var data;
