@@ -19,7 +19,8 @@ function createOne(options){
         rotateDirection: Math.random() > 0.5 ? 1 : -1,
         geometry: GEOMETRY.CIRCLE,
         size: 16,
-        name: 'Morder Drone'
+        name: 'Morder Drone',
+        bounty: 100
     });
 }
 

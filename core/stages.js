@@ -6,7 +6,6 @@ const uuid = require('./uuid');
 const Stage = require('../models/stage');
 const StagesData = require('../data/stages');
 const Actor = require('../models/actor');
-const Player = require('../models/player');
 const Asteroid = require('../models/asteroid');
 const MorderDroneGenerator = require('../generators/npcMorder');
 

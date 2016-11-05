@@ -7,7 +7,6 @@ const pako = require('pako');
 
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
-const Player = require('../models/player');
 const packageData = require('../package.json');
 const Commands = require('./commands');
 const UsersController = require('../controllers/usersController');
@@ -31,6 +30,8 @@ exports.createWSServer = function(server){
         }
 
         UsersController.getUserByTokenInternal(token).then(data => {
+            const Player = require('../models/player');
+
             const _user = data.user;
             const _token = data.token;
             const subscriberId = _user._id;
@@ -43,7 +44,7 @@ exports.createWSServer = function(server){
             });
 
             console.log(`Incoming WS connection (subscriber=${subscriberId})`);
-
+            console.log(Player);
             const deltaTime = Math.random() * 1000
             const player = new Player({
                 kind: 'player',
@@ -54,7 +55,8 @@ exports.createWSServer = function(server){
                 onDamage: 'defaultPlayerDamage',
                 geometry: GEOMETRY.CIRCLE,
                 size: 22,
-                name: playerName
+                name: playerName,
+                createdBy: subscriberId
             });
             const actorId = player.id;
             const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);

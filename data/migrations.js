@@ -7,4 +7,9 @@ module.exports = [function(options, cb){
     Users.update({}, {
         stageId: config.defaultStageId
     }, cb);
+}, function(options, cb){
+    //Set default credits value for all users
+    Users.update({}, {
+        credits: 1000
+    }, cb);
 }];

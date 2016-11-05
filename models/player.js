@@ -4,6 +4,7 @@ const Actor = require('./actor');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 const Projectile = require('../models/projectile');
+const Transactions = require('../core/transactions');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -123,6 +124,13 @@ const actions = {
                 stage.removeAggro(this);
             } else {
                 stage.removeActorById(this.id);
+
+                if (this.bounty && projectile && projectile.createdBy){
+                    Transactions.createOne(
+                        stage.getActorById(projectile.createdBy).createdBy,
+                        this.bounty
+                    );
+                }
             }
         }
     },
@@ -145,6 +153,8 @@ class Player extends Actor{
 
         this.armor = options.armor || PLAYER_ARMOR;
         this.maxArmor = options.armor || PLAYER_ARMOR;
+
+        this.bounty = options.bounty || 0;
 
         this.target = null;
 

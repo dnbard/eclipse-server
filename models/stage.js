@@ -36,6 +36,10 @@ Stage.prototype.removeActorById = function(actorId){
     _.remove(this.actors, a => a.id === actorId);
 }
 
+Stage.prototype.getActorById = function(actorId){
+    return _.find(this.actors, a => a.id === actorId);
+}
+
 Stage.prototype.createGroup = function(actors){
     const group = new AggroGroup({
         actors: actors || [],

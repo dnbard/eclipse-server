@@ -13,7 +13,8 @@ const schema = mongoose.Schema({
     login: { type: String, unique: true, match: stringRegex, index: true },
     salt: { type: String, required: true },
     password: { type: String, required: true },
-    stageId: { type: String, default: config.defaultStageId }
+    stageId: { type: String, default: config.defaultStageId },
+    credits: { type: Number, default: 1000 }
 });
 
 schema.statics.createOne = function(data){
