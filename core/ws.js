@@ -44,7 +44,7 @@ exports.createWSServer = function(server){
             });
 
             console.log(`Incoming WS connection (subscriber=${subscriberId})`);
-            console.log(Player);
+
             const deltaTime = Math.random() * 1000
             const player = new Player({
                 kind: 'player',
@@ -139,6 +139,10 @@ function sendMessage(ws, message, options){
 
     if (ws.readyState !== ws.OPEN){
         return console.log('Unable to send WS message. Reason - WS already closed.')
+    }
+
+    if (typeof message !== 'string'){
+        message = JSON.stringify(message);
     }
 
     const binaryString = options.packed ? message :

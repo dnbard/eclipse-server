@@ -8,6 +8,7 @@ const StagesData = require('../data/stages');
 const Actor = require('../models/actor');
 const Asteroid = require('../models/asteroid');
 const MorderDroneGenerator = require('../generators/npcMorder');
+const Scheduler = require('../core/scheduler');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -47,15 +48,24 @@ exports.createAllStages = function(){
     });
 }
 
+function createMorderDroneGroup(stage){
+    const group = stage.createGroup(MorderDroneGenerator.createFew({
+        quantity: Math.round(Math.random() * 5) + 1
+    }));
+
+    group.onDestroy = function(){
+        Scheduler.schedule(() => createMorderDroneGroup(stage),
+            Math.round(Math.random() * 10000));
+    }
+}
+
 exports.getOrCreateGeneric = function(){
     if(collection.length === 0){
         exports.createAllStages();
     }
 
     const stage = collection.filter(s => s.generic)[0];
-    stage.createGroup(MorderDroneGenerator.createFew({
-        quantity: 4
-    }));
+    createMorderDroneGroup(stage);
 
     return stage;
 }

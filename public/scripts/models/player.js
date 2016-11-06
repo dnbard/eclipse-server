@@ -8,8 +8,9 @@ define([
     'blueprints/ships',
     'components/staticParticle',
     'particles/trail',
+    'particles/spawn',
     'particles/explosion-small-ship'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail, explosionParticle){
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail, spawn, explosionParticle){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -225,6 +226,17 @@ define([
         });
         stage.addChild(name);
         player._name = name;
+
+        setTimeout(function(){
+            stage.addChild(new StaticParticle({
+                textures: [
+                    PIXI.loader.resources['/public/particles/sparks.png'].texture
+                ],
+                particle: spawn,
+                x: player.x,
+                y: player.y,
+            }));
+        }, 1);
 
         return player;
     }

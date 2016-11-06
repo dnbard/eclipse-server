@@ -14,6 +14,8 @@ function AggroGroup(options){
     this.stage = options.stage;
     this.aggroList = [];
 
+    this.onDestroy = options.onDestroy || null;
+
     this.actors.forEach(a => AggroGroup.addToStage(a, this.stage));
 
     //this method should be called in the end of constructor
@@ -55,6 +57,10 @@ AggroGroup.prototype.removeAggro = function(entity){
 
 AggroGroup.prototype.onUpdate = function(){
     if (this.actors.length === 0){
+        if (typeof this.onDestroy === 'function'){
+            this.onDestroy.apply(this, arguments);
+        }
+
         return this.stage.removeGroupById(this.id);
     }
 
