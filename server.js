@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 
 const UpdateLoop = require('./core/updateLoop');
@@ -6,8 +8,10 @@ const ws = require('./core/ws');
 const migrations = require('./core/migrations');
 
 const middlewares = require('./middlewares');
-const config = require('./config');
+const configs = require('./configs');
 const routing = require('./routing');
+
+const PORT = configs.get('server.port');
 
 mongo.connect().then(() => {
     return migrations.init();
@@ -16,8 +20,8 @@ mongo.connect().then(() => {
     const app = express();
 
     server.on('request', app);
-    server.listen(config.port, () => {
-        console.log(`HTTP Server :: listening on port ${config.port}`);
+    server.listen(PORT, () => {
+        console.log(`HTTP Server :: listening on port ${PORT}`);
         ws.createWSServer(server);
         middlewares.init(app);
         routing.init(app);
