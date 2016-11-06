@@ -21,6 +21,8 @@ define([
         var args = arguments;
         this.children.filter(c => typeof c.onDestroy === 'function')
             .forEach(c => c.onDestroy.apply(c, args));
+        this._effects.filter(c => typeof c.onDestroy === 'function')
+            .forEach(c => c.onDestroy.apply(c, args));
 
         const explosion = StaticParticle({
             x: this.x,
@@ -173,6 +175,7 @@ define([
 
         player.addChild(playerSprite);
         player.systems = [];
+        player._effects = [];
 
         blueprint.systems.forEach(s => {
             var system = null;
@@ -206,6 +209,7 @@ define([
                     }
                 });
 
+                player._effects.push(system);
                 return stage.addChild(system);
             }
 
@@ -235,6 +239,7 @@ define([
                 particle: spawn,
                 x: player.x,
                 y: player.y,
+                stage: stage
             }));
         }, 1);
 

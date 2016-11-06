@@ -6,7 +6,9 @@ define([
 
     'pixi-particles'
 ], (PIXI, uuid, PubSub, EVENTS) => {
-    function onDestroy(){
+    function onDestroy(stage){
+        this.particle.emit = false;
+        stage.removeChild(this);
         this.particle.destroy();
     }
 
@@ -25,7 +27,7 @@ define([
 
         container.kind = 'static-particle';
 
-        container.onDestroy = onDestroy;
+        container.onDestroy = options.onDestroy || onDestroy;
         container.onUpdate = options.onUpdate || onUpdate;
 
         container.isPartricle = true;
