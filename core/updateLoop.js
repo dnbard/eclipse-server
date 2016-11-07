@@ -1,6 +1,8 @@
 "use strict";
 
 const pako = require('pako');
+const now = require('performance-now');
+const debug = require('debug')('core:update');
 
 const LOOP_DELTA = 27;
 const AGRO_LOOP_DELTA = 2999;
@@ -38,6 +40,8 @@ exports.init = function(){
     setTimeout(TransactionsIterator, TRANSACTIONS_DELTA);
 
     function LoopIterator(){
+        const start = now();
+
         setTimeout(LoopIterator, LOOP_DELTA);
 
         TIME += LOOP_DELTA;
@@ -50,6 +54,9 @@ exports.init = function(){
         actors.forEach(ActorIterator);
 
         Collision.checkStage(stage);
+
+        const end = now();
+        debug(`Update took: ${(end-start).toFixed(3)}ms`);
     }
 
     function AggroLoopIterator(){

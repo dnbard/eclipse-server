@@ -28,10 +28,7 @@ function createOne(userId, value){
 }
 
 function update(){
-    console.log(`Transactions update started`);
-    Promise.all(_.map(transactions, transactionIterator)).then(() => {
-        console.log('Transactions update ended');
-    });
+    _.map(transactions, transactionIterator);
 }
 
 function transactionIterator(userTransactions, userId){

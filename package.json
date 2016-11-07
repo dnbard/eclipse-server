@@ -1,6 +1,6 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -21,12 +21,14 @@
     "mongoose": "^4.6.4",
     "node-uuid": "^1.4.7",
     "pako": "^1.0.3",
+    "performance-now": "^0.2.0",
     "sorted-array": "^2.0.1",
     "ws": "^1.1.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
     "mocha": "^3.1.0",
