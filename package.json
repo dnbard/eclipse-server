@@ -1,6 +1,6 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -22,6 +22,7 @@
     "node-uuid": "^1.4.7",
     "pako": "^1.0.3",
     "performance-now": "^0.2.0",
+    "request": "^2.78.0",
     "sorted-array": "^2.0.1",
     "ws": "^1.1.1"
   },

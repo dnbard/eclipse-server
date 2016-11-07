@@ -17,6 +17,7 @@ exports.init = function(app){
 
     /*====== SERVER =====*/
     app.get('/server', ServerController.get);
+    app.get('/server/badge', ServerController.getBadge);
 
 
     /*====== STAGES =====*/
