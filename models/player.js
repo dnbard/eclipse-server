@@ -133,6 +133,10 @@ const actions = {
                 }
             }
         }
+
+        if(this.type !== 'player-base' && projectile && projectile.createdBy){
+            stage.addAggro(projectile.createdBy, this.isDestroyed() ? 33 : 9);
+        }
     },
     morderDroneCollision: function(actor, stage){
         if (actor.type !== "player-base"){

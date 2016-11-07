@@ -51,6 +51,14 @@ AggroGroup.prototype.createAggroElement = function(target){
     }
 }
 
+AggroGroup.prototype.addAggro = function(entityId, value){
+    const entity = _.find(this.aggroList, e => e.id === entityId);
+
+    if (entity){
+        entity.value += value;
+    }
+}
+
 AggroGroup.prototype.removeAggro = function(entity){
     _.remove(this.aggroList, e => e.id === entity.id);
 }

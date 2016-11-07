@@ -65,4 +65,12 @@ Stage.prototype.removeAggro = function(entity){
     this.groups.forEach(g => g.removeAggro(entity));
 }
 
+Stage.prototype.addAggro = function(entityId){
+    if (!entityId || typeof entityId !== 'string'){
+        throw new TypeError(`"entityId" should be valid string instead of ${typeof entityId}`);
+    }
+
+    this.groups.forEach(g => g.addAggro(entityId));
+}
+
 module.exports = Stage;
