@@ -8,17 +8,21 @@ const Subscriptions = require('../core/subscriptions');
 const WebSockets = require('../core/ws');
 
 const EVENTS = require('../public/scripts/enums/events');
+const TRANSACTIONS = require('../enums/transactionTypes');
 
 var transactions = {};
 
-function createOne(userId, value){
+function createOne(userId, value, type){
+    type = type || TRANSACTIONS.CREDITS;
+
     const transaction = {
         userId: userId,
         value: value,
-        timestamp: new Date()
+        timestamp: new Date(),
+        type: type
     };
 
-    console.log(`Created transaction(userId=${userId}, value=${value})`);
+    console.log(`Created transaction(userId=${userId}, type=${type}, value=${value})`);
 
     if (transactions[userId]){
         transactions[userId].push(transaction);
@@ -37,15 +41,31 @@ function transactionIterator(userTransactions, userId){
             throw new Error(`User(id=${userId}) not found.`);
         }
 
-        const change = _.reduce(userTransactions, creditsReducer).value;
-        console.log(`User(id=${userId}), credits changed by ${change}`);
+        const change = _.chain(userTransactions)
+            .filter(creditsFilter)
+            .map(mapValue)
+            .reduce(reducer)
+            .value() || 0;
+
+        var pvpChange = _.chain(userTransactions)
+            .filter(pvpFilter)
+            .map(mapValue)
+            .reduce(reducer)
+            .value() || 0;
+
+        console.log(`User(id=${userId}, name=${user.login}), credits changed by ${change}, pvp by ${pvpChange}`);
 
         user.credits += change;
+        user.pvp += pvpChange;
+        if (user.pvp < 0){
+            user.pvp = 0;
+        }
 
         const _tr = new Transactions({
             value: change,
             overall: user.credits,
-            userId: userId
+            userId: userId,
+            pvp: pvpChange
         });
         _tr.save();
 
@@ -58,27 +78,31 @@ function transactionIterator(userTransactions, userId){
             return;
         }
 
-        console.log({
-            subject: EVENTS.IDENTITY.CHANGED,
-            message: {
-                _id: user._id,
-                credits: user.credits
-            }
-        });
-
         WebSockets.sendMessage(subscription.ws, {
             subject: EVENTS.IDENTITY.CHANGED,
             message: {
                 _id: user._id,
-                credits: user.credits
+                credits: user.credits,
+                pvp: user.pvp
             }
         });
     });
 }
 
-function creditsReducer(a, b){
-    a.value += b.value;
-    return a;
+function creditsFilter(a){
+    return a.type === TRANSACTIONS.CREDITS;
+}
+
+function pvpFilter(a){
+    return a.type === TRANSACTIONS.PVP;
+}
+
+function mapValue(a){
+    return a.value;
+}
+
+function reducer(a, b){
+    return a + b;
 }
 
 exports.createOne = createOne;

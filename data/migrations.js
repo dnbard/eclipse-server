@@ -12,4 +12,9 @@ module.exports = [function(options, cb){
     Users.update({}, {
         credits: 1000
     }, cb);
+}, function(options, cb){
+    //Set default pvp value for all users
+    Users.update({}, {
+        pvp: 0
+    }, cb);
 }];

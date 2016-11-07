@@ -4,6 +4,7 @@ const uuid = require('node-uuid').v4;
 const schema = mongoose.Schema({
     _id: { type: String, unique: true, default: uuid },
     value: Number,
+    pvp: Number,
     overall: Number,
     userId: { type: String, index: true },
     timestamp: { type: Date, default: Date.now }

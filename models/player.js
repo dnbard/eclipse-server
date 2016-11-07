@@ -5,6 +5,7 @@ const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
 const Projectile = require('../models/projectile');
 const Transactions = require('../core/transactions');
+const PVP = require('../core/pvp');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -122,6 +123,13 @@ const actions = {
 
                 //remove aggro for given player from all groups
                 stage.removeAggro(this);
+
+                if(projectile && projectile.createdBy){
+                    PVP.doMath(
+                        stage.getActorById(this.id).createdBy,
+                        stage.getActorById(projectile.createdBy).createdBy
+                    );
+                }
             } else {
                 stage.removeActorById(this.id);
 
