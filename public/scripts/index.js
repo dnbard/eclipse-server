@@ -20,10 +20,10 @@ define([
     'core/resourceLoader',
     'core/tokenCheck',
     'models/stage',
-    'enums/events'
-], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS) => {
-    console.log('Started');
+    'enums/events',
 
+    'components/summary'
+], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS) => {
     tokenCheck().then((user) => {
         ResourceLoader().load(() => {
             websocket.genericConnect();
