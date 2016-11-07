@@ -105,6 +105,12 @@ define([
 
             this.armor = newState.armor;
         }
+
+        if (newState.target === playerId){
+            this._name.style.fill = 0xff2222;
+        } else {
+            this._name.style.fill = 0xffffff;
+        }
     }
 
     return function Player(options, stage){
