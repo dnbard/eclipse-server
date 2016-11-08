@@ -10,6 +10,8 @@ define([
             <div class="credits"></div>
         <div class="pvp"></div>`;
 
+        element.querySelector('.system-name').textContent = `${payload.message.stage.name} system`;
+
         fetch('/users').then(user => {
             element.querySelector('.credits').textContent = `${user.credits.toFixed(0)} credits`;
             element.querySelector('.pvp').textContent = `Rating: ${user.pvp.toFixed(0)}`;

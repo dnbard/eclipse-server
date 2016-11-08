@@ -24,8 +24,8 @@ function doMath(userIdTo, userIdTarget){
         const ratingTo = calculateRating(userTo.pvp, userTarget.pvp);
         const ratingTarget = -calculateRating(userTarget.pvp, userTo.pvp, DEATH);
 
-        Transactions.createOne(userIdTarget, ratingTo, TRANSACTIONS.PVP);
-        Transactions.createOne(
+        Transactions.createOneAndExecute(userIdTarget, ratingTo, TRANSACTIONS.PVP);
+        Transactions.createOneAndExecute(
             userIdTo,
             userTo.pvp + ratingTarget > 0 ? ratingTarget: -userTo.pvp,
             TRANSACTIONS.PVP

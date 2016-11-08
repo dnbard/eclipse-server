@@ -1,3 +1,7 @@
+body{
+    font-family: 'Nunito', sans-serif;
+}
+
 * {
     padding: 0;
     margin: 0
@@ -7,7 +11,6 @@
     color: #9a9a9a;
     z-index: 10;
     font-size: 9pt;
-    font-family: sans-serif;
     left: 5px;
     bottom: 1px;
     pointer-events: none;
@@ -17,9 +20,21 @@
     position: fixed;
     color: #9a9a9a;
     z-index: 10;
-    font-size: 9pt;
-    font-family: sans-serif;
+    font-size: 10pt;
     left: 5px;
     top: 1px;
     pointer-events: none;
 }
+
+.system-name{
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 17pt;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/*
+font-family: 'Josefin Sans', sans-serif;
+font-family: 'Nunito', sans-serif;
+*/

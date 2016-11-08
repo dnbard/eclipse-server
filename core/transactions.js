@@ -12,6 +12,19 @@ const TRANSACTIONS = require('../enums/transactionTypes');
 
 var transactions = {};
 
+function createOneAndExecute(userId, value, type){
+    type = type || TRANSACTIONS.CREDITS;
+
+    const transaction = {
+        userId: userId,
+        value: value,
+        timestamp: new Date(),
+        type: type
+    };
+
+    return transactionIterator(transaction, userId);
+}
+
 function createOne(userId, value, type){
     type = type || TRANSACTIONS.CREDITS;
 

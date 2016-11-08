@@ -232,7 +232,7 @@ define([
 
         const _name = (options.name || player.id).replace('-', '').substring(0, 12);
         const name = new PIXI.Text(_name, {
-            fontFamily : 'Arial', fontSize: 14, fill : 0xffffff
+            fontFamily : 'Nunito', fontSize: 14, fill : 0xffffff
         });
         stage.addChild(name);
         player._name = name;
