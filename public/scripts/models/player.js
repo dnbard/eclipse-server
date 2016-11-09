@@ -7,10 +7,11 @@ define([
     'models/turret',
     'blueprints/ships',
     'components/staticParticle',
+    'components/flyingNumber',
     'particles/trail',
     'particles/spawn',
     'particles/explosion-small-ship'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail, spawn, explosionParticle){
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, FlyingNumber, trail, spawn, explosionParticle){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -74,7 +75,7 @@ define([
         }
     }
 
-    function applyUpdate(newState){
+    function applyUpdate(newState, stage){
         this.animateMovement = {
             x: newState.x,
             y: newState.y,
@@ -102,6 +103,22 @@ define([
             }
 
             this._healthbar.endFill();
+
+            if (newState.armor < this.armor){
+                stage.addChild(new FlyingNumber({
+                    text: `-${this.armor - newState.armor}`,
+                    x: this.x + 16,
+                    y: this.y - 16,
+                    color: 0xff0000
+                }));
+            } else if (newState.armor > this.armor){
+                stage.addChild(new FlyingNumber({
+                    text: `${this.armor - newState.armor}`,
+                    x: this.x - 16,
+                    y: this.y - 16,
+                    color: 0x44ff22
+                }));
+            }
 
             this.armor = newState.armor;
         }

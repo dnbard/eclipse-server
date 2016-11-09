@@ -28,7 +28,7 @@ function createFew(options){
     options = options || {};
 
     const seed = Math.random() * Math.PI * 2 - Math.PI;
-    const radius = Math.random() * 2000 + 450;
+    const radius = Math.random() * 1000 + 450;
 
     const newOptions = {
         x: options.x || (Math.sin(seed) * radius),

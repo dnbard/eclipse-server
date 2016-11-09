@@ -41,7 +41,7 @@ define([
 
         function updateLoopIterator(el){
             if (el && el.onUpdate && typeof el.onUpdate === 'function'){
-                el.onUpdate.call(el);
+                el.onUpdate.call(el, stage);
             }
         }
 
@@ -103,7 +103,7 @@ define([
             }
 
             if (typeof localActor.applyUpdate === 'function'){
-                localActor.applyUpdate.call(localActor, actor);
+                localActor.applyUpdate.call(localActor, actor, stage);
             } else {
                 localActor.x = actor.x;
                 localActor.y = actor.y;
