@@ -33,7 +33,7 @@ define({
 		"min": 0.1,
 		"max": 0.75
 	},
-	"blendMode": "normal",
+	"blendMode": "screen",
 	"frequency": 0.001,
 	"emitterLifetime": 0.3,
 	"maxParticles": 1000,

@@ -3,6 +3,8 @@ const _ = require('lodash');
 const idGenerator = require('../core/uuid');
 const Collision = require('../core/collision');
 
+const BUFFS = require('../enums/buffs');
+
 const AGGRO_RADIUS = 1000;
 
 function AggroGroup(options){
@@ -76,6 +78,10 @@ AggroGroup.prototype.onUpdate = function(){
 
     const players = this.stage.actors.filter(this._playerByType);
     players.forEach(p => {
+        if (p.isBuffActive(BUFFS.SANCTUARY)){
+            return;
+        }
+
         this.actors.forEach(a => {
             var aggroElement = this.getAggroElement(p.id);
 
@@ -96,6 +102,8 @@ AggroGroup.prototype.onUpdate = function(){
         if (maxAggro){
             this.actors.forEach(a => a.target = maxAggro.target);
         }
+    } else {
+        this.actors.forEach(a => a.target = null);
     }
 
     if (isGroupChanged){

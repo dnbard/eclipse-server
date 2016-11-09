@@ -1,10 +1,16 @@
 const EVENTS = require('../public/scripts/enums/events');
+const BUFFS = require('../enums/buffs');
 
 var commands = {};
 
 exports.execute = function(commandName, params){
     if (!commands[commandName]){
         throw new Error(`Command ${commandName} not registered.`);
+    }
+
+    //no commands available while in death state
+    if(params && params.player && params.player.isBuffActive(BUFFS.DEATH)){
+        return;
     }
 
     commands[commandName].call(null, params);

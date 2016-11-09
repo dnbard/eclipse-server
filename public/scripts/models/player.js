@@ -7,10 +7,11 @@ define([
     'models/turret',
     'blueprints/ships',
     'components/staticParticle',
+    'components/flyingNumber',
     'particles/trail',
     'particles/spawn',
     'particles/explosion-small-ship'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, trail, spawn, explosionParticle){
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, FlyingNumber, trail, spawn, explosionParticle){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -66,6 +67,12 @@ define([
             this._name.y = this.y - 40;
             this._name.x = this.x - this._name.width * 0.5;
         }
+
+        if (this.buffs.indexOf('death') !== -1){
+            this.alpha = 0.25;
+        } else {
+            this.alpha = 1;
+        }
     }
 
     function systemsIterator(t){
@@ -74,7 +81,7 @@ define([
         }
     }
 
-    function applyUpdate(newState){
+    function applyUpdate(newState, stage){
         this.animateMovement = {
             x: newState.x,
             y: newState.y,
@@ -103,6 +110,22 @@ define([
 
             this._healthbar.endFill();
 
+            if (newState.armor < this.armor){
+                stage.addChild(new FlyingNumber({
+                    text: `-${this.armor - newState.armor}`,
+                    x: this.x + 16,
+                    y: this.y - 16,
+                    color: 0xff0000
+                }));
+            } else if (newState.armor > this.armor){
+                stage.addChild(new FlyingNumber({
+                    text: `${this.armor - newState.armor}`,
+                    x: this.x - 16,
+                    y: this.y - 16,
+                    color: 0x44ff22
+                }));
+            }
+
             this.armor = newState.armor;
         }
 
@@ -110,6 +133,12 @@ define([
             this._name.style.fill = 0xff2222;
         } else {
             this._name.style.fill = 0xffffff;
+        }
+
+        if (newState.buffs){
+            this.buffs = newState.buffs;
+        } else {
+            this.buffs = [];
         }
     }
 
@@ -142,6 +171,8 @@ define([
         player.onUpdate = onUpdate;
         player.applyUpdate = applyUpdate;
         player.onDestroy = onDestroy;
+
+        player.buffs = [];
 
         if (player.id === playerId){
             Hotkey.register({

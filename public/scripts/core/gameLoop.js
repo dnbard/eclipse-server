@@ -24,7 +24,7 @@ define([
             renderer.render(stage);
 
             const thisFrameTime = (thisLoop=new Date) - lastLoop;
-            frameTime+= (thisFrameTime - frameTime) / filterStrength;
+            frameTime += (thisFrameTime - frameTime) / filterStrength;
             lastLoop = thisLoop;
         }
 
@@ -32,7 +32,7 @@ define([
         const latencyOut = document.getElementById('latency');
         const receivedOut = document.getElementById('received');
         setInterval(function(){
-            fpsOut.textContent = `| ${(1000 / frameTime).toFixed(1)} fps`;
+            fpsOut.textContent = `| ${(1000 / frameTime).toFixed(0)} fps`;
             latencyOut.textContent = `| ${Math.round(uframeTime)}ms`;
             receivedOut.textContent = received < 100000 ?
                 `| ⬇${(received / 1000).toFixed(0)}KB` :
@@ -41,7 +41,7 @@ define([
 
         function updateLoopIterator(el){
             if (el && el.onUpdate && typeof el.onUpdate === 'function'){
-                el.onUpdate.call(el);
+                el.onUpdate.call(el, stage);
             }
         }
 
@@ -103,7 +103,7 @@ define([
             }
 
             if (typeof localActor.applyUpdate === 'function'){
-                localActor.applyUpdate.call(localActor, actor);
+                localActor.applyUpdate.call(localActor, actor, stage);
             } else {
                 localActor.x = actor.x;
                 localActor.y = actor.y;

@@ -1,7 +1,9 @@
 "use strict";
 
-const uuid = require('../core/uuid');
+const _ = require('lodash');
 
+const uuid = require('../core/uuid');
+const UpdateLoop = require('../core/updateLoop');
 
 const actions = {};
 
@@ -37,6 +39,8 @@ class Actor{
         this.setMethod(actions, options, 'onUpdate');
         this.setMethod(actions, options, 'onCollide');
         this.setMethod(actions, options, 'onDamage');
+
+        this.buffs = {};
     }
 
     setMethod(methods, options, name){
@@ -69,6 +73,28 @@ class Actor{
     toFixed(value, precision) {
         var power = Math.pow(10, precision || 0);
         return Math.round(value * power) / power;
+    }
+
+    setBuff(buffName, duration){
+        this.buffs[buffName] = UpdateLoop.getTime() + duration;
+    }
+
+    isBuffActive(buffName){
+        const buffDuration = this.buffs[buffName];
+        return !!buffDuration && buffDuration > UpdateLoop.getTime();
+    }
+
+    removeBuff(buffName){
+        this.buffs[buffName] = undefined;
+    }
+
+    clearInactiveBuffs(){
+        const time = UpdateLoop.getTime();
+        _.each(this.buffs, (durration, key) => {
+            if (durration < time){
+                delete this.buffs[key];
+            };
+        });
     }
 }
 

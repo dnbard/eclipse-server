@@ -116,3 +116,7 @@ exports.init = function(){
         Transactions.update(TIME);
     }
 }
+
+exports.getTime = function(){
+    return TIME;
+}
