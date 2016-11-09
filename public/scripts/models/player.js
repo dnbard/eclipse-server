@@ -67,6 +67,12 @@ define([
             this._name.y = this.y - 40;
             this._name.x = this.x - this._name.width * 0.5;
         }
+
+        if (this.buffs.indexOf('death') !== -1){
+            this.alpha = 0.25;
+        } else {
+            this.alpha = 1;
+        }
     }
 
     function systemsIterator(t){
@@ -128,6 +134,12 @@ define([
         } else {
             this._name.style.fill = 0xffffff;
         }
+
+        if (newState.buffs){
+            this.buffs = newState.buffs;
+        } else {
+            this.buffs = [];
+        }
     }
 
     return function Player(options, stage){
@@ -159,6 +171,8 @@ define([
         player.onUpdate = onUpdate;
         player.applyUpdate = applyUpdate;
         player.onDestroy = onDestroy;
+
+        player.buffs = [];
 
         if (player.id === playerId){
             Hotkey.register({

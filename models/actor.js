@@ -1,5 +1,7 @@
 "use strict";
 
+const _ = require('lodash');
+
 const uuid = require('../core/uuid');
 const UpdateLoop = require('../core/updateLoop');
 
@@ -79,8 +81,20 @@ class Actor{
 
     isBuffActive(buffName){
         const buffDuration = this.buffs[buffName];
-
         return !!buffDuration && buffDuration > UpdateLoop.getTime();
+    }
+
+    removeBuff(buffName){
+        this.buffs[buffName] = undefined;
+    }
+
+    clearInactiveBuffs(){
+        const time = UpdateLoop.getTime();
+        _.each(this.buffs, (durration, key) => {
+            if (durration < time){
+                delete this.buffs[key];
+            };
+        });
     }
 }
 

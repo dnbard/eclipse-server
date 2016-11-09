@@ -8,6 +8,7 @@ const Transactions = require('../core/transactions');
 const PVP = require('../core/pvp');
 
 const GEOMETRY = require('../enums/geometry');
+const BUFFS = require('../enums/buffs');
 
 const PLAYER_SPEED = 5;
 const PLAYER_ARMOR = 100;
@@ -110,6 +111,10 @@ const actions = {
             this.lastShot = time;
             stage.addActor(projectile);
         }
+
+        if (this.type === 'player-base'){
+            this.clearInactiveBuffs();
+        }
     },
     defaultPlayerDamage: function(projectile, stage, damage){
         projectile = projectile || {};
@@ -123,6 +128,10 @@ const actions = {
                 this.y = 0;
                 this.armor = PLAYER_ARMOR;
 
+                this.isAccelerating = false;
+                this.velocity = 0;
+                this.rotateDirection = 0;
+
                 //remove aggro for given player from all groups
                 stage.removeAggro(this);
 
@@ -132,6 +141,8 @@ const actions = {
                         stage.getActorById(projectile.createdBy).createdBy
                     );
                 }
+
+                this.setBuff(BUFFS.DEATH, 1000 * 5);
             } else {
                 stage.removeActorById(this.id);
 
@@ -178,6 +189,8 @@ class Player extends Actor{
     }
 
     toJSON(){
+        const buffs = Object.keys(this.buffs);
+
         return {
             id: this.id,
             x: this.toFixed(this.x),
@@ -189,7 +202,8 @@ class Player extends Actor{
             size: this.size,
             name: this.name,
             kind: this.kind,
-            target: this.target ? this.target.id : null
+            target: this.target ? this.target.id : null,
+            buffs: buffs.length === 0 ? undefined : buffs
         }
     }
 

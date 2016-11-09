@@ -1,3 +1,4 @@
 module.exports = {
-    SANCTUARY: 'sanctuary'
+    SANCTUARY: 'sanctuary',
+    DEATH: 'death'
 };
