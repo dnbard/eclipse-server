@@ -24,7 +24,7 @@ define([
             renderer.render(stage);
 
             const thisFrameTime = (thisLoop=new Date) - lastLoop;
-            frameTime+= (thisFrameTime - frameTime) / filterStrength;
+            frameTime += (thisFrameTime - frameTime) / filterStrength;
             lastLoop = thisLoop;
         }
 
@@ -32,7 +32,7 @@ define([
         const latencyOut = document.getElementById('latency');
         const receivedOut = document.getElementById('received');
         setInterval(function(){
-            fpsOut.textContent = `| ${(1000 / frameTime).toFixed(1)} fps`;
+            fpsOut.textContent = `| ${(1000 / frameTime).toFixed(0)} fps`;
             latencyOut.textContent = `| ${Math.round(uframeTime)}ms`;
             receivedOut.textContent = received < 100000 ?
                 `| ⬇${(received / 1000).toFixed(0)}KB` :

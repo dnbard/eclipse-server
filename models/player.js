@@ -42,6 +42,8 @@ const actions = {
             } else {
                 this.rotation += NPC_ROTATION_STEP * rotationDirection;
             }
+        } else if (this.rotateDirection === 0) {
+            this.rotateDirection = Math.random() > 0.5 ? 1 : -1;
         }
 
         actions.defaultNPC.apply(this, arguments);
