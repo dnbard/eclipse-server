@@ -24,7 +24,7 @@ gulp.task('test', ['pre-test'], function(cb){
         return gulp.src('./tests/**/*Spec.js', {
             read: false
         }).pipe(mocha({ })).on('error', (e) => {
-
+            console.error(e);
         }).on('end', () => {
             setTimeout(() => {
                cb();
