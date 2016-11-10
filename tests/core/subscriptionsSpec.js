@@ -81,4 +81,13 @@ describe('Subscriptions', function(){
             expect(Subscriptions.getSubscriptionBySubscriberId(subscriber)).to.have.length(0);
         });
     });
+
+    describe('#toJSON', function(){
+        it('should return subscription without ws property', function(){            
+            let subscription = Subscriptions.createSubscription(uuid(), uuid(), {});
+            let toJsonResult = subscription.toJSON();
+
+            expect(toJsonResult.ws).to.be.undefined;
+        });
+    });
 });
