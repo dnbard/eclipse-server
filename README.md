@@ -9,7 +9,8 @@ Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 
 * clone this repository `git clone https://github.com/dnbard/eclipse-server.git`
 * install npm dependencies `npm install`
-* run server `gulp`
+* install and run `mongod`(MongoDB database) - `sudo service mongod start`
+* run server with `nodemon` command
 * open URL `http://localhost:3000` in browser
 
 ## Debug mode
@@ -17,7 +18,7 @@ Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 `Debug mode` are going to enabled by default locally. It will be disabled on `Curio` and similar environments. Open development tools (F12) and write `window.DEBUG` to access `debug mode` at the client-side.
 
 Available commands:
-* showNextWSMessage - will show next message that will come through the WebSockets
+* `showNextWSMessage` - will show next message that will come through the WebSockets
 
 ## How to contribute
 
