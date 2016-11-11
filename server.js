@@ -13,12 +13,12 @@ const routing = require('./routing');
 
 const PORT = configs.get('server.port');
 
-mongo.connect().then(() => {
+const server = require('http').createServer();
+const app = express();
+
+const promise = mongo.connect().then(() => {
     return migrations.init();
 }).then(() => {
-    const server = require('http').createServer();
-    const app = express();
-
     server.on('request', app);
     server.listen(PORT, () => {
         console.log(`HTTP Server :: listening on port ${PORT}`);
@@ -28,7 +28,10 @@ mongo.connect().then(() => {
 
         UpdateLoop.init();
     });
+    return app;
 }).catch(err => {
    console.log(err);
    return process.exit(1);
 });
+
+module.exports = promise;
