@@ -1,13 +1,15 @@
+'use strict';
+
 const Actor = require('../models/actor');
 const Asteroid = require('../models/asteroid');
-const config = require('../config');
+const configs = require('../configs');
 
 const GEOMETRY = require('../enums/geometry');
 const BUFFS = require('../enums/buffs');
-
+const DEFAULT_STAGE_ID = configs.get('stage.default');
 
 module.exports = [{
-    id: config.defaultStageId,
+    id: DEFAULT_STAGE_ID,
     name: 'Hale',
     onCreate: function(stage){
         stage.addActor(new Actor({
