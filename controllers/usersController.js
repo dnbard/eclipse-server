@@ -18,7 +18,7 @@ exports.getUserByTokenInternal = function(token){
         }
 
         if (new Date(token.expiresAt) < dateNow){
-            return Promise.reject(`Token ${token_id} has been expired`);
+            return Promise.reject(`Token ${token._id} has been expired`);
         }
 
         return Users.findOne({ _id: token.userId }).exec().then(user => {

@@ -1,10 +1,11 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const faker = require('faker');
 
 const users = require('../../db/users');
 
 describe('Users Model', () => {
-    const login = 'test-user';
+    const login = faker.name.findName();
     const password = 'qwerty444';
 
     describe('#createOne', () => {
