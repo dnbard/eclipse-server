@@ -17,8 +17,8 @@ const WebSokets = require('../core/ws');
 const Collision = require('../core/collision');
 const Scheduler = require('../core/scheduler');
 const Transactions = require('../core/transactions');
+const Time = require('../core/time');
 
-let TIME = 0;
 let SYNC_COUNTER = 0;
 
 exports.init = function(){
@@ -44,7 +44,7 @@ exports.init = function(){
 
         setTimeout(LoopIterator, LOOP_DELTA);
 
-        TIME += LOOP_DELTA;
+        Time.increment(LOOP_DELTA);
 
         if (!stage){
             return;
@@ -76,6 +76,7 @@ exports.init = function(){
         }
 
         if (typeof actor.onUpdate === 'function'){
+            const TIME = Time.get();
             actor.onUpdate.call(actor, stage, LOOP_DELTA, TIME);
         }
     }
@@ -108,15 +109,11 @@ exports.init = function(){
 
     function SchedulerIterator(){
         setTimeout(SchedulerIterator, SCHEDULER_DELTA);
-        Scheduler.update(TIME);
+        Scheduler.update(Time.get());
     }
 
     function TransactionsIterator(){
         setTimeout(TransactionsIterator, TRANSACTIONS_DELTA);
-        Transactions.update(TIME);
+        Transactions.update(Time.get());
     }
-}
-
-exports.getTime = function(){
-    return TIME;
 }

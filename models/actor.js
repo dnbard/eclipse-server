@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 const uuid = require('../core/uuid');
-const UpdateLoop = require('../core/updateLoop');
+const Time = require('../core/time');
 
 const actions = {};
 
@@ -76,12 +76,12 @@ class Actor{
     }
 
     setBuff(buffName, duration){
-        this.buffs[buffName] = UpdateLoop.getTime() + duration;
+        this.buffs[buffName] = Time.get() + duration;
     }
 
     isBuffActive(buffName){
         const buffDuration = this.buffs[buffName];
-        return !!buffDuration && buffDuration > UpdateLoop.getTime();
+        return !!buffDuration && buffDuration > Time.get();
     }
 
     removeBuff(buffName){
@@ -89,7 +89,7 @@ class Actor{
     }
 
     clearInactiveBuffs(){
-        const time = UpdateLoop.getTime();
+        const time = Time.get();
         _.each(this.buffs, (durration, key) => {
             if (durration < time){
                 delete this.buffs[key];
