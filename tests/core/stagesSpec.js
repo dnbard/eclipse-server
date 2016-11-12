@@ -7,17 +7,6 @@ describe('Stages', function(){
         Stages.removeAll();
     });
 
-    // describe('#createStage', function(){
-    //     it('should create new stage', function(){
-    //         const stage = Stages.createStage();
-    //
-    //         expect(stage).to.be.an.object;
-    //         expect(stage.id).to.be.a.string;
-    //         expect(stage.actors).to.be.an.array
-    //         expect(stage.generic).to.be.a.boolean;
-    //     });
-    // });
-
     describe('#getOrCreateGeneric', function(){
         it('should create default stage', function(){
             const stage = Stages.getOrCreateGeneric();
@@ -36,24 +25,20 @@ describe('Stages', function(){
         });
     });
 
-    describe.skip('#removeAll', function(){
+    describe('#removeAll', function(){
         it('should erase all stages', function(){
-            Stages.createStage();
-            Stages.createStage();
-            Stages.createStage();
+            Stages.createAllStages();
             Stages.removeAll();
 
             expect(Stages.length()).to.be.equal(0);
         });
     });
 
-    describe.skip('#length', function(){
+    describe('#length', function(){
         it('should return number of stages in collection', function(){
-            Stages.createStage();
-            Stages.createStage();
-            Stages.createStage();
+            Stages.createAllStages();
 
-            expect(Stages.length()).to.be.equal(3);
+            expect(Stages.length()).to.be.above(0);
         });
     });
 });
