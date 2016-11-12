@@ -5,8 +5,8 @@ const _ = require('lodash');
 const uuid = require('./uuid');
 const Stage = require('../models/stage');
 const StagesData = require('../data/stages');
-const Actor = require('../models/actor');
-const Asteroid = require('../models/asteroid');
+// const Actor = require('../models/actor');
+// const Asteroid = require('../models/asteroid');
 const MorderDroneGenerator = require('../generators/npcMorder');
 const Scheduler = require('../core/scheduler');
 
@@ -16,25 +16,25 @@ const GEOMETRY = require('../enums/geometry');
 let collection = [];
 
 //obsolete
-exports.createStage = function(options){
-    const stage = new Stage();
-    stage.addActor(new Actor({
-        kind: 'planet',
-        geometry: GEOMETRY.CIRCLE,
-        size: 118
-    }));
-
-    for(var i = 0; i < 15; i ++){
-        var asteroid = new Asteroid({
-            x: Math.random() * 800 - 400,
-            y: Math.random() * 900 - 1000,
-        });
-        stage.addActor(asteroid);
-    }
-
-    collection.push(stage);
-    return stage;
-}
+// exports.createStage = function(options){
+//     const stage = new Stage();
+//     stage.addActor(new Actor({
+//         kind: 'planet',
+//         geometry: GEOMETRY.CIRCLE,
+//         size: 118
+//     }));
+//
+//     for(var i = 0; i < 15; i ++){
+//         var asteroid = new Asteroid({
+//             x: Math.random() * 800 - 400,
+//             y: Math.random() * 900 - 1000,
+//         });
+//         stage.addActor(asteroid);
+//     }
+//
+//     collection.push(stage);
+//     return stage;
+// }
 
 exports.createAllStages = function(){
     StagesData.forEach(data => {
