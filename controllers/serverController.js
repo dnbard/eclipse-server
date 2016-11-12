@@ -1,12 +1,16 @@
+'use strict';
+
 const packageJson = require('../package.json');
-const config = require('../config');
+const configs = require('../configs');
 const request = require('request');
+
+const DEBUG_UI = configs.get('debug.ui');
 
 exports.get = function(req, res){
     return res.send({
         status: 'OK',
         version: packageJson.version,
-        isDebug: config.debug
+        isDebug: DEBUG_UI
     });
 }
 

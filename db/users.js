@@ -1,19 +1,23 @@
+'use strict';
+
 const uuid = require('node-uuid').v4;
 const mongoose = require('mongoose');
 const Base64 = require('js-base64').Base64;
-const CryptoJS = require("crypto-js");
+const CryptoJS = require('crypto-js');
 
-const config = require('../config');
-const secret = config.secret;
+const configs = require('../configs');
 const Token = require('../db/tokens');
 const stringRegex = /[0-9a-zA-Z]+/;
+
+const DEFAULT_STAGE_ID = configs.get('stage.default');
+const SECRET_KEY = configs.get('secret');
 
 const schema = mongoose.Schema({
     _id: { type: String, unique: true, default: uuid },
     login: { type: String, unique: true, match: stringRegex, index: true },
     salt: { type: String, required: true },
     password: { type: String, required: true },
-    stageId: { type: String, default: config.defaultStageId },
+    stageId: { type: String, default: DEFAULT_STAGE_ID },
     credits: { type: Number, default: 1000 },
     pvp: { type: Number, default: 0, index: true }
 });
@@ -33,7 +37,7 @@ schema.statics.createOne = function(data){
     const user = new User({
         login: data.login,
         salt: salt,
-        password: CryptoJS.SHA256(data.password + salt + secret)
+        password: CryptoJS.SHA256(data.password + salt + SECRET_KEY)
     });
 
     return user.save().then(user => {

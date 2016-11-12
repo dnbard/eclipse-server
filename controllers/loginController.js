@@ -1,9 +1,12 @@
+'use strict';
+
 const CryptoJS = require('crypto-js');
 
+const configs = require('../configs');
 const Users = require('../db/users');
 const Tokens = require('../db/tokens');
-const secret = require('../config').secret;
 
+const SECRET_KEY = configs.get('secret');
 
 exports.login = function(req, res, next){
     const login = req.body.login;
@@ -22,7 +25,7 @@ exports.login = function(req, res, next){
             throw res.status(404).send(`User(login="${login}") not found"`);
         }
 
-        const checkString = CryptoJS.SHA256(password + user.salt + secret).toString();
+        const checkString = CryptoJS.SHA256(password + user.salt + SECRET_KEY).toString();
         console.log(`User(id="${user._id}", login="${user.login}") are logging in`);
 
         if (checkString === user.password){

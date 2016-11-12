@@ -11,6 +11,14 @@ let conf = convict({
         default: 'development',
         env: 'NODE_ENV'
     },
+    debug: {
+        ui: {
+            doc: 'Debug for ui',
+            format: Boolean,
+            default: false,
+            env: 'DEBUG_UI'
+        }
+    },
     server: {
         ip: {
             doc: 'The IP address to bind.',
@@ -32,6 +40,20 @@ let conf = convict({
             default: 'mongodb://127.0.0.1:27017/eclipse',
             env: 'MONGO_URL'
         }
+    },
+    stage: {
+        default: {
+            doc: 'Default stage id',
+            format: String,
+            default: 'ce44bd18-b408-492f-b561-0d8f1a8c5421',
+            env: 'STAGE_DEFAULT'
+        }
+    },
+    secret: {
+        doc: 'Secret key for password encryption',
+        format: String,
+        default: 'U2FsdGVkX19LTE8mlF/Ta7ahEWkqgwsjD8Fc9c2UnMU=',
+        env: 'SECRET'
     }
 });
 

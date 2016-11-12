@@ -1,16 +1,18 @@
+'use strict';
+
 process.env.NODE_ENV = 'test';
 
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
 mongoose.Promise = Promise;
-const config = require('../config');
+const configs = require('../configs');
+
+const MONGO_URL = configs.get('mongo.url');
 
 var _connection = null;
 
 module.exports = function(cb){
-    const url = config.mongoTest;
-
     var action = Promise.resolve();
 
     if (_connection){
@@ -18,16 +20,16 @@ module.exports = function(cb){
     }
 
     action.then(() => {
-            mongoose.connect(url, function(err) {
+            mongoose.connect(MONGO_URL, function(err) {
             if (err){
                 return console.error(err);
             }
-            console.log('Connected to "eclipse-test"');
+            console.log(`Connected to "${MONGO_URL}"`);
 
             _connection = mongoose.connection;
 
             mongoose.connection.db.dropDatabase();
-            console.log('"eclipse-test" database droped');
+            console.log(`"${MONGO_URL}" database droped`);
 
             cb(_connection);
         });

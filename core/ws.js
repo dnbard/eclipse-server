@@ -1,3 +1,5 @@
+'use strict';
+
 const WebSocketServer = require('ws').Server;
 const uuid = require('./uuid');
 const NativeUUID = require('node-uuid').v4;
@@ -10,8 +12,9 @@ const Subscriptions = require('./subscriptions');
 const packageData = require('../package.json');
 const Commands = require('./commands');
 const UsersController = require('../controllers/usersController');
-const config = require('../config');
+const configs = require('../configs');
 
+const DEBUG_UI = configs.get('debug.ui');
 const GEOMETRY = require('../enums/geometry');
 const EVENTS = require('../public/scripts/enums/events');
 
@@ -67,7 +70,7 @@ exports.createWSServer = function(server){
                 subject: EVENTS.SUBSCRIBE.CREATED,
                 message: Object.assign({}, subscription, {
                     actorId: actorId,
-                    isDebug: config.debug
+                    isDebug: DEBUG_UI
                 })
             }));
 
