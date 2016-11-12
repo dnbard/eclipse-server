@@ -10,15 +10,10 @@ const PVP = require('../core/pvp');
 const GEOMETRY = require('../enums/geometry');
 const BUFFS = require('../enums/buffs');
 
-const PLAYER_SPEED = 5;
-const PLAYER_ARMOR = 100;
-const PLAYER_RADIAL_SPEED = 0.1;
 const PLAYER_ROF = 200;
 
 const PROJECTILE_SPEED = 13;
 const PROJECTILE_LIFETIME = 1900;
-
-const NPC_ROTATION_STEP = 0.07;
 const HALF_PI = Math.PI * 0.5;
 const TRESHOLD_PI = Math.PI * 0.99;
 
@@ -35,13 +30,13 @@ const actions = {
             const rotationDirection = this.rotation > newRotation ? -1 : 1;
             const difference = Math.abs(this.rotation - newRotation);
 
-            if (difference < NPC_ROTATION_STEP ||
+            if (difference < this.ship.get('radialSpeed') ||
                 (Math.abs(this.rotation) > TRESHOLD_PI &&
                  Math.abs(newRotation) > TRESHOLD_PI)
             ){
                 this.rotation = newRotation;
             } else {
-                this.rotation += NPC_ROTATION_STEP * rotationDirection;
+                this.rotation += this.ship.get('radialSpeed') * rotationDirection;
             }
         } else if (this.rotateDirection === 0) {
             this.rotateDirection = Math.random() > 0.5 ? 1 : -1;
@@ -54,21 +49,21 @@ const actions = {
     },
     defaultPlayer: function(stage, delta, time){
         if (this.isAccelerating){
-            this.velocity += PLAYER_SPEED * 0.1;
-            if (this.velocity > PLAYER_SPEED){
-                this.velocity = PLAYER_SPEED;
+            this.velocity += this.ship.get('speed') * 0.1;
+            if (this.velocity > this.ship.get('speed')){
+                this.velocity = this.ship.get('speed');
             }
         } else {
-            this.velocity -= PLAYER_SPEED * 0.025;
+            this.velocity -= this.ship.get('speed') * 0.025;
             if (this.velocity < 0){
                 this.velocity = 0;
             }
         }
 
         if (this.rotateDirection !== 0){
-            this.radialVelocity = Velocity.getRadialVelocity(this.velocity, PLAYER_SPEED, PLAYER_RADIAL_SPEED) * this.rotateDirection;
+            this.radialVelocity = Velocity.getRadialVelocity(this.velocity, this.ship.get('speed'), this.ship.get('radialSpeed')) * this.rotateDirection;
         } else {
-            this.radialVelocity -= PLAYER_RADIAL_SPEED * 0.3;
+            this.radialVelocity -= this.ship.get('radialSpeed') * 0.3;
             if (this.radialVelocity < 0){
                 this.radialVelocity = 0;
             }
@@ -92,7 +87,7 @@ const actions = {
 
         if (this.firing && typeof this.firing === 'object'
             && typeof this.firing.x === 'number' && typeof this.firing.y === 'number'
-            && time - (this.lastShot || 0) > PLAYER_ROF){
+            && time - (this.lastShot || 0) > this.ship.get('rof')){
             const angle = Angle.getAngleBetweenTwoPoints( this.x, this.y, this.firing.x, this.firing.y );
             const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
             const projectile = new Projectile({
@@ -126,7 +121,7 @@ const actions = {
             if (this.type === "player-base"){
                 this.x = 0;
                 this.y = 0;
-                this.armor = PLAYER_ARMOR;
+                this.armor = this.ship.get('maxArmor');
 
                 this.isAccelerating = false;
                 this.velocity = 0;
@@ -176,10 +171,18 @@ class Player extends Actor{
     constructor(options){
         super(options);
 
-        this.armor = options.armor || PLAYER_ARMOR;
-        this.maxArmor = options.armor || PLAYER_ARMOR;
+        this.armor = options.armor;
+        this.maxArmor = options.armor;
 
         this.bounty = options.bounty || 0;
+
+        this.ship = options.ship || undefined;
+
+        if (options.ship){
+            this.size = options.ship.get('size');
+            this.armor = options.ship.get('maxArmor');
+            this.maxArmor = options.ship.get('maxArmor');
+        }
 
         this.target = null;
 
@@ -203,7 +206,8 @@ class Player extends Actor{
             name: this.name,
             kind: this.kind,
             target: this.target ? this.target.id : null,
-            buffs: buffs.length === 0 ? undefined : buffs
+            buffs: buffs.length === 0 ? undefined : buffs,
+            ship: this.ship ? this.ship.kind : undefined
         }
     }
 

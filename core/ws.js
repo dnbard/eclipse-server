@@ -12,7 +12,9 @@ const Subscriptions = require('./subscriptions');
 const packageData = require('../package.json');
 const Commands = require('./commands');
 const UsersController = require('../controllers/usersController');
+const ShipsController = require('../controllers/shipsController');
 const configs = require('../configs');
+const Spaceship = require('../models/spaceship');
 
 const DEBUG_UI = configs.get('debug.ui');
 const GEOMETRY = require('../enums/geometry');
@@ -32,11 +34,17 @@ exports.createWSServer = function(server){
             return ws.close();
         }
 
+        var _user = null;
+        var _token = null;
         UsersController.getUserByTokenInternal(token).then(data => {
-            const Player = require('../models/player');
+            _user = data.user;
+            _token = data.token;
 
-            const _user = data.user;
-            const _token = data.token;
+            return ShipsController.getOrCreate(_user);
+        }).then(playerShip => {
+            const Player = require('../models/player');
+            const spaceship = new Spaceship(playerShip.base, playerShip.mods);
+
             const subscriberId = _user._id;
             const playerName = _user.login;
 
@@ -59,7 +67,8 @@ exports.createWSServer = function(server){
                 geometry: GEOMETRY.CIRCLE,
                 size: 22,
                 name: playerName,
-                createdBy: subscriberId
+                createdBy: subscriberId,
+                ship: spaceship
             });
             const actorId = player.id;
             const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);

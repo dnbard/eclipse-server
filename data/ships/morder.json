@@ -1,0 +1,9 @@
+{
+    "name": "Morder Drone",
+    "kind": "morder",
+    "turrets": 0,
+    "speed": 7.5,
+    "maxArmor": 14,
+    "radialSpeed": 0.07,
+    "size": 16
+}

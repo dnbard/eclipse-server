@@ -80,6 +80,7 @@ exports.getUser = function(req, res){
         expiresAt: token.expiresAt,
         stageId: user.stageId,
         credits: user.credits,
+        shipId: user.shipId,
         pvp: user.pvp
     });
 }

@@ -1,0 +1,10 @@
+{
+    "name": "Drifter",
+    "kind": "drifter",
+    "turrets": 1,
+    "speed": 5.0,
+    "maxArmor": 100,
+    "radialSpeed": 0.1,
+    "rof": 200,
+    "size": 22
+}

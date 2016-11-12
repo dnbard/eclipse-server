@@ -38,7 +38,12 @@
             </div>
             <!-- ko if: stage -->
             <div class="flex-row">System:
-                <input name="eclipse-login" disabled data-bind="textInput: stage().name"/>
+                <input disabled data-bind="textInput: stage().name"/>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: ship -->
+            <div class="flex-row">Spaceship:
+                <input disabled data-bind="textInput: ship().kind"/>
             </div>
             <!-- /ko -->
             <div class="buttons">

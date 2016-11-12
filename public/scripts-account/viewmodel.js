@@ -17,6 +17,7 @@ define([
         this.error = ko.observable('');
         this.user = ko.observable(null);
         this.stage = ko.observable(null);
+        this.ship = ko.observable(null);
 
         tokenCheck().then(user => {
             this.user(user);
@@ -25,6 +26,10 @@ define([
             return fetch(`/stages/${user.stageId}`);
         }).then(stage => {
             this.stage(stage);
+
+            return fetch(`/spaceships/${this.user().shipId}`);
+        }).then((ship) => {
+            this.ship(ship);
         }).catch(() => {
             this.isTokenValid(false);
             this.user(null);

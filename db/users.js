@@ -19,7 +19,8 @@ const schema = mongoose.Schema({
     password: { type: String, required: true },
     stageId: { type: String, default: DEFAULT_STAGE_ID },
     credits: { type: Number, default: 1000 },
-    pvp: { type: Number, default: 0, index: true }
+    pvp: { type: Number, default: 0, index: true },
+    shipId: String
 });
 
 schema.statics.createOne = function(data){

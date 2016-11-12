@@ -143,7 +143,7 @@ define([
     }
 
     return function Player(options, stage){
-        const blueprint = ShipBlueprints.find(b => b.id === options.type);
+        const blueprint = ShipBlueprints.find(b => b.id === options.type || b.id === options.ship);
         const texture = PIXI.loader.resources[blueprint.texture]
             .texture;
         const player = new PIXI.Container();

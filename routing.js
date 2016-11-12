@@ -2,6 +2,8 @@ const UsersController = require('./controllers/usersController');
 const LoginController = require('./controllers/loginController');
 const ServerController = require('./controllers/serverController');
 const StagesController = require('./controllers/stagesController');
+const ShipsController = require('./controllers/shipsController')
+
 
 exports.init = function(app){
     /*====== USERS ======*/
@@ -22,4 +24,8 @@ exports.init = function(app){
 
     /*====== STAGES =====*/
     app.get('/stages/:id', StagesController.getOneById);
+
+
+    /*====== SPACESHIPS =*/
+    app.get('/spaceships/:id', ShipsController.getOneById);
 }

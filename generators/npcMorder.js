@@ -1,4 +1,5 @@
 const Player = require('../models/player');
+const Spaceship = require('../models/spaceship');
 
 const GEOMETRY = require('../enums/geometry');
 
@@ -20,7 +21,8 @@ function createOne(options){
         geometry: GEOMETRY.CIRCLE,
         size: 16,
         name: 'Morder Drone',
-        bounty: 100
+        bounty: 100,
+        ship: new Spaceship(require('../data/ships/morder'), {})
     });
 }
 

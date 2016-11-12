@@ -1,6 +1,6 @@
 (function(converter){
     const ships = [{
-        id: 'player-base',
+        id: 'drifter',
         texture: '/public/images/spaceship-01.png',
         systems: [{
             kind: 'turret',
