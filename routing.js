@@ -2,14 +2,16 @@ const UsersController = require('./controllers/usersController');
 const LoginController = require('./controllers/loginController');
 const ServerController = require('./controllers/serverController');
 const StagesController = require('./controllers/stagesController');
-const ShipsController = require('./controllers/shipsController')
+const ShipsController = require('./controllers/shipsController');
+const RigsController = require('./controllers/rigsController');
 
 
 exports.init = function(app){
     /*====== USERS ======*/
-    app.get('/users', [
-        UsersController.getUserByToken
-    ], UsersController.getUser);
+    app.get('/users',
+        [ UsersController.getUserByToken ],
+        UsersController.getUser
+    );
     app.post('/users', UsersController.postUser);
 
 
@@ -28,4 +30,11 @@ exports.init = function(app){
 
     /*====== SPACESHIPS =*/
     app.get('/spaceships/:id', ShipsController.getOneById);
+
+
+    /*====== RIGS =======*/
+    app.get('/storage/:id/rigs',
+        [ UsersController.getUserByToken ],
+        RigsController.getFew
+    );
 }

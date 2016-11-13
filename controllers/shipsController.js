@@ -1,6 +1,8 @@
 const Ships = require('../db/ships');
+const Rigs = require('../db/rigs');
 
 const DEFAULT_SHIP = 'drifter';
+const DEFAULT_SHIP_BLUEPRINT = require('../data/ships/drifter');
 
 function getOneById(req, res, next){
     const shipId = req.params.id;
@@ -26,8 +28,27 @@ function getOrCreate(user){
             kind: DEFAULT_SHIP,
             ownedBy: user._id
         });
+        var promises = [];
 
-        findOrCreatePromise = ship.save().then(() => {
+        if (DEFAULT_SHIP_BLUEPRINT.rigs.length > 0){
+            promises = DEFAULT_SHIP_BLUEPRINT.rigs.map(rigName => {
+                const r = require(`../data/rigs/${rigName}.json`);
+                const rig = new Rigs({
+                    equiped: true,
+                    ownedBy: user._id,
+                    storedIn: ship._id,
+                    kind: r.kind,
+                    mods: r,
+                    name: r.name,
+                });
+
+                return rig.save();
+            });
+        }
+
+        promises.push(ship.save());
+
+        findOrCreatePromise = Promise.all(promises).then(() => {
             user.shipId = ship._id;
             return user.save();
         }).then(() => {

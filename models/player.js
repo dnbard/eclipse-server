@@ -10,10 +10,6 @@ const PVP = require('../core/pvp');
 const GEOMETRY = require('../enums/geometry');
 const BUFFS = require('../enums/buffs');
 
-const PLAYER_ROF = 200;
-
-const PROJECTILE_SPEED = 13;
-const PROJECTILE_LIFETIME = 1900;
 const HALF_PI = Math.PI * 0.5;
 const TRESHOLD_PI = Math.PI * 0.99;
 
@@ -88,23 +84,27 @@ const actions = {
         if (this.firing && typeof this.firing === 'object'
             && typeof this.firing.x === 'number' && typeof this.firing.y === 'number'
             && time - (this.lastShot || 0) > this.ship.get('rof')){
-            const angle = Angle.getAngleBetweenTwoPoints( this.x, this.y, this.firing.x, this.firing.y );
-            const velocity = Velocity.get2DVelocity(angle, PROJECTILE_SPEED);
-            const projectile = new Projectile({
-                x: this.x,
-                y: this.y,
-                rotation: -angle,
-                vx: velocity.x,
-                vy: velocity.y,
-                ttl: PROJECTILE_LIFETIME,
-                onUpdate: 'defaultProjectile',
-                geometry: GEOMETRY.POINT,
-                onCollide: 'defaultProjectileCollision',
-                createdBy: this.id
-            });
+            this.ship.getTurrets().forEach(t => {
+                const angle = Angle.getAngleBetweenTwoPoints(
+                    this.x, this.y, this.firing.x, this.firing.y
+                );
+                const velocity = Velocity.get2DVelocity(angle, t.projectileSpeed);
+                const projectile = new Projectile({
+                    x: this.x,
+                    y: this.y,
+                    rotation: -angle,
+                    vx: velocity.x,
+                    vy: velocity.y,
+                    ttl: t.projectileLifetime,
+                    onUpdate: t.projectileUpdate,
+                    geometry: GEOMETRY.POINT,
+                    onCollide: t.projectileCollide,
+                    createdBy: this.id
+                });
 
-            this.lastShot = time;
-            stage.addActor(projectile);
+                this.lastShot = time;
+                stage.addActor(projectile);
+            });
         }
 
         if (this.type === 'player-base'){

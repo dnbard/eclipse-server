@@ -27,7 +27,13 @@ define([
         }).then(stage => {
             this.stage(stage);
 
-            return fetch(`/spaceships/${this.user().shipId}`);
+            const shipId = this.user().shipId;
+
+            if (!shipId){
+                return { kind: '---' };
+            }
+
+            return fetch(`/spaceships/${shipId}`);
         }).then((ship) => {
             this.ship(ship);
         }).catch(() => {

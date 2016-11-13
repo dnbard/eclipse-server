@@ -1,0 +1,12 @@
+{
+    "projectileLifetime": 1900,
+    "projectileKind": "ion",
+    "projectileUpdate": "defaultProjectile",
+    "projectileCollide": "defaultProjectileCollision",
+    "projectileSpeed": 13,
+    "projectileMinDamage": 10,
+    "projectileMaxDamage": 14,
+    "kind": "turret",
+    "id": "turret-ion",
+    "name": "Ion Cannon"
+}
