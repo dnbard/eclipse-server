@@ -10,6 +10,7 @@ const UPDATE_DELTA = 100;
 const SCHEDULER_DELTA = 1000;
 const TRANSACTIONS_DELTA = 20000;
 
+const logger = require('./logger').child({widget_type: 'updateLoop'});
 const Stages = require('../core/stages');
 const Subscriptions = require('../core/subscriptions');
 const EVENTS = require('../public/scripts/enums/events');
@@ -24,19 +25,19 @@ let SYNC_COUNTER = 0;
 exports.init = function(){
     let stage = Stages.getOrCreateGeneric();
 
-    console.log('Update Loop :: initialized');
+    logger.info('Update Loop :: initialized');
     setTimeout(LoopIterator, LOOP_DELTA);
 
-    console.log('WS Update Loop :: initialized');
+    logger.info('WS Update Loop :: initialized');
     setTimeout(WSUpdateIterator, UPDATE_DELTA);
 
-    console.log('Aggro Detection Loop :: initialized');
+    logger.info('Aggro Detection Loop :: initialized');
     setTimeout(AggroLoopIterator, AGRO_LOOP_DELTA);
 
-    console.log('Scheduler Loop :: initialized');
+    logger.info('Scheduler Loop :: initialized');
     setTimeout(SchedulerIterator, SCHEDULER_DELTA);
 
-    console.log('Transactions Loop :: initialized');
+    logger.info('Transactions Loop :: initialized');
     setTimeout(TransactionsIterator, TRANSACTIONS_DELTA);
 
     function LoopIterator(){

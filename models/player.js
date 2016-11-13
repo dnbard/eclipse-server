@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('../core/logger').child({widget_type: 'player'});
 const Actor = require('./actor');
 const Angle = require('../physics/angle');
 const Velocity = require('../physics/velocity');
@@ -116,7 +117,7 @@ const actions = {
         this.armor -= projectile.damage || damage;
 
         if (this.isDestroyed()){
-            console.log(`Actor(id=${this.id}, name=${this.name}) was destroyed`);
+            logger.info(`Actor(id=${this.id}, name=${this.name}) was destroyed`);
 
             if (this.type === "player-base"){
                 this.x = 0;

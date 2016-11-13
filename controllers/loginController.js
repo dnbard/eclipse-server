@@ -2,6 +2,7 @@
 
 const CryptoJS = require('crypto-js');
 
+const logger = require('../core/logger').child({widget_type: 'loginController'});
 const configs = require('../configs');
 const Users = require('../db/users');
 const Tokens = require('../db/tokens');
@@ -26,7 +27,7 @@ exports.login = function(req, res, next){
         }
 
         const checkString = CryptoJS.SHA256(password + user.salt + SECRET_KEY).toString();
-        console.log(`User(id="${user._id}", login="${user.login}") are logging in`);
+        logger.info(`User(id="${user._id}", login="${user.login}") are logging in`);
 
         if (checkString === user.password){
             return new Tokens({ userId: user._id }).save()
@@ -34,7 +35,7 @@ exports.login = function(req, res, next){
             throw res.status(404).send('Invalid password');
         }
     }).then(token => {
-        console.log(`Token(id="${token._id}") for User(id="${token.userId}") was created`);
+        logger.info(`Token(id="${token._id}") for User(id="${token.userId}") was created`);
         return res.send(token);
     });
 }

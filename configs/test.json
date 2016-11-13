@@ -1,5 +1,8 @@
 {
     "mongo": {
         "url": "mongodb://127.0.0.1:27017/eclipse-test"
+    },
+    "log": {
+        "level": "fatal"
     }
 }

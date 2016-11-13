@@ -7,6 +7,7 @@ const Base64 = require('js-base64').Base64;
 const url = require('url');
 const pako = require('pako');
 
+const logger = require('./logger').child({widget_type: 'wsServer'});
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
 const packageData = require('../package.json');
@@ -49,12 +50,12 @@ exports.createWSServer = function(server){
             const playerName = _user.login;
 
             _token.extend().then(() => {
-                console.log(`Token(id="${_token._id}") was prolongated`);
+                logger.info(`Token(id="${_token._id}") was prolongated`);
             }).catch(() => {
-                console.log(`Token(id="${_token._id}") was NOT prolongated`);
+                logger.warn(`Token(id="${_token._id}") was NOT prolongated`);
             });
 
-            console.log(`Incoming WS connection (subscriber=${subscriberId})`);
+            logger.info(`Incoming WS connection (subscriber=${subscriberId})`);
 
             const deltaTime = Math.random() * 1000
             const player = new Player({
@@ -98,7 +99,7 @@ exports.createWSServer = function(server){
 
             if (Subscriptions.getSubscriptionBySubscriberId(subscriberId).length > 1){
                 //check for active subscriptions for that user and close WS connection if it was found
-                console.log(`Found 2+ subscriptions for Subscriber(id=${subscriberId}, name=${playerName}), closing Subscription(id=${subscription.id})`);
+                logger.warn(`Found 2+ subscriptions for Subscriber(id=${subscriberId}, name=${playerName}), closing Subscription(id=${subscription.id})`);
                 ws.close();
             }
 
@@ -108,15 +109,15 @@ exports.createWSServer = function(server){
                 try{
                     data = JSON.parse(payload);
                 } catch(e){
-                    console.err(e);
+                    logger.error(e);
                 }
 
                 if (data.token !== token){
-                    return console.log(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
+                    return logger.info(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
                 }
 
                 if (EVENTS._hash[data.subject]){
-                    console.log(`Received message(subject="${data.subject}") from player(id=${player.id})`);
+                    logger.info(`Received message(subject="${data.subject}") from player(id=${player.id})`);
 
                     Commands.execute(data.subject, {
                         message: data.message,
@@ -125,7 +126,7 @@ exports.createWSServer = function(server){
                         stage: stage
                     });
                 } else {
-                    console.log(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
+                    logger.warn(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
                 }
             });
 
@@ -136,12 +137,12 @@ exports.createWSServer = function(server){
                 Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
             });
         }).catch(err => {
-            console.log(err);
+            logger.error(err);
             return ws.close();
         });
     });
 
-    console.log(`WS Server :: created`);
+    logger.info('Ws server created');
 
     return wss;
 }
@@ -150,7 +151,7 @@ function sendMessage(ws, message, options){
     options = options || {};
 
     if (ws.readyState !== ws.OPEN){
-        return console.log('Unable to send WS message. Reason - WS already closed.')
+        return logger.warn('Unable to send WS message. Reason - WS already closed.')
     }
 
     if (typeof message !== 'string'){

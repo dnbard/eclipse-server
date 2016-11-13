@@ -1,4 +1,7 @@
+'use strict';
+
 const SETTINGS = require('../enums/settings');
+const logger = require('./logger').child({widget_type: 'migrations'});
 
 const migrations = require('../data/migrations');
 
@@ -8,13 +11,13 @@ exports.init = function(options){
     function applyMigrations(err, DBVersionAttribute){
         return new Promise((res, rej) => {
             function migrationHandler(){
-                console.log(`Looking at migration(index=${index})`);
+                logger.info(`Looking at migration(index=${index})`);
 
                 if (index < migrations.length){
-                    console.log(`Execute migration(index=${index})`);
+                    logger.info(`Execute migration(index=${index})`);
                     migrations[index].call(this, null, (err) => {
                         if (err){
-                            console.error(err);
+                            logger.fatal(err);
                             process.exit(1);
                         }
 
@@ -23,13 +26,13 @@ exports.init = function(options){
                         DBVersionAttribute.save(migrationHandler);
                     });
                 } else {
-                    console.log('Stop migrations execution');
+                    logger.info('Stop migrations execution');
                     res();
                 }
             }
 
             if (err){
-                console.error(err);
+                logger.fatal(err);
                 process.exit(1);
             }
 

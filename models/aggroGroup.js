@@ -1,5 +1,8 @@
+'use strict';
+
 const _ = require('lodash');
 
+const logger = require('../core/logger').child({widget_type: 'aggroGroup'});
 const idGenerator = require('../core/uuid');
 const Collision = require('../core/collision');
 
@@ -107,7 +110,7 @@ AggroGroup.prototype.onUpdate = function(){
     }
 
     if (isGroupChanged){
-        console.log(`Aggro Group(id=${this.id}) was changed: ${isGroupChanged} actors were removed`);
+        logger.info(`Aggro Group(id=${this.id}) was changed: ${isGroupChanged} actors were removed`);
         this.createJSONView();
     }
 }

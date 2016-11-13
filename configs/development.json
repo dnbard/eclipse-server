@@ -1,5 +1,8 @@
 {
     "debug": {
         "ui": true
+    },
+    "log": {
+        "level": "info"
     }
 }

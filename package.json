@@ -6,6 +6,7 @@
   "scripts": {
     "test": "gulp test",
     "start": "node server.js",
+    "start-dev": "node server.js | ./node_modules/.bin/bunyan -o short",
     "dev": "nodemon"
   },
   "author": "",
@@ -13,6 +14,7 @@
   "dependencies": {
     "app-root-path": "^2.0.1",
     "body-parser": "^1.15.2",
+    "bunyan": "^1.8.4",
     "convict": "^1.5.0",
     "crypto-js": "^3.1.7",
     "debug": "^2.2.0",

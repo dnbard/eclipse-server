@@ -2,13 +2,14 @@
 
 const express = require('express');
 
+const configs = require('./configs');
+const logger = require('./core/logger').child({widget_type: 'httpServer'});
 const UpdateLoop = require('./core/updateLoop');
 const mongo = require('./core/mongo');
 const ws = require('./core/ws');
 const migrations = require('./core/migrations');
 
 const middlewares = require('./middlewares');
-const configs = require('./configs');
 const routing = require('./routing');
 
 const PORT = configs.get('server.port');
@@ -21,7 +22,7 @@ const promise = mongo.connect().then(() => {
 }).then(() => {
     server.on('request', app);
     server.listen(PORT, () => {
-        console.log(`HTTP Server :: listening on port ${PORT}`);
+        logger.info(`Listening on port ${PORT}`);
         ws.createWSServer(server);
         middlewares.init(app);
         routing.init(app);
@@ -30,8 +31,8 @@ const promise = mongo.connect().then(() => {
     });
     return app;
 }).catch(err => {
-   console.log(err);
-   return process.exit(1);
+   logger.fatal(err);
+   process.exit(1);
 });
 
 module.exports = promise;

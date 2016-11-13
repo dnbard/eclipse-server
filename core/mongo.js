@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const configs = require('../configs');
+const logger = require('../core/logger').child({widget_type: 'mongo'});
 
 const MONGO_URL = configs.get('mongo.url');
 
@@ -17,7 +18,7 @@ exports.connect = function() {
             if (err){
                 return rej(err);
             } else {
-                console.log('Connected to Mongo Database');
+                logger.info('Connected to Mongo Database');
                 return res(db);
             }
         });
