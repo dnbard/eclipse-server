@@ -212,6 +212,11 @@ define([
                     PubSub.publish(EVENTS.COMMANDS.PLAYER.RADIAL_DECELERATE);
                 }
             });
+
+            Hotkey.register({
+                keycode: KEYS.F1,
+                onPress: () => PubSub.publish(EVENTS.UI.TOGGLE)
+            });
         }
 
         player.addChild(playerSprite);

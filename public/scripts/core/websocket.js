@@ -5,8 +5,9 @@ define([
     'enums/events',
     'enums/debugCommands',
     'core/token',
-    'core/debug'
-], (PubSub, pako, alertify, EVENTS, DEBUG_COMMANDS, TokenProvider, debug) => {
+    'core/debug',
+    'ui/main'
+], (PubSub, pako, alertify, EVENTS, DEBUG_COMMANDS, TokenProvider, debug, UIApp) => {
     var token = TokenProvider.get(),
         messageIdStore = null,
         lostPackages = 0,
@@ -58,6 +59,10 @@ define([
         }
 
         PubSub.subscribe(EVENTS.COMMANDS.ALL, (e, data) => {
+            if (UIApp.getApp().visible){
+                return;
+            }
+
             const payload = JSON.stringify({
                 subject: e,
                 message: data,

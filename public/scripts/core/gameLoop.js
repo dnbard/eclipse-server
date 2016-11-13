@@ -2,8 +2,9 @@ define([
     'lodash',
     'pubsub',
     'models/stage',
-    'enums/events'
-], (_, PubSub, Stage, EVENTS) => {
+    'enums/events',
+    'ui/main'
+], (_, PubSub, Stage, EVENTS, UIApp) => {
     function startGameLoop(data){
         const stage = data.stage;
         const renderer = data.renderer;
@@ -21,7 +22,9 @@ define([
             updateLoopIterator(stage._camera);
             updateLoopIterator(stage._backdrop);
 
-            renderer.render(stage);
+            if (!UIApp.getApp().visible){
+                renderer.render(stage);
+            }
 
             const thisFrameTime = (thisLoop=new Date) - lastLoop;
             frameTime += (thisFrameTime - frameTime) / filterStrength;

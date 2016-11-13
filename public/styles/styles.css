@@ -53,6 +53,20 @@ body{
     font-size: 9pt;
 }
 
+#ui{
+    display: block;
+    width: 75%;
+    height: 75%;
+    position: absolute;
+    background: red;
+    z-index: 10;
+    top: 12.5%;
+    left: 12.5%;
+    background: rgba(1, 19, 18, 0.9);
+    border: 1px solid #097EBF;
+    border-radius: 3px;
+}
+
 /*
 font-family: 'Josefin Sans', sans-serif;
 font-family: 'Nunito', sans-serif;

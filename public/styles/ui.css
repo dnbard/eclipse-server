@@ -1,0 +1,21 @@
+section[data-id="menu"]{
+    width: 48px;
+    height: 100%;
+    position: absolute;
+    border-right: 1px solid rgba(9, 126, 191, 0.29);
+    padding: 5px 0;
+}
+
+.menu-item{
+    opacity: 0.25;
+    transition: opacity 0.3s ease-in;
+    cursor: pointer;
+}
+
+.menu-item:hover{
+    opacity: 1;
+}
+
+.menu-item.selected{
+    opacity: 1;
+}

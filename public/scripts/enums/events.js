@@ -25,6 +25,12 @@
                 FIRE: 'eclipse.commands.player.fire',
                 STOP_FIRE: 'eclipse.commands.player.stop_fire'
             }
+        },
+        UI: {
+            TOGGLE: 'eclipse.ui.toggle',
+            MENU_ITEM: {
+                SELECTED: 'eclipse.ui.menuitem.selected'
+            }
         }
     };
 

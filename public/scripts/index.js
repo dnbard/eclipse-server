@@ -7,7 +7,8 @@ requirejs.config({
         'particles': '../particles',
         'pubsub': 'https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.5.3/pubsub',
         'lodash': 'https://cdn.jsdelivr.net/lodash/4.16.2/lodash.min',
-        'pako': 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min'
+        'pako': 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min',
+        'ko': 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min'
     }
 });
 
@@ -22,9 +23,10 @@ define([
     'models/stage',
     'enums/events',
     'components/buffs',
+    'ui/main',
 
     'components/summary'
-], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS, BuffsComponent) => {
+], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS, BuffsComponent, UIComponent) => {
     tokenCheck().then((user) => {
         ResourceLoader().load(() => {
             websocket.genericConnect();
@@ -46,6 +48,7 @@ define([
             });
 
             BuffsComponent.init('#buffs');
+            UIComponent.init('#ui');
         });
     }).catch(() => {
         location.href = '/';
