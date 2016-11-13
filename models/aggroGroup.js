@@ -64,8 +64,23 @@ AggroGroup.prototype.addAggro = function(entityId, value){
     }
 }
 
+AggroGroup.prototype.calculateTargets = function(){
+    if (this.aggroList.length > 0){
+        const maxAggro = _.maxBy(this.aggroList, 'value');
+        if (maxAggro){
+            this.actors.forEach(a => a.target = maxAggro.target);
+        }
+    } else {
+        this.actors.forEach(a => a.target = null);
+    }
+}
+
 AggroGroup.prototype.removeAggro = function(entity){
-    _.remove(this.aggroList, e => e.id === entity.id);
+    const isRemoved = !!_.remove(this.aggroList, e => e.id === entity.id);
+
+    if (isRemoved){
+        this.calculateTargets();
+    }
 }
 
 AggroGroup.prototype.onUpdate = function(){
@@ -100,14 +115,7 @@ AggroGroup.prototype.onUpdate = function(){
         });
     });
 
-    if (this.aggroList.length > 0){
-        const maxAggro = _.maxBy(this.aggroList, 'value');
-        if (maxAggro){
-            this.actors.forEach(a => a.target = maxAggro.target);
-        }
-    } else {
-        this.actors.forEach(a => a.target = null);
-    }
+    this.calculateTargets();
 
     if (isGroupChanged){
         logger.info(`Aggro Group(id=${this.id}) was changed: ${isGroupChanged} actors were removed`);
