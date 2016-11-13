@@ -1,7 +1,8 @@
 (function(converter){
     const events = {
         IDENTITY: {
-            CHANGED: 'eclipse.identity.changed'
+            CHANGED: 'eclipse.identity.changed',
+            BUFFS_CHANGED: 'eclipse.identity.buffs.changed'
         },
         SUBSCRIBE: {
             CREATED: 'eclipse.subscribe.created'

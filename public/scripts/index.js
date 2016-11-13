@@ -21,9 +21,10 @@ define([
     'core/tokenCheck',
     'models/stage',
     'enums/events',
+    'components/buffs',
 
     'components/summary'
-], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS) => {
+], (PIXI, PubSub, Renderer, websocket, GameLoop, ResourceLoader, tokenCheck, Stage, EVENTS, BuffsComponent) => {
     tokenCheck().then((user) => {
         ResourceLoader().load(() => {
             websocket.genericConnect();
@@ -43,6 +44,8 @@ define([
 
                 document.querySelector('#version').textContent = `${payload.message.application.title} v${payload.message.application.version}`;
             });
+
+            BuffsComponent.init('#buffs');
         });
     }).catch(() => {
         location.href = '/';

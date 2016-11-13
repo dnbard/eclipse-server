@@ -140,6 +140,10 @@ define([
         } else {
             this.buffs = [];
         }
+
+        if (this.id === playerId){
+            PubSub.publish(EVENTS.IDENTITY.BUFFS_CHANGED, this.buffs);
+        }
     }
 
     return function Player(options, stage){

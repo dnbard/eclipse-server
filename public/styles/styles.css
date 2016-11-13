@@ -38,6 +38,21 @@ body{
     vertical-align: super;
 }
 
+#buffs{
+    z-index: 10;
+    position: fixed;
+    right: 0;
+    color: white;
+}
+
+#buffs > .buff{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    font-size: 9pt;
+}
+
 /*
 font-family: 'Josefin Sans', sans-serif;
 font-family: 'Nunito', sans-serif;
