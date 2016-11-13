@@ -1,7 +1,8 @@
-"use strict";
+'use strict';
 
 const _ = require('lodash');
 
+const logger = require('./logger').child({widget_type: 'transactions'});
 const Users = require('../db/users');
 const Transactions = require('../db/transactions');
 const Subscriptions = require('../core/subscriptions');
@@ -35,7 +36,7 @@ function createOne(userId, value, type){
         type: type
     };
 
-    console.log(`Created transaction(userId=${userId}, type=${type}, value=${value})`);
+    logger.info(`Created transaction(userId=${userId}, type=${type}, value=${value})`);
 
     if (transactions[userId]){
         transactions[userId].push(transaction);
@@ -66,7 +67,7 @@ function transactionIterator(userTransactions, userId){
             .reduce(reducer)
             .value() || 0;
 
-        console.log(`User(id=${userId}, name=${user.login}), credits changed by ${change}, pvp by ${pvpChange}`);
+        logger.info(`User(id=${userId}, name=${user.login}), credits changed by ${change}, pvp by ${pvpChange}`);
 
         user.credits += change;
         user.pvp += pvpChange;

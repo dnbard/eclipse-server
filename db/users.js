@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Base64 = require('js-base64').Base64;
 const CryptoJS = require('crypto-js');
 
+const logger = require('../core/logger').child({widget_type: 'dbUsers'});
 const configs = require('../configs');
 const Token = require('../db/tokens');
 const stringRegex = /[0-9a-zA-Z]+/;
@@ -42,14 +43,14 @@ schema.statics.createOne = function(data){
     });
 
     return user.save().then(user => {
-        console.log(`User(id="${user.id}") created`);
+        logger.info(`User(id="${user.id}") created`);
 
         const token = new Token({
             userId: user._id
         });
 
         return token.save().then(t => {
-            console.log(`Token(id="${t.id}") for user(id="${user.id}") created`);
+            logger.info(`Token(id="${t.id}") for user(id="${user.id}") created`);
             return {
                 login: user.login,
                 token: t.token,

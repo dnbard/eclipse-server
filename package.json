@@ -6,6 +6,7 @@
   "scripts": {
     "test": "gulp test",
     "start": "node server.js",
+    "start-dev": "node server.js | ./node_modules/.bin/bunyan -o short",
     "dev": "nodemon"
   },
   "author": "",
