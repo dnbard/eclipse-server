@@ -19,6 +19,14 @@ let conf = convict({
             env: 'DEBUG_UI'
         }
     },
+    app: {
+        name: {
+            doc: 'Application name',
+            format: String,
+            default: 'eclipse',
+            env: 'APP_NAME'
+        }
+    },
     server: {
         ip: {
             doc: 'The IP address to bind.',
@@ -54,6 +62,20 @@ let conf = convict({
         format: String,
         default: 'U2FsdGVkX19LTE8mlF/Ta7ahEWkqgwsjD8Fc9c2UnMU=',
         env: 'SECRET'
+    },
+    log: {
+        level: {
+            doc: 'Log level',
+            format: ['info', 'warn', 'error', 'fatal'],
+            default: 'error',
+            env: 'LOG_LEVEL'
+        },
+        path: {
+            doc: 'Path for log file',
+            format: String,
+            default: '',
+            env: 'LOG_PATH'
+        }
     }
 });
 
