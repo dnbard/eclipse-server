@@ -50,8 +50,8 @@ define([
 
             if (this.animateMovement.ticks >= 5){
                 this.animateMovement = null;
-                this.vx = 0;
-                this.vy = 0;
+                // this.vx = 0;
+                // this.vy = 0;
             }
         }
 
@@ -89,6 +89,8 @@ define([
             velY: (newState.y - this.y ) * 0.2,
             ticks: 0
         };
+
+        this._velocity = newState.velocity;
 
         this.vx = this.animateMovement.velX;
         this.vy = this.animateMovement.velY;
@@ -161,6 +163,7 @@ define([
         player.maxArmor = options.maxArmor;
 
         player.size = options.size;
+        player._velocity = 0;
 
         player.vx = 0;
         player.vy = 0;

@@ -208,7 +208,8 @@ class Player extends Actor{
             kind: this.kind,
             target: this.target ? this.target.id : null,
             buffs: buffs.length === 0 ? undefined : buffs,
-            ship: this.ship ? this.ship.kind : undefined
+            ship: this.ship ? this.ship.kind : undefined,
+            velocity: this.velocity
         }
     }
 

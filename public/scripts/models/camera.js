@@ -4,9 +4,16 @@ define([
     function onUpdate(){
         const container = this.container;
         const target = this.target;
+        //const previousZoom = container.scale.x;
+        const zoom = 1 - target._velocity / 20;
 
-        container.x = - target.x + this.centerX;
-        container.y = - target.y + this.centerY;
+        container.scale.x = (container.scale.x * 49 + zoom) * 0.02;
+        container.scale.y = (container.scale.y * 49 + zoom) * 0.02;
+        // container.scale.y = zoom;
+        // container.scale.x = zoom;
+
+        container.x = -target.x * container.scale.x + this.centerX;
+        container.y = -target.y * container.scale.y + this.centerY;
     }
 
     function onDispose(){
