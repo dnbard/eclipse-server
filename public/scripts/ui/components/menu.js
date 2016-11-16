@@ -10,15 +10,11 @@ define([
             this.MENU_ITEMS = MENU_ITEMS;
 
             this.selectedMenuItem = ko.observable(null);
-            this.selectedMenuItem.subscribe((value) => {
-                PubSub.publish(EVENTS.UI.MENU_ITEM.SELECTED, {
-                    item: value
-                });
-            });
+            this.selectedMenuItem.subscribe(
+                (value) => PubSub.publish(EVENTS.UI.MENU_ITEM.SELECTED, { item: value })
+            );
 
-            this.selectCargo = () => {
-                this.selectedMenuItem(MENU_ITEMS.CARGO);
-            }
+            this.selectCargo = () => this.selectedMenuItem(MENU_ITEMS.CARGO);
 
 
             this.selectCargo();

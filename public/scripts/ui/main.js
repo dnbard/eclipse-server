@@ -4,7 +4,8 @@ define([
     'ko',
     'ui/app',
 
-    'ui/components/menu'
+    'ui/components/menu',
+    'ui/components/index'
 ], (PubSub, EVENTS, ko, AppViewmodel) => {
     var app = null;
 
