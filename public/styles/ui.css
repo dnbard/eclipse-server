@@ -19,3 +19,31 @@ section[data-id="menu"]{
 .menu-item.selected{
     opacity: 1;
 }
+
+section[data-id="cargo"]{
+    margin-left: 50px;
+    color: white;
+    padding: 5px;
+}
+
+section[data-id="cargo"] .rigs{
+    text-align: center;
+}
+
+section[data-id="cargo"] .rig{
+    width: 96px;
+    border: 1px solid;
+    padding: 5px;
+    display: inline-block;
+    text-align: center;
+    background: rgba(1, 19, 18, 0.9);
+    border-radius: 3px;
+}
+
+section[data-id="cargo"] .rig *{
+    vertical-align: middle;
+}
+
+section[data-id="cargo"] .plugger{
+    cursor: pointer;
+}

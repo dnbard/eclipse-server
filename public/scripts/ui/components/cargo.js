@@ -6,10 +6,12 @@ define([
     'enums/events',
     'enums/menuItems'
 ], (ko, PubSub, fetch, template, EVENTS, MENU_ITEMS) => {
-    var stage = null;
+    var stage = null,
+        spaceship = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, payload) => {
         stage = payload.message.stage;
+        spaceship = payload.message.spaceship;
     });
 
 
@@ -19,10 +21,22 @@ define([
 
 
             this.fetchData = function(){
-                fetch(`/storage/${stage._id}/rigs`).then((rigs) => {
-                    debugger;
-                });
-            }.bind(this);
+                fetch(`/storage/${spaceship.id}/rigs`)
+                    .then(rigs => this.rigs(rigs));
+            }
+
+            this.getIcon = function(){
+                return '/public/images/ui/turret.svg';
+            }
+
+            this.getEquippedIcon = function(rig){
+                return rig.equipped ? '/public/images/ui/unplug.svg' :
+                    '/public/images/ui/plug.svg';
+            }
+
+            this.getEquippedTitle = function(rig){
+                return rig.equipped ? 'Unplug from Spaceship' : 'Plug into the Spaceship';
+            }
 
             this.fetchData();
         },

@@ -1,12 +1,12 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "gulp test",
     "start": "node server.js",
-    "start-dev": "node server.js | ./node_modules/.bin/bunyan -o short",
+    "start-dev": "nodemon | ./node_modules/.bin/bunyan -o short",
     "dev": "nodemon"
   },
   "engines": {

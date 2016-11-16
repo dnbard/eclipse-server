@@ -88,6 +88,7 @@ exports.createWSServer = function(server){
                 subject: EVENTS.CONNECTION.OPEN,
                 message: {
                     stage: stage,
+                    spaceship: playerShip,
                     actorId: actorId,
                     application: {
                         title: 'Eclipse',

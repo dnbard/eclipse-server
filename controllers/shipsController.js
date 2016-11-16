@@ -34,7 +34,7 @@ function getOrCreate(user){
             promises = DEFAULT_SHIP_BLUEPRINT.rigs.map(rigName => {
                 const r = require(`../data/rigs/${rigName}.json`);
                 const rig = new Rigs({
-                    equiped: true,
+                    equipped: true,
                     ownedBy: user._id,
                     storedIn: ship._id,
                     kind: r.kind,

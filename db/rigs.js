@@ -11,7 +11,7 @@ const schema = mongoose.Schema({
     kind: { type: String, required: true },
     mods: mongoose.Schema.Types.Mixed,
     name: String,
-    equiped: { type: Boolean, default: false }
+    equipped: { type: Boolean, default: false }
 });
 
 schema.index({ ownedBy: 1, storedIn: 1 });
