@@ -46,7 +46,7 @@ class Asteroid extends Actor{
                 var loot = new Loot({
                     x: this.x,
                     y: this.y,
-                    loot: Minerals.mineral
+                    loot: Minerals.chrondite
                 });
                 stage.addActor(loot);
             }

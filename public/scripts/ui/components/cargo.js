@@ -19,14 +19,18 @@ define([
         viewModel: function(){
             this.rigs = ko.observableArray([]);
 
-
             this.fetchData = function(){
                 fetch(`/storage/${spaceship.id}/rigs`)
                     .then(rigs => this.rigs(rigs));
             }
 
-            this.getIcon = function(){
-                return '/public/images/ui/turret.svg';
+            this.getIcon = function(rig){
+                if (rig.kind === 'turret'){
+                    return '/public/images/ui/turret.svg';
+                } else if (rig.kind === 'chrondite'){
+                    return '/public/images/ui/ore.svg';
+                }
+                return '/public/images/ui/defaultBuff.svg';
             }
 
             this.getEquippedIcon = function(rig){
@@ -38,6 +42,7 @@ define([
                 return rig.equipped ? 'Unplug from Spaceship' : 'Plug into the Spaceship';
             }
 
+            PubSub.subscribe(EVENTS.UI.TOGGLE, this.fetchData.bind(this));
             this.fetchData();
         },
         template: template

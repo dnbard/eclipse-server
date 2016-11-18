@@ -32,12 +32,24 @@ section[data-id="cargo"] .rigs{
 
 section[data-id="cargo"] .rig{
     width: 96px;
-    border: 1px solid;
+    border: 1px dashed gray;
     padding: 5px;
     display: inline-block;
     text-align: center;
     background: rgba(1, 19, 18, 0.9);
     border-radius: 3px;
+    cursor: default;
+
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+section[data-id="cargo"] .rig:hover{
+    background: #4c4c6c;
+}
+
+section[data-id="cargo"] .rig.equipped{
+    border: 1px solid;
 }
 
 section[data-id="cargo"] .rig *{

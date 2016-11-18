@@ -2,7 +2,7 @@ const Rigs = require('../db/rigs');
 
 const RIGS = require('../enums/rigs');
 
-function Spaceship(base, mods){
+function Spaceship(base, mods, id){
     this.base = base;
     this.mods = mods || {};
 
@@ -11,6 +11,8 @@ function Spaceship(base, mods){
     });
 
     this.kind = base.kind;
+
+    this.id = id || null;
 }
 
 Spaceship.prototype.get = function(key){

@@ -44,7 +44,7 @@ exports.createWSServer = function(server){
             return ShipsController.getOrCreate(_user);
         }).then(playerShip => {
             const Player = require('../models/player');
-            const spaceship = new Spaceship(playerShip.base, playerShip.mods);
+            const spaceship = new Spaceship(playerShip.base, playerShip.mods, playerShip.id);
 
             const subscriberId = _user._id;
             const playerName = _user.login;

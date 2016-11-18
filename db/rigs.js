@@ -11,10 +11,34 @@ const schema = mongoose.Schema({
     kind: { type: String, required: true },
     mods: mongoose.Schema.Types.Mixed,
     name: String,
-    equipped: { type: Boolean, default: false }
+    equipped: { type: Boolean, default: false },
+    quantity: { type: Number, default: 1 }
 });
 
-schema.index({ ownedBy: 1, storedIn: 1 });
+schema.index({ ownedBy: 1, storedIn: 1, kind: 1 });
+
+schema.statics.createOrStack = function(options){
+    return Rig.findOne({
+        ownedBy: options.ownedBy,
+        storedIn: options.storedIn,
+        kind: options.kind
+    }).exec().then(rig => {
+        if (!rig){
+            rig = new Rig({
+                ownedBy: options.ownedBy,
+                storedIn: options.storedIn,
+                kind: options.kind,
+                name: options.name,
+                mods: options.mods || {},
+                quantity: options.quantity
+            });
+        } else {
+            rig.quantity += options.quantity;
+        }
+
+        return rig.save();
+    });
+}
 
 const Rig = mongoose.models.rigs || mongoose.model('rigs', schema);
 

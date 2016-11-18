@@ -26,4 +26,8 @@ module.exports = [function(options, cb){
         equipped: true,
         equiped: undefined
     }, {multi: true}, cb);
+}, function(options, cb){
+    Rigs.update({}, {
+        quantity: 1
+    }, {multi: true}, cb);
 }];

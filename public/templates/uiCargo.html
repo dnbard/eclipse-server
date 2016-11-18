@@ -1,9 +1,12 @@
 <section data-id="cargo">
     <div class="rigs" data-bind="foreach: rigs">
-        <div class="rig">
+        <div class="rig" data-bind="css: { equipped: $data.equipped }">
             <img width="64" data-bind="attr: { src: $component.getIcon($data) }" />
             <div data-bind="text: name"></div>
-            <div>
+            <div data-bind="if: quantity > 1">
+                <span data-bind="text: `x${quantity}`"></span>
+            </div>
+            <div data-bind="if: kind === 'turret'">
                 <span data-bind="text: `[${$data.mods.projectileMinDamage}-${$data.mods.projectileMaxDamage}]`"></span>
                 <img class="plugger" width="16"
                      data-bind="attr: { src: $component.getEquippedIcon($data),

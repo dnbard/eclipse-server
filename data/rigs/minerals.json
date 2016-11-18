@@ -1,7 +1,12 @@
 {
-    "mineral":{
-        "name": "MineralName",
+    "chrondite":{
+        "name": "Chrondite",
         "kind": "mineral",
-        "id": "mineralId" 
+        "id": "chrondite",
+        "price": 4,
+        "quantity": {
+            "min": 10,
+            "max": 80
+        }
     }
 }
