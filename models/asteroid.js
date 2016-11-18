@@ -2,6 +2,8 @@
 
 const Actor = require('./actor');
 const AsteroidsMetadata = require('../public/images/asteroids/asteroids.json');
+const Minerals = require('../data/rigs/minerals.json');
+const Loot = require('../models/loot');
 
 const GEOMETRY = require('../enums/geometry');
 const COLLISION_VELOCITY = 5;
@@ -39,7 +41,15 @@ class Asteroid extends Actor{
 
         if (this.armor <= 0){
             stage.removeActorById(this.id);
-            //TODO: spawn loot; respawn asteroid
+            const quantity = Math.ceil(Math.random() * 4);
+            for (var i = 0; i < quantity; i++){
+                var loot = new Loot({
+                    x: this.x,
+                    y: this.y,
+                    loot: Minerals.mineral
+                });
+                stage.addActor(loot);
+            }
         }
     }
 

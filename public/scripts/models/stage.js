@@ -5,25 +5,22 @@ define([
     'models/camera',
     'models/projectile',
     'models/asteroid',
+    'models/loot',
     'components/backdrop',
     'components/borders',
     'pubsub',
     'enums/events'
-],(PIXI, Planet, Player, Camera, Projectile, Asteroid, Backdrop, Borders, PubSub, EVENTS) => {
+],(PIXI, Planet, Player, Camera, Projectile, Asteroid, Loot, Backdrop, Borders, PubSub, EVENTS) => {
+    const Constructors = {
+        'planet': Planet,
+        'player': Player,
+        'projectile': Projectile,
+        'asteroid': Asteroid,
+        'loot': Loot
+    };
+
     function getActorConstructor(kind){
-        var constructor = null;
-
-        if (kind === 'planet'){
-            constructor = Planet;
-        } else if (kind === 'player'){
-            constructor = Player;
-        } else if (kind === 'projectile'){
-            constructor = Projectile;
-        } else if (kind = 'asteroid'){
-            constructor = Asteroid;
-        }
-
-        return constructor;
+        return Constructors[kind];
     }
 
     function createGenericActor(el, stage){

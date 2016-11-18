@@ -1,0 +1,7 @@
+{
+    "mineral":{
+        "name": "MineralName",
+        "kind": "mineral",
+        "id": "mineralId" 
+    }
+}
