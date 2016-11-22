@@ -1,3 +1,4 @@
 define({
-    CARGO: 'cargo-menu-item'
+    CARGO: 'cargo-menu-item',
+    PVP: 'pvp-menu-item'
 })

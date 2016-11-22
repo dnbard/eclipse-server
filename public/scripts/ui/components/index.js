@@ -5,7 +5,8 @@ define([
     'enums/events',
     'enums/menuItems',
 
-    'ui/components/cargo'
+    'ui/components/cargo',
+    'ui/components/pvp'
 ], (ko, PubSub, template, EVENTS, MENU_ITEMS) => {
     ko.components.register('ui-index', {
         viewModel: function(){
@@ -14,7 +15,7 @@ define([
             this.activePage = ko.observable(null);
 
             PubSub.subscribe(EVENTS.UI.TOGGLE, () => this.activePage(MENU_ITEMS.CARGO));
-            PubSub.subscribe(EVENTS.UI.MENU_ITEM.SELECTED, data => this.activePage(data.item));
+            PubSub.subscribe(EVENTS.UI.MENU_ITEM.SELECTED, (e, data) => this.activePage(data.item));
         },
         template: template
     });

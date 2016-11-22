@@ -71,7 +71,7 @@ exports.getUser = function(req, res){
     if(!token){
         return res.status(500).send('No Token entity available');
     }
-
+Users
     res.send({
         _id: user._id,
         login: user.login,
@@ -83,4 +83,13 @@ exports.getUser = function(req, res){
         shipId: user.shipId,
         pvp: user.pvp
     });
+}
+
+exports.getUsersByRating = function(req, res){
+    return Users.find({ pvp : { $gt: 0 } }, '_id pvp login' )
+        .sort('-pvp')
+        .limit(20)
+        .exec()
+        .then(users => res.send(users))
+        .catch(err => res.status(500).send(err));
 }

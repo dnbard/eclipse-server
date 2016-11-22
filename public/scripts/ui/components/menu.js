@@ -15,6 +15,7 @@ define([
             );
 
             this.selectCargo = () => this.selectedMenuItem(MENU_ITEMS.CARGO);
+            this.selectPVP = () => this.selectedMenuItem(MENU_ITEMS.PVP);
 
 
             this.selectCargo();

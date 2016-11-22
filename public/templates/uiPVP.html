@@ -1,0 +1,9 @@
+<section data-id="cargo">
+    <h1>PVP Leaderboard</h1>
+    <div class="pvpers" data-bind="foreach: rating">
+        <div class="pvper">
+            <span data-bind="text: $data.login"></span>
+            <span data-bind="text: $data.pvp"></span>
+        </div>
+    </div>
+</section>

@@ -14,6 +14,8 @@ exports.init = function(app){
     );
     app.post('/users', UsersController.postUser);
 
+    app.get('/users/pvp', UsersController.getUsersByRating);
+
 
     /*====== LOGIN ======*/
     app.post('/login', LoginController.login);
