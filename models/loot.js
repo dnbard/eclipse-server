@@ -15,6 +15,7 @@ class Loot extends Actor{
         this.geometry = GEOMETRY.POINT;
 
         this.loot = options.loot || null;
+        this.quantityMod = options.quantityMod || 1;
 
         this.rotationSpeed = Math.random() * 0.1 - 0.05;
 
@@ -51,7 +52,11 @@ class Loot extends Actor{
                 storedIn: actor.ship.id,
                 kind: this.loot.id,
                 name: this.loot.name,
-                quantity: Math.round(Math.random() * (this.loot.quantity.max - this.loot.quantity.min) + this.loot.quantity.min)
+                quantity: Math.round(
+                    this.quantityMod * (
+                        Math.random() * (this.loot.quantity.max - this.loot.quantity.min) + this.loot.quantity.min
+                    )
+                )
             });
         }
     }

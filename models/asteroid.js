@@ -6,7 +6,7 @@ const Minerals = require('../data/rigs/minerals.json');
 const Loot = require('../models/loot');
 
 const GEOMETRY = require('../enums/geometry');
-const COLLISION_VELOCITY = 5;
+const COLLISION_VELOCITY = 1;
 
 const types = [
     'gray01',
@@ -42,12 +42,14 @@ class Asteroid extends Actor{
         if (this.armor <= 0){
             stage.removeActorById(this.id);
             const quantity = Math.ceil(Math.random() * 4);
+            const lootObject = {
+                x: this.x,
+                y: this.y,
+                loot: Minerals.chrondite
+            };
+
             for (var i = 0; i < quantity; i++){
-                var loot = new Loot({
-                    x: this.x,
-                    y: this.y,
-                    loot: Minerals.chrondite
-                });
+                var loot = new Loot(lootObject);
                 stage.addActor(loot);
             }
         }
