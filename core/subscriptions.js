@@ -3,6 +3,7 @@
 const debug = require('debug')('subscriptions');
 const _ = require('lodash');
 const uuid = require('./uuid');
+const EMPTY_ARRAY = [];
 
 let subscriptionsBySubscriberMap = new Map();
 let subscriptionsBySubscribeToMap = new Map();
@@ -33,11 +34,11 @@ exports.createSubscription = function(subscriber, subscribeTo, ws) {
 }
 
 exports.getSubscriptionBySubscriberId = function(subscriberId){
-    return (subscriptionsBySubscriberMap.get(subscriberId) || []);
+    return (subscriptionsBySubscriberMap.get(subscriberId) || EMPTY_ARRAY);
 }
 
 exports.getSubscriptionBySubscribeToId = function(subscribeTo){
-    return (subscriptionsBySubscribeToMap.get(subscribeTo) || []);
+    return (subscriptionsBySubscribeToMap.get(subscribeTo) || EMPTY_ARRAY);
 }
 
 exports.removeSubscriptionById = function(subscriptionId){
