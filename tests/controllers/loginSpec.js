@@ -65,6 +65,24 @@ server.then(s => {
                         done();
                     }).catch(err => done);
             });
+
+            it('should return 404 on wrong password', done => {
+                let user = null;
+
+                chai.request(s)
+                    .post('/users')
+                    .send({ password: "asdasdasd", login: faker.name.findName() })
+                    .then(res => {
+                        user = res.body;
+
+                        return chai.request(s)
+                            .post('/login')
+                            .send({ login: user.login, password: "asda1231234sdasd" });
+                    }).catch(res => {
+                        expect(res).to.have.status(404);
+                        done();
+                    });
+            });
         });
     });
 });
