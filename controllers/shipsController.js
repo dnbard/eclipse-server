@@ -42,6 +42,8 @@ function getOrCreate(user){
                     name: r.name,
                 });
 
+                ship.rigs.push(r.id);
+
                 return rig.save();
             });
         }
@@ -63,7 +65,7 @@ function getOrCreate(user){
         return {
             id: ship._id,
             kind: shipKind,
-            base: shipBase,
+            base: ship.rigs ? Object.assign({}, shipBase, { rigs: ship.rigs }) : shipBase,
             mods: ship.mods || {}
         };
     });

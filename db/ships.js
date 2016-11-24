@@ -8,7 +8,8 @@ const schema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     kind: { type: String, required: true },
-    mods: mongoose.Schema.Types.Mixed
+    mods: mongoose.Schema.Types.Mixed,
+    rigs: [String]
 });
 
 const Ship = mongoose.models.ships || mongoose.model('ships', schema);

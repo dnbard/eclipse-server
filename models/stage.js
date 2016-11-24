@@ -40,6 +40,10 @@ Stage.prototype.getActorById = function(actorId){
     return _.find(this.actors, a => a.id === actorId);
 }
 
+Stage.prototype.getActorByParentId = function(parentId){
+    return _.find(this.actors, a => a.createdBy === parentId);
+}
+
 Stage.prototype.createGroup = function(actors){
     const group = new AggroGroup({
         actors: actors || [],

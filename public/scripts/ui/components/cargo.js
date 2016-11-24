@@ -17,6 +17,8 @@ define([
 
     ko.components.register('ui-cargo', {
         viewModel: function(){
+            var self = this;
+
             this.rigs = ko.observableArray([]);
 
             this.fetchData = function(){
@@ -40,6 +42,15 @@ define([
 
             this.getEquippedTitle = function(rig){
                 return rig.equipped ? 'Unplug from Spaceship' : 'Plug into the Spaceship';
+            }
+
+            this.equipToggle = function(rig){
+                function updateInventory(rigToUpdate){
+                    self.rigs.remove(r => r._id === rigToUpdate._id);
+                    self.rigs.push(rigToUpdate);
+                }
+
+                fetch(`/storage/${spaceship.id}/rigs/${rig._id}/${rig.equipped ? 'unequip' : 'equip'}`, { method: 'post' }).then(updateInventory);
             }
 
             PubSub.subscribe(EVENTS.UI.TOGGLE, this.fetchData.bind(this));

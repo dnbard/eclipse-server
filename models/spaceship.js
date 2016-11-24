@@ -1,5 +1,6 @@
-const Rigs = require('../db/rigs');
+const _ = require('lodash');
 
+const Rigs = require('../db/rigs');
 const RIGS = require('../enums/rigs');
 
 function Spaceship(base, mods, id){
@@ -28,6 +29,18 @@ Spaceship.prototype.get = function(key){
 
 Spaceship.prototype.getTurrets = function(){
     return this.rigs.filter(r => r.kind === RIGS.TURRET);
+}
+
+Spaceship.prototype.equip = function(rigId){
+    this.rigs.push(require(`../data/rigs/${rigId}.json`));
+}
+
+Spaceship.prototype.unequip = function(rigId){
+    const rigIndex = _.findIndex(this.rigs, { id: rigId });
+
+    if (rigIndex >= 0){
+        this.rigs.splice(rigIndex, 1);
+    }
 }
 
 module.exports = Spaceship;

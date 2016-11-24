@@ -10,7 +10,8 @@
                 <span data-bind="text: `[${$data.mods.projectileMinDamage}-${$data.mods.projectileMaxDamage}]`"></span>
                 <img class="plugger" width="16"
                      data-bind="attr: { src: $component.getEquippedIcon($data),
-                                title: $component.getEquippedTitle($data) }" />
+                                title: $component.getEquippedTitle($data) },
+                                click: $component.equipToggle" />
             </div>
         </div>
     </div>

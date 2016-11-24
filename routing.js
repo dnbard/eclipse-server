@@ -39,4 +39,13 @@ exports.init = function(app){
         [ UsersController.getUserByToken ],
         RigsController.getFew
     );
+
+    app.post('/storage/:id/rigs/:rigId/equip',
+        [ UsersController.getUserByToken ],
+        RigsController.equip
+    );
+    app.post('/storage/:id/rigs/:rigId/unequip',
+        [ UsersController.getUserByToken ],
+        RigsController.unequip
+    );
 }
