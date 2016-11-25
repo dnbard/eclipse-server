@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
-    _id: { type: String, unique: true },
+    _id: { type: String, index: true },
     value: mongoose.Schema.Types.Mixed
 });
 

@@ -6,19 +6,14 @@ const logger = require('../core/logger')
 
 function onFinishedHandler(err, req){
     const size = req.res._headers['content-length'];
-    const output = [
-        req.method,
-        req.url,
-        '-',
-        req.res.statusCode,
-        `${new Date() - req._timestamp}ms`
-    ];
+    //ES6 templates aren't used because of performance degradation in comparison to plain strings concatenation
+    let output = req.method + ' ' + req.url + ' - ' + req.res.statusCode + ' ' + new Date() - req._timestamp + 'ms';
 
     if (size){
-        output.push(`${req.res._headers['content-length']}b`);
+        output += req.res._headers['content-length']+ 'b';
     }
 
-    logger.info(output.join(' '));
+    return logger.info(output);
 }
 
 module.exports = function(req, res, next) {

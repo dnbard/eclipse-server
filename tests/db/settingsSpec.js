@@ -10,7 +10,7 @@ describe('Settings Model', () => {
             settings.createOne().catch(spy).then(() => {
                 expect(spy.called).to.be.true;
                 done();
-            });
+            }).catch(e => done);
         });
 
         it('should validate wrong arguments', (done) => {

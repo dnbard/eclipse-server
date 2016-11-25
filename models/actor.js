@@ -44,6 +44,10 @@ class Actor{
     }
 
     setMethod(methods, options, name){
+        if (options === undefined){
+            return;
+        }
+
         if (typeof options[name] === 'function'){
             this[name] = options[name];
         } else if (typeof options[name] === 'string'){
