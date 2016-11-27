@@ -3,7 +3,7 @@ define(function(){
 		get: get
 	};
 
-	function get(){
+	function get(type){
 		return {
 			"alpha": {
 				"start": 0.8,
@@ -14,10 +14,13 @@ define(function(){
 				"end": 0.03,
 				"minimumScaleMultiplier": 0.39
 			},
-			"color": {
+			"color": type === 'ion' ? {
 				"start": "#2e0ffc",
 				"end": "#b2d9ed"
-			},
+			} : {
+				"start": "#e8172f",
+				"end": "#e5f013"
+			} ,
 			"speed": {
 				"start": 59,
 				"end": 84

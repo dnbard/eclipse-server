@@ -1,0 +1,12 @@
+{
+    "projectileLifetime": 750,
+    "projectileKind": "mining",
+    "projectileUpdate": "defaultProjectile",
+    "projectileCollide": "defaultProjectileCollision",
+    "projectileSpeed": 20,
+    "projectileMinDamage": 1,
+    "projectileMaxDamage": 2,
+    "kind": "turret",
+    "id": "turret-mining",
+    "name": "Mining Laser"
+}

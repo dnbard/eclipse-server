@@ -1,11 +1,12 @@
 define([
     'pixi',
     'particles/projectile-ion',
+    'particles/projectile-mining',
     'particles/explosion-small-ion',
     'components/staticParticle',
 
     'pixi-particles'
-], function(PIXI, particle, particleExplosion, StaticParticle){
+], function(PIXI, particle, miningParticle, particleExplosion, StaticParticle){
     function applyUpdate(newState){
         this.animateMovement = {
             x: newState.x,
@@ -23,10 +24,10 @@ define([
         this.particle.destroy();
 
         const explosion = StaticParticle({
-            x: this.x,
-            y: this.y,
+            x: this.x + this.vx,
+            y: this.y + this.vy,
             textures: [PIXI.loader.resources['/public/particles/particle.png'].texture],
-            particle: particleExplosion.get(),
+            particle: particleExplosion.get(this.type),
             stage: stage
         });
 
@@ -54,13 +55,22 @@ define([
     return function Projectile(options, stage){
         const projectile = new PIXI.Container();
 
-        projectile.particle = new PIXI.particles.Emitter(projectile,
-            [PIXI.loader.resources['/public/particles/particle.png'].texture], particle);
+        if (options.type === 'ion'){
+            projectile.particle = new PIXI.particles.Emitter(projectile,
+                [PIXI.loader.resources['/public/particles/particle.png'].texture], particle);
+        } else if (options.type === 'mining'){
+            projectile.particle = new PIXI.particles.Emitter(projectile,
+                [PIXI.loader.resources['/public/particles/particle.png'].texture], miningParticle);
+        } else {
+            throw new Error(`Missing particle emitter(type=${options.type})`);
+        }
 
         projectile.id = options.id;
 
         projectile.vx = options.vx * 0.2;
         projectile.vy = options.vy * 0.2;
+
+        projectile.type = options.type;
 
         projectile.kind = 'projectile';
         projectile.rotation = -options.rotation + Math.PI * 0.5;

@@ -36,7 +36,7 @@ class Projectile extends Actor{
         this.armor = 0;
         this.maxArmor = 0;
 
-        this.damage = 10;
+        this.damage = Math.round(Math.random() * (options.damageMax - options.damageMin) + options.damageMin);
 
         this.setMethod(actions, options, 'onUpdate');
         this.setMethod(actions, options, 'onCollide');
@@ -50,7 +50,8 @@ class Projectile extends Actor{
             vx: this.toFixed(this.vx, 1),
             vy: this.toFixed(this.vy, 1),
             rotation: this.toFixed(this.rotation, 2),
-            kind: this.kind
+            kind: this.kind,
+            type: this.type
         }
     }
 }

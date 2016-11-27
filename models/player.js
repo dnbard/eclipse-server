@@ -100,7 +100,10 @@ const actions = {
                     onUpdate: t.projectileUpdate,
                     geometry: GEOMETRY.POINT,
                     onCollide: t.projectileCollide,
-                    createdBy: this.id
+                    createdBy: this.id,
+                    type: t.projectileKind,
+                    damageMin: t.projectileMinDamage,
+                    damageMax: t.projectileMaxDamage
                 });
 
                 this.lastShot = time;

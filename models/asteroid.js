@@ -45,7 +45,8 @@ class Asteroid extends Actor{
             const lootObject = {
                 x: this.x,
                 y: this.y,
-                loot: Minerals.chrondite
+                loot: Minerals.chrondite,
+                quantityMod: actor.kind === 'projectile' && actor.type === 'mining' ? 4 : 1
             };
 
             for (var i = 0; i < quantity; i++){
