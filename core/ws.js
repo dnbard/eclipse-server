@@ -1,12 +1,12 @@
 'use strict';
 
 const WebSocketServer = require('ws').Server;
-const uuid = require('./uuid');
 const NativeUUID = require('node-uuid').v4;
 const Base64 = require('js-base64').Base64;
 const url = require('url');
 const pako = require('pako');
 
+const uuid = require('./uuid');
 const logger = require('./logger').child({widget_type: 'wsServer'});
 const Stages = require('./stages');
 const Subscriptions = require('./subscriptions');
@@ -21,12 +21,21 @@ const DEBUG_UI = configs.get('debug.ui');
 const GEOMETRY = require('../enums/geometry');
 const EVENTS = require('../public/scripts/enums/events');
 
-var wss = null;
+let wss = null;
 
-exports.createWSServer = function(server){
+module.exports = {
+    createWSServer: createWSServer,
+    sendMessage: sendMessage
+};
+
+function createWSServer(server) {
+    if (wss) {
+        throw new Error('WS server already created');
+    }
+
     wss = new WebSocketServer({ server: server });
 
-    wss.on('connection', function connection(ws) {
+    wss.on('connection', ws => {
         const stage = Stages.getOrCreateGeneric();
         const location = url.parse(ws.upgradeReq.url, true);
         const token = location.query.token;
@@ -35,111 +44,18 @@ exports.createWSServer = function(server){
             return ws.close();
         }
 
-        var _user = null;
-        var _token = null;
-        UsersController.getUserByTokenInternal(token).then(data => {
-            _user = data.user;
-            _token = data.token;
-
-            return ShipsController.getOrCreate(_user);
-        }).then(playerShip => {
-            const Player = require('../models/player');
-            const spaceship = new Spaceship(playerShip.base, playerShip.mods, playerShip.id);
-
-            const subscriberId = _user._id;
-            const playerName = _user.login;
-
-            _token.extend().then(() => {
-                logger.info(`Token(id="${_token._id}") was prolongated`);
-            }).catch(() => {
-                logger.warn(`Token(id="${_token._id}") was NOT prolongated`);
-            });
-
-            logger.info(`Incoming WS connection (subscriber=${subscriberId})`);
-
-            const deltaTime = Math.random() * 1000
-            const player = new Player({
-                kind: 'player',
-                type: 'player-base',
-                x: Math.random() * 100,
-                y: Math.random() * 100,
-                onUpdate: 'defaultPlayer',
-                onDamage: 'defaultPlayerDamage',
-                geometry: GEOMETRY.CIRCLE,
-                size: 22,
-                name: playerName,
-                createdBy: subscriberId,
-                ship: spaceship
-            });
-            const actorId = player.id;
-            const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
-
-            stage.addActor(player);
-
-            sendMessage(ws, JSON.stringify({
-                subject: EVENTS.SUBSCRIBE.CREATED,
-                message: Object.assign({}, subscription, {
-                    actorId: actorId,
-                    isDebug: DEBUG_UI
-                })
-            }));
-
-            sendMessage(ws, JSON.stringify({
-                subject: EVENTS.CONNECTION.OPEN,
-                message: {
-                    stage: stage,
-                    spaceship: playerShip,
-                    actorId: actorId,
-                    application: {
-                        title: 'Eclipse',
-                        version: packageData.version
-                    },
-                    token: token
-                }
-            }));
-
-            if (Subscriptions.getSubscriptionBySubscriberId(subscriberId).length > 1){
-                //check for active subscriptions for that user and close WS connection if it was found
-                logger.warn(`Found 2+ subscriptions for Subscriber(id=${subscriberId}, name=${playerName}), closing Subscription(id=${subscription.id})`);
-                ws.close();
-            }
-
-            ws.on('message', (payload, flags) => {
-                var data;
-
-                try{
-                    data = JSON.parse(payload);
-                } catch(e){
-                    logger.error(e);
-                }
-
-                if (data.token !== token){
-                    return logger.info(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
-                }
-
-                if (EVENTS._hash[data.subject]){
-                    logger.info(`Received message(subject="${data.subject}") from player(id=${player.id})`);
-
-                    Commands.execute(data.subject, {
-                        message: data.message,
-                        subject: data.subject,
-                        player: player,
-                        stage: stage
-                    });
-                } else {
-                    logger.warn(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
-                }
-            });
-
-            ws.on('close', () => {
-                stage.removeAggro(player);
-
-                stage.removeActorById(actorId);
-                Subscriptions.removeSubscriptionBySubscriberId(subscriberId);
-            });
-        }).catch(err => {
+        Promise.resolve({
+            ws: ws,
+            stage: stage,
+            token: token
+        })
+        .then(getUser)
+        .then(getShip)
+        .then(addInStage)
+        .then(addHandlers)
+        .catch(err => {
             logger.error(err);
-            return ws.close();
+            ws.close();
         });
     });
 
@@ -148,21 +64,161 @@ exports.createWSServer = function(server){
     return wss;
 }
 
-function sendMessage(ws, message, options){
+function sendMessage(ws, message, options) {
     options = options || {};
 
-    if (ws.readyState !== ws.OPEN){
-        return logger.warn('Unable to send WS message. Reason - WS already closed.')
+    if (ws.readyState !== ws.OPEN) {
+        logger.error('Unable to send WS message. Reason - WS already closed.');
+        return;
     }
 
-    if (typeof message !== 'string'){
+    if (typeof message !== 'string') {
         message = JSON.stringify(message);
     }
 
-    const binaryString = options.packed ? message :
-        pako.deflate(message, { to: 'string' });
+    if (!options.packed) {
+        message = pako.deflate(message, { to: 'string' });
+    }
 
-    ws.send(binaryString);
+    ws.send(message);
 }
 
-exports.sendMessage = sendMessage;
+function getUser(data) {
+    const token = data.token;
+
+    return UsersController.getUserByTokenInternal(token)
+        .then(res => {
+            return Object.assign(data, {
+                user: res.user,
+                _token: res.token
+            });
+        });
+}
+
+function getShip(data) {
+    const user = data.user;
+
+    return ShipsController.getOrCreate(user)
+        .then(playerShip => {
+            return Object.assign(data, {
+                playerShip: playerShip
+            });
+        });
+}
+
+function addInStage(data) {
+    const Player = require('../models/player'); //TODO: need refactor it's
+    const playerShip = data.playerShip;
+    const user = data.user;
+    const token = data.token;
+    const _token = data._token;
+    const stage = data.stage;
+    const ws = data.ws;
+
+    const subscriberId = user._id;
+    const playerName = user.login;
+
+    if (Subscriptions.getSubscriptionBySubscriberId(subscriberId).length >= 1){
+        //check for active subscriptions for that user and close WS connection if it was found
+        throw new Error(`Subscriber(id=${subscriberId}, name=${playerName}) already has active subscription`);
+    }
+
+    const spaceship = new Spaceship(playerShip.base, playerShip.mods, playerShip.id);
+
+    _token.extend().then(() => {
+        logger.info(`Token(id="${_token._id}") was prolongated`);
+    }).catch(() => {
+        logger.warn(`Token(id="${_token._id}") was NOT prolongated`);
+    });
+
+    logger.info(`Incoming WS connection (subscriber=${subscriberId})`);
+
+    const deltaTime = Math.random() * 1000
+    const player = new Player({
+        kind: 'player',
+        type: 'player-base',
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        onUpdate: 'defaultPlayer',
+        onDamage: 'defaultPlayerDamage',
+        geometry: GEOMETRY.CIRCLE,
+        size: 22,
+        name: playerName,
+        createdBy: subscriberId,
+        ship: spaceship
+    });
+    const actorId = player.id;
+    const subscription = Subscriptions.createSubscription(subscriberId, stage.id, ws);
+
+    stage.addActor(player);
+
+    sendMessage(ws, JSON.stringify({
+        subject: EVENTS.SUBSCRIBE.CREATED,
+        message: Object.assign({}, subscription, {
+            actorId: actorId,
+            isDebug: DEBUG_UI
+        })
+    }));
+
+    sendMessage(ws, JSON.stringify({
+        subject: EVENTS.CONNECTION.OPEN,
+        message: {
+            stage: stage,
+            spaceship: playerShip,
+            actorId: actorId,
+            application: {
+                title: 'Eclipse',
+                version: packageData.version
+            },
+            token: token
+        }
+    }));
+
+    return Object.assign(data, {
+        player: player
+    });
+}
+
+function addHandlers(data) {
+    const ws = data.ws;
+    const user = data.user;
+    const token = data.token;
+    const player = data.player;
+    const stage = data.stage;
+
+    ws.on('message', (payload, flags) => {
+        let data;
+
+        try {
+            data = JSON.parse(payload);
+        } catch(e){
+            logger.error(e);
+            return;
+        }
+
+        if (data.token !== token){
+            logger.info(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
+            return;
+        }
+
+        if (!EVENTS._hash[data.subject]) {
+            logger.warn(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
+            return;
+        }
+
+        logger.info(`Received message(subject="${data.subject}") from player(id=${player.id})`);
+
+        Commands.execute(data.subject, {
+            message: data.message,
+            subject: data.subject,
+            player: player,
+            stage: stage
+        });
+    });
+
+    ws.on('close', () => {
+        stage.removeAggro(player);
+        stage.removeActorById(player.id);
+        Subscriptions.removeSubscriptionBySubscriberId(user._id);
+    });
+}
