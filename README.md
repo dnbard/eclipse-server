@@ -13,6 +13,10 @@ Server for online browser game written in NodeJS(back-end) and Pixi(front-end).
 * run server with `nodemon` command
 * open URL `http://localhost:3000` in browser
 
+## Game Menu
+
+Press `F1` to open in-game menu(inventory, PVP rating etc). This menu are going to work in `/eclipse` page(main page) only. 
+
 ## Debug mode
 
 `Debug mode` are going to enabled by default locally. It will be disabled on `Curio` and similar environments. Open development tools (F12) and write `window.DEBUG` to access `debug mode` at the client-side.
