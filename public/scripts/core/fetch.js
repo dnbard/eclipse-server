@@ -10,7 +10,9 @@ define([
             return r;
         }
 
-        return Promise.reject(r);
+        return r.json().then(r => {
+            return Promise.reject(r);
+        });
     }
 
     return function(url, options){

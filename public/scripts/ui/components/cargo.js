@@ -4,8 +4,9 @@ define([
     'core/fetch',
     'text!templates/uiCargo.html',
     'enums/events',
-    'enums/menuItems'
-], (ko, PubSub, fetch, template, EVENTS, MENU_ITEMS) => {
+    'enums/menuItems',
+    'vendor/alertify'
+], (ko, PubSub, fetch, template, EVENTS, MENU_ITEMS, alertify) => {
     var stage = null,
         spaceship = null;
 
@@ -50,7 +51,13 @@ define([
                     self.rigs.push(rigToUpdate);
                 }
 
-                fetch(`/storage/${spaceship.id}/rigs/${rig._id}/${rig.equipped ? 'unequip' : 'equip'}`, { method: 'post' }).then(updateInventory);
+                fetch(`/storage/${spaceship.id}/rigs/${rig._id}/${rig.equipped ? 'unequip' : 'equip'}`, { method: 'post' })
+                    .then(updateInventory)
+                    .catch(res => {
+                        const errorMessage = typeof res === 'object' ?
+                            res.message : 'Generic Server Error';
+                        alertify.error(errorMessage);
+                    });
             }
 
             PubSub.subscribe(EVENTS.UI.TOGGLE, this.fetchData.bind(this));
