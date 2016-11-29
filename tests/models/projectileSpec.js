@@ -7,7 +7,10 @@ const Actor = require('../../models/actor');
 describe('Projectile Model', () => {
     var projectile = null;
 
-    beforeEach(() => projectile = new Projectile());
+    beforeEach(() => projectile = new Projectile({
+        damageMax: 2,
+        damageMin: 1
+    }));
 
     it('should be instance of Actor', () => {
         expect(projectile).to.be.instanceOf(Actor);
