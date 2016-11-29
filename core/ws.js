@@ -1,6 +1,6 @@
 'use strict';
 
-const WebSocketServer = require('ws').Server;
+const WebSocketServer = require('uws').Server;
 const NativeUUID = require('node-uuid').v4;
 const Base64 = require('js-base64').Base64;
 const url = require('url');
@@ -68,8 +68,7 @@ function sendMessage(ws, message, options) {
     options = options || {};
 
     if (ws.readyState !== ws.OPEN) {
-        logger.error('Unable to send WS message. Reason - WS already closed.');
-        return;
+        return logger.error('Unable to send WS message. Reason - WS already closed.');
     }
 
     if (typeof message !== 'string') {
@@ -84,26 +83,18 @@ function sendMessage(ws, message, options) {
 }
 
 function getUser(data) {
-    const token = data.token;
-
-    return UsersController.getUserByTokenInternal(token)
-        .then(res => {
-            return Object.assign(data, {
-                user: res.user,
-                _token: res.token
-            });
-        });
+    return UsersController.getUserByTokenInternal(data.token)
+        .then(res => Object.assign(data, {
+            user: res.user,
+            _token: res.token
+        }));
 }
 
 function getShip(data) {
-    const user = data.user;
-
-    return ShipsController.getOrCreate(user)
-        .then(playerShip => {
-            return Object.assign(data, {
-                playerShip: playerShip
-            });
-        });
+    return ShipsController.getOrCreate(data.user)
+        .then(playerShip => Object.assign(data, {
+            playerShip: playerShip
+        }));
 }
 
 function addInStage(data) {
@@ -192,18 +183,15 @@ function addHandlers(data) {
         try {
             data = JSON.parse(payload);
         } catch(e){
-            logger.error(e);
-            return;
+            return logger.error(e);
         }
 
         if (data.token !== token){
-            logger.info(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
-            return;
+            return logger.info(`Received message(subject="${data.subject}") with wrong token from player(id=${player.id}); propagation stopped`);
         }
 
         if (!EVENTS._hash[data.subject]) {
-            logger.warn(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
-            return;
+            return logger.warn(`Received unregistered WS command ${data.subject} from player(id=${player.id})`);
         }
 
         logger.info(`Received message(subject="${data.subject}") from player(id=${player.id})`);

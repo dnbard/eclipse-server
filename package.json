@@ -1,6 +1,6 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "performance-now": "^0.2.0",
     "request": "^2.78.0",
     "sorted-array": "^2.0.1",
-    "ws": "^1.1.1"
+    "uws": "^0.11.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
