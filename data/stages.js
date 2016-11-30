@@ -7,6 +7,7 @@ const configs = require('../configs');
 const GEOMETRY = require('../enums/geometry');
 const BUFFS = require('../enums/buffs');
 const DEFAULT_STAGE_ID = configs.get('stage.default');
+const ANGLE_DELTA = 0.003;
 
 module.exports = [{
     id: DEFAULT_STAGE_ID,
@@ -34,12 +35,16 @@ module.exports = [{
         }));
 
         for(var i = 0; i < 32; i ++){
-            var seed = Math.random() * Math.PI * 2 - Math.PI;
-            var radius = Math.random() * 800 + 450;
+            var seed = Math.random() * Math.PI * 2 - Math.PI,
+                radius = Math.random() * 800 + 450;
 
             var asteroid = new Asteroid({
-                x: Math.sin(seed) * radius,
-                y: Math.cos(seed) * radius,
+                x: Math.cos(seed) * radius,
+                y: Math.sin(seed) * radius,
+                angle: seed,
+                angleDelta: Math.random() * ANGLE_DELTA,
+                radius: radius,
+                rotateAround: { x: 0, y: 0 } //not usable yet
             });
 
             stage.addActor(asteroid);

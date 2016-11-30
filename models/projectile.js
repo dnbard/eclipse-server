@@ -1,32 +1,7 @@
 "use strict";
 
 const Actor = require('./actor');
-
-const actions = {
-    defaultProjectile: function(stage, delta){
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.ttl){
-            this.ttl -= delta;
-
-            if (this.ttl <= 0){
-                stage.removeActorById(this.id);
-            }
-        }
-    },
-    defaultProjectileCollision: function(actor, stage){
-        if(actor.id === this.createdBy){
-            return;
-        }
-
-        stage.removeActorById(this.id);
-
-        if (typeof actor.onDamage === 'function'){
-            actor.onDamage(this, stage);
-        }
-    }
-}
+const Actions = require('../actions');
 
 class Projectile extends Actor{
     constructor(options){
@@ -38,8 +13,8 @@ class Projectile extends Actor{
 
         this.damage = Math.round(Math.random() * (options.damageMax - options.damageMin) + options.damageMin);
 
-        this.setMethod(actions, options, 'onUpdate');
-        this.setMethod(actions, options, 'onCollide');
+        this.onUpdate = Actions.getAction('projectile/default');
+        this.onCollide = Actions.getAction('projectile/defaultCollision');
     }
 
     toJSON(){

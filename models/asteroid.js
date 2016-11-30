@@ -2,17 +2,10 @@
 
 const Actor = require('./actor');
 const AsteroidsMetadata = require('../public/images/asteroids/asteroids.json');
-const Minerals = require('../data/rigs/minerals.json');
-const Loot = require('../models/loot');
+const Actions = require('../actions');
 
 const GEOMETRY = require('../enums/geometry');
-const COLLISION_VELOCITY = 1;
-
-const types = [
-    'gray01',
-    'gray02',
-    'gray03'
-];
+const types = [ 'gray01', 'gray02', 'gray03' ];
 
 class Asteroid extends Actor{
     constructor(options){
@@ -32,61 +25,16 @@ class Asteroid extends Actor{
 
         this.rotationSpeed = Math.random() * 0.01 - 0.005;
 
+        this.globalRotationAngle = options.angle || null;
+        this.globalRotationRadius = options.radius || null;
+        this.globalRotationAngleDelta = options.angleDelta || null;
+
         this.maxArmor = Math.round(Math.random() * 10);
         this.armor = this.maxArmor;
-    }
 
-    onDamage(actor, stage){
-        this.armor --;
-
-        if (this.armor <= 0){
-            stage.removeActorById(this.id);
-            const quantity = Math.ceil(Math.random() * 4);
-            const lootObject = {
-                x: this.x,
-                y: this.y,
-                loot: Minerals.chrondite,
-                quantityMod: actor.kind === 'projectile' && actor.type === 'mining' ? 4 : 1
-            };
-
-            for (var i = 0; i < quantity; i++){
-                var loot = new Loot(lootObject);
-                stage.addActor(loot);
-            }
-        }
-    }
-
-    onUpdate(){
-        this.x += this.vx;
-        this.y += this.vy;
-
-        this.vx -= 0.05 * this.vx;
-        this.vy -= 0.05 * this.vy;
-
-        this.rotation += this.rotationSpeed;
-
-        if (this.rotation > Math.PI){
-            this.rotation -= Math.PI * 2;
-        } else if (this.rotation < -Math.PI){
-            this.rotation += Math.PI * 2;
-        }
-    }
-
-    onCollide(actor, stage){
-        if (actor.kind === 'player'){
-            const angle = -actor.rotation;
-
-            this.vx = Math.cos(angle) * COLLISION_VELOCITY;
-            this.vy = Math.sin(angle) * COLLISION_VELOCITY;
-
-            actor.velocity = 0;
-            actor.rotation += Math.random() * 0.6 - 0.3;
-
-            actor.onDamage(null, stage , 1);
-        } else if (actor.kind === 'asteroid'){
-            this.vx = actor.vx;
-            this.vy = actor.vy;
-        }
+        this.onDamage = Actions.getAction('asteroid/onDamage');
+        this.onUpdate = Actions.getAction('asteroid/onUpdate');
+        this.onCollide = Actions.getAction('asteroid/onCollide');
     }
 
     toJSON(){
