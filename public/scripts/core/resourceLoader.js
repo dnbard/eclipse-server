@@ -12,6 +12,7 @@ define([
             .add('/public/particles/smoke.png')
             .add('/public/particles/sparks.png')
             .add('/public/particles/flare.png')
+            .add('/public/particles/pixel.png')
             .add('/public/images/container.png')
             .add(files)
             .on('progress', loadProgressHandler);

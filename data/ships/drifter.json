@@ -4,6 +4,7 @@
     "turrets": 1,
     "speed": 5.0,
     "maxArmor": 100,
+    "maxShield": 50,
     "radialSpeed": 0.1,
     "rof": 200,
     "size": 22,

@@ -19,12 +19,16 @@ class Player extends Actor{
 
         if (options.ship){
             this.size = options.ship.get('size');
+
             this.armor = options.ship.get('maxArmor');
             this.maxArmor = options.ship.get('maxArmor');
+
+            this.shield = options.ship.get('maxShield');
+            this.maxShield = options.ship.get('maxShield');
         }
 
         this.target = null;
-        
+
         this.onUpdate = Actions.getAction(options.onUpdate);
         this.onDamage = Actions.getAction(options.onDamage);
         this.onCollide = Actions.getAction(options.onCollide);
@@ -40,6 +44,8 @@ class Player extends Actor{
             rotation: this.toFixed(this.rotation, 2),
             armor: this.armor,
             maxArmor: this.maxArmor,
+            shield: this.shield,
+            maxShield: this.maxShield,
             type: this.type,
             size: this.size,
             name: this.name,

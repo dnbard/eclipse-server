@@ -10,8 +10,9 @@ define([
     'components/flyingNumber',
     'particles/trail',
     'particles/spawn',
-    'particles/explosion-small-ship'
-], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, FlyingNumber, trail, spawn, explosionParticle){
+    'particles/explosion-small-ship',
+    'particles/shield'
+], function(PIXI, PubSub, EVENTS, KEYS, Hotkey, Turret, ShipBlueprints, StaticParticle, FlyingNumber, trail, spawn, explosionParticle, shieldParticle){
     var playerId = null;
 
     PubSub.subscribe(EVENTS.CONNECTION.OPEN, (e, data) => {
@@ -98,6 +99,11 @@ define([
         const projectedRotation = -(newState.rotation || 0) + Math.PI * 0.5;
         this.rotation = projectedRotation;
 
+        if (this.maxShield > 0 && newState.shield < this.shield){
+            this.spawnShieldDamageParticles(stage);
+        }
+        this.shield = newState.shield;
+
         if (this._healthbar && newState.armor !== this.armor){
             this._healthbar.clear();
 
@@ -148,6 +154,26 @@ define([
         }
     }
 
+    function spawnShieldDamageParticles(stage){
+        const player = this;
+        const shieldEmitter = StaticParticle({
+            x: this.x,
+            y: this.y,
+            textures: [
+                PIXI.loader.resources['/public/particles/pixel.png'].texture
+            ],
+            particle: shieldParticle,
+            stage: stage,
+            onUpdate: function(){
+                this.x = player.x;
+                this.y = player.y;
+                this.particle.update(20*0.001);
+            }
+        });
+
+        stage.addChild(shieldEmitter);
+    }
+
     return function Player(options, stage){
         const blueprint = ShipBlueprints.find(b => b.id === options.type || b.id === options.ship);
         const texture = PIXI.loader.resources[blueprint.texture]
@@ -161,6 +187,8 @@ define([
 
         player.armor = options.armor;
         player.maxArmor = options.maxArmor;
+        player.shield = options.shield;
+        player.maxShield = options.maxShield;
 
         player.size = options.size;
         player._velocity = 0;
@@ -180,6 +208,8 @@ define([
         player.onDestroy = onDestroy;
 
         player.buffs = [];
+
+        player.spawnShieldDamageParticles = spawnShieldDamageParticles;
 
         if (player.id === playerId){
             Hotkey.register({

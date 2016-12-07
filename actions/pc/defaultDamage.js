@@ -7,7 +7,21 @@ const BUFFS = require('../../enums/buffs');
 
 module.exports = function(projectile, stage, damage){
     projectile = projectile || {};
-    this.armor -= projectile.damage || damage;
+    damage = projectile.damage || damage;
+
+    if (this.shield > 0){
+        if (this.shield > damage){
+            this.shield -= damage;
+            damage = 0;
+        } else {
+            damage -= this.shield;
+            this.shield = 0;
+        }
+    }
+
+    if (damage > 0){
+        this.armor -= damage;
+    }
 
     if (this.isDestroyed()){
         logger.info(`Actor(id=${this.id}, name=${this.name}) was destroyed`);
@@ -16,6 +30,7 @@ module.exports = function(projectile, stage, damage){
             this.x = 0;
             this.y = 0;
             this.armor = this.ship.get('maxArmor');
+            this.shield = this.ship.get('maxShield');
 
             this.isAccelerating = false;
             this.velocity = 0;
@@ -25,10 +40,12 @@ module.exports = function(projectile, stage, damage){
             stage.removeAggro(this);
 
             if(projectile && projectile.createdBy){
-                PVP.doMath(
-                    stage.getActorById(this.id).createdBy,
-                    stage.getActorById(projectile.createdBy).createdBy
-                );
+                const actor1 = stage.getActorById(this.id);
+                const actor2 = stage.getActorById(projectile.createdBy);
+
+                if (actor1 && actor2 && actor1.type === 'player-base' && actor2.type === 'player-base'){
+                    PVP.doMath(actor1.createdBy, actor2.createdBy);
+                }
             }
 
             this.setBuff(BUFFS.DEATH, 1000 * 5);

@@ -4,6 +4,7 @@
     "turrets": 0,
     "speed": 4.5,
     "maxArmor": 14,
+    "maxShield": 0,
     "radialSpeed": 0.08,
     "size": 28
 }

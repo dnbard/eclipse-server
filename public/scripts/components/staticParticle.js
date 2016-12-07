@@ -38,7 +38,7 @@ define([
                     stageId: options.stage.id,
                     child: container
                 });
-            }, options.particle.emitterLifetime * 3000);
+            }, options.particle.emitterLifetime * 1000);
         }
 
         return container;
