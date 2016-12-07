@@ -44,9 +44,10 @@ gulp.task('test', ['pre-test'], function(cb){
 
 gulp.task('pre-test', function () {
   return gulp.src([
+      './actions/**/*.js',
       './controllers/*.js',
       './core/*.js',
-      './data/*.js',
+      './data/**/*.js',
       './db/*.js',
       './enums/*.js',
       './generators/*.js',
