@@ -1,5 +1,5 @@
 module.exports = function(actor, stage){
-    if(actor.id === this.createdBy){
+    if(actor.id === this.createdBy || (this.groupId && this.groupId === actor.groupId)){
         return;
     }
 

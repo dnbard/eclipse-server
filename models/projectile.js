@@ -11,6 +11,8 @@ class Projectile extends Actor{
         this.armor = 0;
         this.maxArmor = 0;
 
+        this.groupId = options.groupId;
+
         this.damage = Math.round(Math.random() * (options.damageMax - options.damageMin) + options.damageMin);
 
         this.onUpdate = Actions.getAction('projectile/default');

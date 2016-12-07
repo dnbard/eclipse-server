@@ -21,7 +21,10 @@ function AggroGroup(options){
 
     this.onDestroy = options.onDestroy || null;
 
-    this.actors.forEach(a => AggroGroup.addToStage(a, this.stage));
+    this.actors.forEach(a => {
+        AggroGroup.addToStage(a, this.stage);
+        a.groupId = this.id;
+    });
 
     //this method should be called in the end of constructor
     this.createJSONView();

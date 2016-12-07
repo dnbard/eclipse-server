@@ -40,6 +40,8 @@ class Actor{
         this.setMethod(actions, options, 'onCollide');
         this.setMethod(actions, options, 'onDamage');
 
+        this.groupId = null;
+
         this.buffs = {};
     }
 

@@ -56,8 +56,9 @@ module.exports = function(stage, delta, time){
                 onCollide: Actions.getAction('projectile/defaultCollision'),
                 createdBy: this.id,
                 type: 'mining',
-                damageMin: 1,
-                damageMax: 2
+                damageMin: 4,
+                damageMax: 9,
+                groupId: this.groupId || undefined
             });
 
             this.lastShot = time;

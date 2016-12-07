@@ -1,6 +1,6 @@
 {
   "name": "eclipse-server",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "",
   "main": "server.js",
   "scripts": {
