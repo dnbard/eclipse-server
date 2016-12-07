@@ -41,8 +41,6 @@ define([
 
             if (this.animateMovement.ticks >= 5){
                 this.animateMovement = null;
-                this.vx = 0;
-                this.vy = 0;
             }
         }
     }

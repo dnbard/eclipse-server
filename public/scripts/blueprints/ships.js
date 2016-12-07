@@ -15,12 +15,24 @@
             offset: {x: 12, y: 18}
         }]
     },{
-        id: 'npc-base',
+        id: 'morder',
         texture: '/public/images/spaceship-02.png',
         systems: [{
             kind: 'trail',
             particle: 'trail',
             offset: {x: 0, y: 12}
+        }]
+    },{
+        id: 'hammerhead',
+        texture: '/public/images/hammerhead.png',
+        systems: [{
+            kind: 'trail',
+            particle: 'trail',
+            offset: {x: -8, y: 16}
+        }, {
+            kind: 'trail',
+            particle: 'trail',
+            offset: {x: 8, y: 16}
         }]
     }];
 

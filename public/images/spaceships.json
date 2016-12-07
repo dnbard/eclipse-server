@@ -10,4 +10,10 @@
     "filename": "spaceship-02.png",
     "widht": 32,
     "height": 32
+},{
+    "kind": "spaceship",
+    "id": "03",
+    "filename": "hammerhead.png",
+    "widht": 32,
+    "height": 32
 }]

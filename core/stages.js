@@ -8,33 +8,13 @@ const StagesData = require('../data/stages');
 // const Actor = require('../models/actor');
 // const Asteroid = require('../models/asteroid');
 const MorderDroneGenerator = require('../generators/npcMorder');
+const HammerheadGenerator = require('../generators/npcHammerhead');
 const Scheduler = require('../core/scheduler');
 
 const GEOMETRY = require('../enums/geometry');
 
 //TODO: to change it to binary tree
 let collection = [];
-
-//obsolete
-// exports.createStage = function(options){
-//     const stage = new Stage();
-//     stage.addActor(new Actor({
-//         kind: 'planet',
-//         geometry: GEOMETRY.CIRCLE,
-//         size: 118
-//     }));
-//
-//     for(var i = 0; i < 15; i ++){
-//         var asteroid = new Asteroid({
-//             x: Math.random() * 800 - 400,
-//             y: Math.random() * 900 - 1000,
-//         });
-//         stage.addActor(asteroid);
-//     }
-//
-//     collection.push(stage);
-//     return stage;
-// }
 
 exports.createAllStages = function(){
     StagesData.forEach(data => {
@@ -59,6 +39,17 @@ function createMorderDroneGroup(stage){
     }
 }
 
+function createHammerheadGroup(stage){
+    const group = stage.createGroup(HammerheadGenerator.createFew({
+        quantity: Math.round(Math.random() * 5) + 1
+    }));
+
+    group.onDestroy = function(){
+        Scheduler.schedule(() => createHammerheadGroup(stage),
+            Math.round(Math.random() * 10000));
+    }
+}
+
 exports.getOrCreateGeneric = function(){
     if(collection.length === 0){
         exports.createAllStages();
@@ -66,6 +57,7 @@ exports.getOrCreateGeneric = function(){
 
     const stage = collection.filter(s => s.generic)[0];
     createMorderDroneGroup(stage);
+    createHammerheadGroup(stage);
 
     return stage;
 }
