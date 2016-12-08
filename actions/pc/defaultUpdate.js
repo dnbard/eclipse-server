@@ -3,6 +3,7 @@ const Angle = require('../../physics/angle');
 const Projectile = require('../../models/projectile');
 
 const GEOMETRY = require('../../enums/geometry');
+const SHIELD_REGEN_COEF = 1 / 27 * 0.5;
 
 
 module.exports = function(stage, delta, time){
@@ -74,5 +75,12 @@ module.exports = function(stage, delta, time){
 
     if (this.type === 'player-base'){
         this.clearInactiveBuffs();
+    }
+
+    if (this.maxShield > 0 && this.shield < this.maxShield && Math.random() <= SHIELD_REGEN_COEF){
+        this.shield += 1;
+        if (this.shield > this.maxShield){
+            this.shield = this.maxShield;
+        }
     }
 }
