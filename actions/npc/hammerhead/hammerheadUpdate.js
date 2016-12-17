@@ -40,8 +40,11 @@ module.exports = function(stage, delta, time){
         }
 
         if (!this.lastShot || time - this.lastShot > RATE_OF_FIRE){
+            const shotX = target.x + Math.random() * 16 - 8;
+            const shotY = target.y + Math.random() * 16 - 8;
+
             const angle = Angle.getAngleBetweenTwoPoints(
-                this.x, this.y, target.x, target.y
+                this.x, this.y, shotX, shotY
             );
             const velocity = Velocity.get2DVelocity(angle, 40);
             const projectile = new Projectile({
